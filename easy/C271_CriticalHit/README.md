@@ -25,3 +25,11 @@ The probability of you getting h or more points with your die.
 | 1        | 10       | 1           |
 | 100      | 200      | 0.0001      |
 | 8        | 20       | 0.009765625 |
+
+### Implementation
+
+This challenge was completed with Lua. I chose Lua, because I wanted to learn.
+
+### Usage
+
+Unconfirmed.
