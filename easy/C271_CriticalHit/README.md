@@ -32,10 +32,10 @@ This challenge was completed with Lua. I chose Lua, because I wanted to learn.
 
 The probability of killing an enemy with health _h_ with a _d_ sided die is equal to 
 
-    _(d - r)/(d<sup>v + 1</sup>)_
-    where 
-    _v = floor((h - 1)/d)_
-    _r = (h - 1) mod d_
+    (d - r) / (d ^ (v + 1))
+    where
+    v = floor((h - 1)/d)
+    r = (h - 1) mod d
 
 ### Usage
 
