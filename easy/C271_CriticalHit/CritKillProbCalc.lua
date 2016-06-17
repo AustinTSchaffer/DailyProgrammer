@@ -1,17 +1,10 @@
-function critKillProbCalc(maxDam, health)
-	
-	local overflow = -1
-	local remain = -1
 
-	if health > maxDam then
-		overflow = math.floor(health/maxDam)
-		remain = health % maxDam
-	else
-		overflow = 0
-		remain = health
-	end
+function critKillProbCalc(d, h)
 	
-	-- TODO
+	local v = math.floor((h - 1) / d) -- Overflow
+	local r = (h - 1) % d             -- Remainder
+
+	return (d - r) / (d ^ (v + 1))
 end
 
-critKillProbCalc(arg[1], arg[2])
+print(100*critKillProbCalc(arg[1], arg[2]) .. "%")
