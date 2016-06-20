@@ -1,29 +1,4 @@
-function invade(filename)
-    
-    local N, map = _readFile(filename)
-    local D, jDelta, iPrime, jPrime = 1, 1, 0, 0
-
-    -- Anonymous function for loop conditions
-    function minus(n,d) return n - d end
-
-    for i = 1, minus(N+1,D), 1 do
-        for j = 1, minus(N+1,D), jDelta do
-
-            newD, jDelta = _expandSquare(N, map, i, j, D)
-            
-            if newD > D then
-                D = newD
-                iPrime = i
-                jPrime = j
-            end
-        end
-    end
-
-    return (D-1).."x"..(D-1).." square at i="..(iPrime-1).." and j="..(jPrime-1)
-end
-
-
-function _readFile(filename)
+local function _readFile(filename)
 
     local file = io.open(filename)
     
@@ -41,8 +16,9 @@ function _readFile(filename)
     return n, map
 end
 
-function _expandSquare(N, map, iLoc, jLoc, D)
-    
+
+local function _expandSquare(N, map, iLoc, jLoc, D)
+
     local suitable = true
     local jDelta = 1
 
@@ -55,7 +31,7 @@ function _expandSquare(N, map, iLoc, jLoc, D)
         for j=1, D do
             if map[iLoc + i - 1][jLoc + j - 1] == "X" then
                 suitable = false
-                if j > jLoc then jDelta = j end
+                if j > jDelta then jDelta = j end
             end
         end
     end
@@ -68,7 +44,7 @@ function _expandSquare(N, map, iLoc, jLoc, D)
 end
 
 
-function printMap(map)
+local function _printMap(map)
     for i=1, #map do
         local line = ""
         for j=1, #map[i] do
@@ -76,4 +52,32 @@ function printMap(map)
         end
         print(line)
     end
+end
+
+
+function invade(filename)
+    
+    local N, map = _readFile(filename)
+    local D, jDelta, iPrime, jPrime = 1, 1, 0, 0
+
+    -- While loops were used here, since for loops are very restricting
+    local i = 1
+    while (i <= (N + 1 - D)) do
+        local j = 1
+        while (j <= (N + 1 - D)) do
+
+            newD, jDelta = _expandSquare(N, map, i, j, D)
+
+            if newD > D then
+                D = newD
+                iPrime = i
+                jPrime = j
+            end
+
+            j = j + jDelta
+        end
+        i = i + 1
+    end
+
+    return (D-1).."x"..(D-1).." square at i="..(iPrime-1).." and j="..(jPrime-1)
 end
