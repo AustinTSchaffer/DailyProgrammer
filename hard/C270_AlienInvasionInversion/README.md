@@ -35,10 +35,10 @@ Determine the largest square of crops that our drone can cut in preparation for 
 
 Test files have been included under the /data/ subdirectory. These files are listed below, along with their respective solutions.
 
-    Environment5.txt   // Solution = 9
-    Environment8.txt   // Solution = 16
-    Environment50.txt  // Solution = 49
-    Environment100.txt // Solution = 81
+    Environment5.txt   // Solution = 9 acres
+    Environment8.txt   // Solution = 16 acres
+    Environment50.txt  // Solution = 49 acres
+    Environment100.txt // Solution = 81 acres
 
 ### Implementation
 
@@ -108,15 +108,13 @@ Below is an example of an expanding square checking a few locations. The final D
      - - X - - - - X
      - - - - - X - -
      X - - X - - - -
-     -[- X - - -]- -
-     X[- - X - -]- -
-     X[X X X - -]- -
-     -[- X - - -]- -
-     -[- X - - -]X -
-     
-     ...
+     - - X -[- - - - B]
+     X - - X[- - - - B]
+     X X X X[- - - - B]
+     - - X -[- - - - B]
+     - - X -[- - X - B]
 
-In the third and fifth rows, B stands for _boundary_, referring to an expansion that pushed the search area outside the bounds of the map. Boundary detection is performed prior to a search, preventing out of bounds errors and reducing the total number of comparisons.
+In rows 3, 5, and 7, B stands for _boundary_, referring to an expansion that pushed the search area outside the bounds of the map. Boundary detection is performed prior to a search, preventing out of bounds errors and reducing the total number of comparisons.
 
 ### Usage
 
