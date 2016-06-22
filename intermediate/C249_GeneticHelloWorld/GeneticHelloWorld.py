@@ -76,6 +76,14 @@ def hammingDistance(stringA, stringB):
     """ Determines the bitwise Hamming Distance between two strings. Used to
     determine the fitness of a mutating string against the input.
 
+    Example:
+        bin(ord('a'))                       == '0b1100001'
+        bin(ord('9'))                       == '0b0111001'
+        bin(ord('a') ^ ord('9'))            == '0b1011000' 
+        bin(ord('a') ^ ord('9')).count('1') == 3
+        3 * len('aaaa')                     == 12
+        hammingDistance('aaaa', '9999')     == 12
+
     Args:
         stringA: A string
         stringB: A string
