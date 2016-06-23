@@ -8,9 +8,8 @@ Since:    2016-06-22
 Modified: 2016-06-22
 
 Description:
-Contains modules to satisfy the intermediate challenge numbered C249.
-Implements a genetic algorithm for the purposes of recreating an input string
-using random mutations.
+Contains the MutatingString class, which encapsulates a string and methods
+used to perform genetic operations on the string.
 """
 
 
@@ -45,15 +44,18 @@ class MutatingString(object):
             MutatingString.chars) for _ in range(length))
 
 
-    def mutate(self, hammingDistance = -1):
+    def mutate(self, distance = -1, maxDistance = -1):
        
         """ Causes the MutatingString's genome to randomly change. The amount
         the genome changes is proportional to its fitness.
 
         Args:
-            hammingDistance: The Hamming Distance from this MutatingString
-            to the desired input string. Defaults to half the maximum distance,
-            0.5 times the number of bits. Assumes 8-bit chars.
+            distance: The distance between this MutatingString's genome and the
+            input sequence. Defaults to half the number of bits in the
+            contained genome.
+            maxDistance: The maximum distance between any string and the input
+            sequence. This is dependent on the comparison algorithm used.
+            Defaults to the number of bits in the contained genome.
         Returns:
             Returns the new value of this MutatingStrings genome
         """
@@ -62,8 +64,8 @@ class MutatingString(object):
             return
         
         percentDiff = (
-            0.5 if hammingDistance == -1 else
-            float(hammingDistance) / float(len(self.genome) * 8.0)
+            float(len(self.genome)*4) if distance    == -1 else float(distance) /
+            float(len(self.genome)*8) if maxDistance == -1 else float(maxDistance)
         )
 
         newGenome = []
@@ -114,46 +116,3 @@ class MutatingString(object):
         
         offspring.genome = ''.join(newGenome)
         return offspring
-    
-
-def hammingDistance(strA, strB):
-
-    """ Determines the bitwise Hamming Distance between two strings. Used to
-    determine the fitness of a mutating string against the input.
-
-    Example:
-        bin(ord('a'))                       == '0b1100001'
-        bin(ord('9'))                       == '0b0111001'
-        bin(ord('a') ^ ord('9'))            == '0b1011000' 
-        bin(ord('a') ^ ord('9')).count('1') == 3
-        hammingDistance('a', '9')           == 3
-        hammingDistance('a', '9') * 4       == 12
-        hammingDistance('aaaa', '9999')     == 12
-
-    Args:
-        strA: A string
-        strB: A string
-    Returns:
-        Returns an integer that represents the Hamming Distance from a to b.
-    Raises:
-        ValueError: If the two strings are unequal in length or if one input is
-        not a string.
-    """
-    
-    if (not isinstance(strA, basestring) or not isinstance(strB, basestring)):
-        raise ValueError('Input is not a string', valueA, valueB)
-
-    if len(strA) != len(strB):
-        raise ValueError('The two strings are unequal in length', strA, strB)
-
-    # base case, hamming distance of nothing and nothing is 0
-    if (len(strA) == 0) and (len(strB) == 0):
-        return 0
-    
-    # XOR both first characters, count the 1s, remaining is recursive case
-    return (bin(ord(strA[0]) ^ ord(strB[0])).count('1') + 
-                hammingDistance(
-                    (strA[1:] if (len(strA) > 1) else ''),
-                    (strB[1:] if (len(strB) > 1) else '')
-                )
-            )
