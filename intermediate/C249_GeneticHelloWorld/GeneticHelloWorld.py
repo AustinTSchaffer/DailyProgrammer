@@ -30,8 +30,7 @@ class MutatingString(object):
     
     def __init__(self, length, chars=string.printable):
         
-        """
-        Initializes a mutating string with a random genome.
+        """ Initializes a mutating string with a random genome.
 
         Args:
             length: Desired length of the genome (contained string)
@@ -45,6 +44,7 @@ class MutatingString(object):
         self.genome = ''.join(random.SystemRandom().choice(
             MutatingString.chars) for _ in range(length))
 
+
     def mutate(self, hammingDistance = -1):
        
         """ Causes the MutatingString's genome to randomly change. The amount
@@ -54,6 +54,8 @@ class MutatingString(object):
             hammingDistance: The Hamming Distance from this MutatingString
             to the desired input string. Defaults to half the maximum distance,
             0.5 times the number of bits. Assumes 8-bit chars.
+        Returns:
+            Returns the new value of this MutatingStrings genome
         """
         
         if len(self.genome) == 0 or self.genome is None:
@@ -61,14 +63,21 @@ class MutatingString(object):
         
         percentDiff = (
             0.5 if hammingDistance == -1 else
-            hammingDistance / len(self.genome)*8
+            float(hammingDistance) / float(len(self.genome) * 8.0)
         )
-        
-        for i in range(len(self.genome)):
-            if random.uniform(0,1) < percentDiff:
-                self.genome[i] = random.SystemRandom().choice(
-                        MutatingString.chars)
 
+        newGenome = []
+
+        for i in range(len(self.genome)):
+            newGenome.append(
+                random.SystemRandom().choice(MutatingString.chars)
+                if random.uniform(0,1) < percentDiff
+                else self.genome[i]
+            )
+        
+        self.genome = ''.join(newGenome)
+        
+        return self.genome
 
 
     def mate(self, mStr):
@@ -108,6 +117,7 @@ class MutatingString(object):
     
 
 def hammingDistance(strA, strB):
+
     """ Determines the bitwise Hamming Distance between two strings. Used to
     determine the fitness of a mutating string against the input.
 
