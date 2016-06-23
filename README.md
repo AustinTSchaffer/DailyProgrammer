@@ -5,3 +5,5 @@ This is a repository for solutions to problems proposed by either <http://www.re
 ### Organization
 
 The three directories, labeled "easy", "intermediate", and "hard", are the primary categories on the Daily Programmer subreddit. Each subdirectory under one of these is labeled by the convention "C[challenge#]-[ChallengeName]".
+
+The directory labelled "foobar" contains challenges that were given to me by Google's recruitment beta, "foobar." I completed three of the five challenges, but the beta crashed, so I was unable to complete all five. Documentation for the 3 challenges is coming soon.
