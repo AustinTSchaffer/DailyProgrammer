@@ -1,17 +1,16 @@
 """
-File:     GeneticHelloWorld.py
+File:     MutatingString.py
 Author:   Austin Schaffer
 Email:    schaffer.austin.t@gmail.com
 Github:   http://github.com/AustinTSchaffer
 
 Since:    2016-06-22
-Modified: 2016-06-22
+Modified: 2016-06-23
 
 Description:
 Contains the MutatingString class, which encapsulates a string and methods
 used to perform genetic operations on the string.
 """
-
 
 import string
 import random
@@ -22,8 +21,10 @@ class MutatingString(object):
     """Encapsulates a string and methods used to mutate the string."""
 
 
-    # Holds all chars available for mutations for this. Static member.
+    # Holds all chars available for genome mutations. Static member.
     chars = ''
+
+    # Mutation rate of offspring during mating
     childMutRate = 0.005
 
     
@@ -52,7 +53,7 @@ class MutatingString(object):
         Args:
             distance: The distance between this MutatingString's genome and the
             input sequence. Defaults to half the number of bits in the
-            contained genome.
+            contained gehammingDistancenome.
             maxDistance: The maximum distance between any string and the input
             sequence. This is dependent on the comparison algorithm used.
             Defaults to the number of bits in the contained genome.
@@ -69,7 +70,6 @@ class MutatingString(object):
         )
 
         newGenome = []
-
         for i in range(len(self.genome)):
             newGenome.append(
                 random.SystemRandom().choice(MutatingString.chars)
@@ -104,7 +104,6 @@ class MutatingString(object):
         offspring = MutatingString(len(self.genome), MutatingString.chars)
         
         newGenome = []
-
         for i in range(len(self.genome)):
             newGenome.append( 
                 random.choice(MutatingString.chars)
