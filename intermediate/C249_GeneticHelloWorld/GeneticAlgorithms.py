@@ -12,8 +12,38 @@ Contains functions and structures used to perform operations on generations
 of strings in an attempt to recreate an input character sequence.
 """
 
-
 import MutatingString as MS
+
+generationSize = 100
+
+def generate(goal):
+    """ Runs a genetic simulation in order to obtain the goal
+
+    Args:
+        goal: desired goal string
+    Returns:
+        Returns a 3 column table recording a summary of the evolution. Each row
+        in the table will include the top 5, most fit members of the generation
+        along with their fitnesses.
+        [
+            [[fitness, string], [same], [same], [same], [same]], #gen0
+            [[firness, string], [same], [same], [same], [same]], #gen1
+
+            ...
+            
+            [[fitness, goal], ... ]                        #genN
+        ]
+
+    """
+    
+    c_gen = [] # Current
+    n_gen = [] # Next
+
+    for _ in range(generationSize):
+        c_cen.append(MS.MutatingString(len(goal)))
+    
+    
+    # while True:
 
 
 def hammingDistance(strA, strB):
@@ -41,7 +71,7 @@ def hammingDistance(strA, strB):
     """
     
     if (not isinstance(strA, basestring) or not isinstance(strB, basestring)):
-        raise ValueError('Input is not a string', valueA, valueB)
+        raise ValueError('Input is not a string', strA, strB)
 
     if len(strA) != len(strB):
         raise ValueError('The two strings are unequal in length', strA, strB)
