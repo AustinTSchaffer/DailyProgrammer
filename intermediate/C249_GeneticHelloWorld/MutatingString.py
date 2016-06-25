@@ -61,12 +61,12 @@ class MutatingString(object):
             Returns the new value of this MutatingStrings genome
         """
         
-        if len(self.genome) == 0 or self.genome is None:
+        if self.genome is None or len(self.genome) == 0:
             return
         
         percentDiff = (
-            float(len(self.genome)*4) if distance    == -1 else float(distance) /
-            float(len(self.genome)*8) if maxDistance == -1 else float(maxDistance)
+            (float(len(self.genome)*4) if distance    == -1 else float(distance)) /
+            (float(len(self.genome)*8) if maxDistance == -1 else float(maxDistance))
         )
 
         newGenome = []
@@ -79,7 +79,7 @@ class MutatingString(object):
         
         self.genome = ''.join(newGenome)
         
-        return self.genome
+        return self
 
 
     def mate(self, mStr):
