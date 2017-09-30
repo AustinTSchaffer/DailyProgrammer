@@ -57,8 +57,8 @@ function critKillProbCalc(d, h)
     -- @param h Numerical HP of enemy.
     -- @return Decimal probabilitiy of a kill.
 	
-	local v = math.floor((h - 1) / d) -- Overflow
-	local r = (h - 1) % d             -- Remainder
+	local overflow = math.floor((h - 1) / d) -- Overflow
+	local remaindr = (h - 1) % d             -- Remainder
 
-	return (d - r) / (d ^ (v + 1))
+	return (d - remaindr) / (d ^ (overflow + 1))
 end
