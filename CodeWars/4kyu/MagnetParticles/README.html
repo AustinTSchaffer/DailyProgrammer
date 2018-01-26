@@ -1,0 +1,654 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset='utf-8'>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.4.1/github-markdown.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/default.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.css">
+	<link rel="stylesheet" href="https://gitcdn.xyz/repo/goessner/mdmath/master/css/texmath.css">
+	<link rel="stylesheet" href="https://gitcdn.xyz/repo/goessner/mdmath/master/css/vscode-texmath.css">
+
+</head>
+
+<body class="markdown-body">
+	<section>
+		<eqn>
+			<span class="katex-display">
+				<span class="katex">
+					<span class="katex-mathml">
+						<math>
+							<semantics>
+								<mrow>
+									<mi>v</mi>
+									<mo>(</mo>
+									<mi>k</mi>
+									<mo separator="true">,</mo>
+									<mi>n</mi>
+									<mo>)</mo>
+									<mo>=</mo>
+									<mfrac>
+										<mrow>
+											<mn>1</mn>
+										</mrow>
+										<mrow>
+											<mi>k</mi>
+											<mo>(</mo>
+											<mi>n</mi>
+											<mo>+</mo>
+											<mn>1</mn>
+											<msup>
+												<mo>)</mo>
+												<mrow>
+													<mn>2</mn>
+													<mi>k</mi>
+												</mrow>
+											</msup>
+										</mrow>
+									</mfrac>
+								</mrow>
+								<annotation encoding="application/x-tex">v(k,n) = \frac{1}{k(n+1)^{2k}}</annotation>
+							</semantics>
+						</math>
+					</span>
+					<span class="katex-html" aria-hidden="true">
+						<span class="strut" style="height:1.32144em;"></span>
+						<span class="strut bottom" style="height:2.25744em;vertical-align:-0.936em;"></span>
+						<span class="base">
+							<span class="mord mathit" style="margin-right:0.03588em;">v</span>
+							<span class="mopen">(</span>
+							<span class="mord mathit" style="margin-right:0.03148em;">k</span>
+							<span class="mpunct">,</span>
+							<span class="mord mathit">n</span>
+							<span class="mclose">)</span>
+							<span class="mrel">=</span>
+							<span class="mord">
+								<span class="mopen nulldelimiter"></span>
+								<span class="mfrac">
+									<span class="vlist-t vlist-t2">
+										<span class="vlist-r">
+											<span class="vlist" style="height:1.32144em;">
+												<span style="top:-2.314em;">
+													<span class="pstrut" style="height:3em;"></span>
+													<span class="mord">
+														<span class="mord mathit" style="margin-right:0.03148em;">k</span>
+														<span class="mopen">(</span>
+														<span class="mord mathit">n</span>
+														<span class="mbin">+</span>
+														<span class="mord mathrm">1</span>
+														<span class="mclose">
+															<span class="mclose">)</span>
+															<span class="msupsub">
+																<span class="vlist-t">
+																	<span class="vlist-r">
+																		<span class="vlist" style="height:0.7751079999999999em;">
+																			<span style="top:-2.9890000000000003em;margin-right:0.05em;">
+																				<span class="pstrut" style="height:2.7em;"></span>
+																				<span class="sizing reset-size6 size3 mtight">
+																					<span class="mord mtight">
+																						<span class="mord mathrm mtight">2</span>
+																						<span class="mord mathit mtight" style="margin-right:0.03148em;">k</span>
+																					</span>
+																				</span>
+																			</span>
+																		</span>
+																	</span>
+																</span>
+															</span>
+														</span>
+													</span>
+												</span>
+												<span style="top:-3.23em;">
+													<span class="pstrut" style="height:3em;"></span>
+													<span class="frac-line" style="border-bottom-width:0.04em;"></span>
+												</span>
+												<span style="top:-3.677em;">
+													<span class="pstrut" style="height:3em;"></span>
+													<span class="mord">
+														<span class="mord mathrm">1</span>
+													</span>
+												</span>
+											</span>
+											<span class="vlist-s">​</span>
+										</span>
+										<span class="vlist-r">
+											<span class="vlist" style="height:0.936em;"></span>
+										</span>
+									</span>
+								</span>
+								<span class="mclose nulldelimiter"></span>
+							</span>
+						</span>
+					</span>
+				</span>
+			</span>
+		</eqn>
+	</section>
+	<section>
+		<eqn>
+			<span class="katex-display">
+				<span class="katex">
+					<span class="katex-mathml">
+						<math>
+							<semantics>
+								<mrow>
+									<mi>u</mi>
+									<mo>(</mo>
+									<mn>1</mn>
+									<mo separator="true">,</mo>
+									<mi>N</mi>
+									<mo>)</mo>
+									<mo>=</mo>
+									<munderover>
+										<mo>∑</mo>
+										<mrow>
+											<mi>n</mi>
+											<mo>=</mo>
+											<mn>1</mn>
+										</mrow>
+										<mi>N</mi>
+									</munderover>
+									<mrow>
+										<mi>v</mi>
+										<mo>(</mo>
+										<mn>1</mn>
+										<mo separator="true">,</mo>
+										<mi>n</mi>
+										<mo>)</mo>
+									</mrow>
+									<mo>=</mo>
+									<mfrac>
+										<mrow>
+											<mn>1</mn>
+										</mrow>
+										<mrow>
+											<mn>1</mn>
+											<mo>∗</mo>
+											<msup>
+												<mn>2</mn>
+												<mn>2</mn>
+											</msup>
+										</mrow>
+									</mfrac>
+									<mo>+</mo>
+									<mfrac>
+										<mrow>
+											<mn>1</mn>
+										</mrow>
+										<mrow>
+											<mn>1</mn>
+											<mo>∗</mo>
+											<msup>
+												<mn>3</mn>
+												<mn>2</mn>
+											</msup>
+										</mrow>
+									</mfrac>
+									<mo>+</mo>
+									<mi mathvariant="normal">.</mi>
+									<mi mathvariant="normal">.</mi>
+									<mi mathvariant="normal">.</mi>
+									<mo>+</mo>
+									<mfrac>
+										<mrow>
+											<mn>1</mn>
+										</mrow>
+										<mrow>
+											<mn>1</mn>
+											<mo>∗</mo>
+											<mo>(</mo>
+											<mi>N</mi>
+											<mo>+</mo>
+											<mn>1</mn>
+											<msup>
+												<mo>)</mo>
+												<mn>2</mn>
+											</msup>
+										</mrow>
+									</mfrac>
+								</mrow>
+								<annotation encoding="application/x-tex">u(1,N) = \sum_{n=1}^{N}{v(1,n)} = \frac{1}{1*2^2} + \frac{1}{1*3^2} + ... + \frac{1}{1*(N+1)^2}</annotation>
+							</semantics>
+						</math>
+					</span>
+					<span class="katex-html" aria-hidden="true">
+						<span class="strut" style="height:1.8283360000000002em;"></span>
+						<span class="strut bottom" style="height:3.0954490000000003em;vertical-align:-1.267113em;"></span>
+						<span class="base">
+							<span class="mord mathit">u</span>
+							<span class="mopen">(</span>
+							<span class="mord mathrm">1</span>
+							<span class="mpunct">,</span>
+							<span class="mord mathit" style="margin-right:0.10903em;">N</span>
+							<span class="mclose">)</span>
+							<span class="mrel">=</span>
+							<span class="mop op-limits">
+								<span class="vlist-t vlist-t2">
+									<span class="vlist-r">
+										<span class="vlist" style="height:1.8283360000000002em;">
+											<span style="top:-1.882887em;margin-left:0em;">
+												<span class="pstrut" style="height:3.05em;"></span>
+												<span class="sizing reset-size6 size3 mtight">
+													<span class="mord mtight">
+														<span class="mord mathit mtight">n</span>
+														<span class="mrel mtight">=</span>
+														<span class="mord mathrm mtight">1</span>
+													</span>
+												</span>
+											</span>
+											<span style="top:-3.050005em;">
+												<span class="pstrut" style="height:3.05em;"></span>
+												<span>
+													<span class="mop op-symbol large-op">∑</span>
+												</span>
+											</span>
+											<span style="top:-4.3000050000000005em;margin-left:0em;">
+												<span class="pstrut" style="height:3.05em;"></span>
+												<span class="sizing reset-size6 size3 mtight">
+													<span class="mord mtight">
+														<span class="mord mathit mtight" style="margin-right:0.10903em;">N</span>
+													</span>
+												</span>
+											</span>
+										</span>
+										<span class="vlist-s">​</span>
+									</span>
+									<span class="vlist-r">
+										<span class="vlist" style="height:1.267113em;"></span>
+									</span>
+								</span>
+							</span>
+							<span class="mord">
+								<span class="mord mathit" style="margin-right:0.03588em;">v</span>
+								<span class="mopen">(</span>
+								<span class="mord mathrm">1</span>
+								<span class="mpunct">,</span>
+								<span class="mord mathit">n</span>
+								<span class="mclose">)</span>
+							</span>
+							<span class="mrel">=</span>
+							<span class="mord">
+								<span class="mopen nulldelimiter"></span>
+								<span class="mfrac">
+									<span class="vlist-t vlist-t2">
+										<span class="vlist-r">
+											<span class="vlist" style="height:1.32144em;">
+												<span style="top:-2.314em;">
+													<span class="pstrut" style="height:3em;"></span>
+													<span class="mord">
+														<span class="mord mathrm">1</span>
+														<span class="mbin">∗</span>
+														<span class="mord">
+															<span class="mord mathrm">2</span>
+															<span class="msupsub">
+																<span class="vlist-t">
+																	<span class="vlist-r">
+																		<span class="vlist" style="height:0.740108em;">
+																			<span style="top:-2.9890000000000003em;margin-right:0.05em;">
+																				<span class="pstrut" style="height:2.7em;"></span>
+																				<span class="sizing reset-size6 size3 mtight">
+																					<span class="mord mathrm mtight">2</span>
+																				</span>
+																			</span>
+																		</span>
+																	</span>
+																</span>
+															</span>
+														</span>
+													</span>
+												</span>
+												<span style="top:-3.23em;">
+													<span class="pstrut" style="height:3em;"></span>
+													<span class="frac-line" style="border-bottom-width:0.04em;"></span>
+												</span>
+												<span style="top:-3.677em;">
+													<span class="pstrut" style="height:3em;"></span>
+													<span class="mord">
+														<span class="mord mathrm">1</span>
+													</span>
+												</span>
+											</span>
+											<span class="vlist-s">​</span>
+										</span>
+										<span class="vlist-r">
+											<span class="vlist" style="height:0.686em;"></span>
+										</span>
+									</span>
+								</span>
+								<span class="mclose nulldelimiter"></span>
+							</span>
+							<span class="mbin">+</span>
+							<span class="mord">
+								<span class="mopen nulldelimiter"></span>
+								<span class="mfrac">
+									<span class="vlist-t vlist-t2">
+										<span class="vlist-r">
+											<span class="vlist" style="height:1.32144em;">
+												<span style="top:-2.314em;">
+													<span class="pstrut" style="height:3em;"></span>
+													<span class="mord">
+														<span class="mord mathrm">1</span>
+														<span class="mbin">∗</span>
+														<span class="mord">
+															<span class="mord mathrm">3</span>
+															<span class="msupsub">
+																<span class="vlist-t">
+																	<span class="vlist-r">
+																		<span class="vlist" style="height:0.740108em;">
+																			<span style="top:-2.9890000000000003em;margin-right:0.05em;">
+																				<span class="pstrut" style="height:2.7em;"></span>
+																				<span class="sizing reset-size6 size3 mtight">
+																					<span class="mord mathrm mtight">2</span>
+																				</span>
+																			</span>
+																		</span>
+																	</span>
+																</span>
+															</span>
+														</span>
+													</span>
+												</span>
+												<span style="top:-3.23em;">
+													<span class="pstrut" style="height:3em;"></span>
+													<span class="frac-line" style="border-bottom-width:0.04em;"></span>
+												</span>
+												<span style="top:-3.677em;">
+													<span class="pstrut" style="height:3em;"></span>
+													<span class="mord">
+														<span class="mord mathrm">1</span>
+													</span>
+												</span>
+											</span>
+											<span class="vlist-s">​</span>
+										</span>
+										<span class="vlist-r">
+											<span class="vlist" style="height:0.686em;"></span>
+										</span>
+									</span>
+								</span>
+								<span class="mclose nulldelimiter"></span>
+							</span>
+							<span class="mbin">+</span>
+							<span class="mord mathrm">.</span>
+							<span class="mord mathrm">.</span>
+							<span class="mord mathrm">.</span>
+							<span class="mbin">+</span>
+							<span class="mord">
+								<span class="mopen nulldelimiter"></span>
+								<span class="mfrac">
+									<span class="vlist-t vlist-t2">
+										<span class="vlist-r">
+											<span class="vlist" style="height:1.32144em;">
+												<span style="top:-2.314em;">
+													<span class="pstrut" style="height:3em;"></span>
+													<span class="mord">
+														<span class="mord mathrm">1</span>
+														<span class="mbin">∗</span>
+														<span class="mopen">(</span>
+														<span class="mord mathit" style="margin-right:0.10903em;">N</span>
+														<span class="mbin">+</span>
+														<span class="mord mathrm">1</span>
+														<span class="mclose">
+															<span class="mclose">)</span>
+															<span class="msupsub">
+																<span class="vlist-t">
+																	<span class="vlist-r">
+																		<span class="vlist" style="height:0.740108em;">
+																			<span style="top:-2.9890000000000003em;margin-right:0.05em;">
+																				<span class="pstrut" style="height:2.7em;"></span>
+																				<span class="sizing reset-size6 size3 mtight">
+																					<span class="mord mathrm mtight">2</span>
+																				</span>
+																			</span>
+																		</span>
+																	</span>
+																</span>
+															</span>
+														</span>
+													</span>
+												</span>
+												<span style="top:-3.23em;">
+													<span class="pstrut" style="height:3em;"></span>
+													<span class="frac-line" style="border-bottom-width:0.04em;"></span>
+												</span>
+												<span style="top:-3.677em;">
+													<span class="pstrut" style="height:3em;"></span>
+													<span class="mord">
+														<span class="mord mathrm">1</span>
+													</span>
+												</span>
+											</span>
+											<span class="vlist-s">​</span>
+										</span>
+										<span class="vlist-r">
+											<span class="vlist" style="height:0.936em;"></span>
+										</span>
+									</span>
+								</span>
+								<span class="mclose nulldelimiter"></span>
+							</span>
+						</span>
+					</span>
+				</span>
+			</span>
+		</eqn>
+	</section>
+	<section>
+		<eqn>
+			<span class="katex-display">
+				<span class="katex">
+					<span class="katex-mathml">
+						<math>
+							<semantics>
+								<mrow>
+									<mi>S</mi>
+									<mo>(</mo>
+									<mi>K</mi>
+									<mo separator="true">,</mo>
+									<mi>N</mi>
+									<mo>)</mo>
+									<mo>=</mo>
+									<munderover>
+										<mo>∑</mo>
+										<mrow>
+											<mi>k</mi>
+											<mo>=</mo>
+											<mn>1</mn>
+										</mrow>
+										<mi>K</mi>
+									</munderover>
+									<mrow>
+										<mi>u</mi>
+										<mo>(</mo>
+										<mi>k</mi>
+										<mo separator="true">,</mo>
+										<mi>N</mi>
+										<mo>)</mo>
+									</mrow>
+									<mo>=</mo>
+									<munderover>
+										<mo>∑</mo>
+										<mrow>
+											<mi>k</mi>
+											<mo>=</mo>
+											<mn>1</mn>
+										</mrow>
+										<mi>K</mi>
+									</munderover>
+									<mrow>
+										<mo>(</mo>
+										<munderover>
+											<mo>∑</mo>
+											<mrow>
+												<mi>n</mi>
+												<mo>=</mo>
+												<mn>1</mn>
+											</mrow>
+											<mi>N</mi>
+										</munderover>
+										<mrow>
+											<mi>v</mi>
+											<mo>(</mo>
+											<mi>k</mi>
+											<mo separator="true">,</mo>
+											<mi>n</mi>
+											<mo>)</mo>
+										</mrow>
+										<mo>)</mo>
+									</mrow>
+								</mrow>
+								<annotation encoding="application/x-tex">S(K,N) = \sum_{k=1}^{K}{u(k,N)} = \sum_{k=1}^{K}{(\sum_{n=1}^{N}{v(k,n)})}</annotation>
+							</semantics>
+						</math>
+					</span>
+					<span class="katex-html" aria-hidden="true">
+						<span class="strut" style="height:1.8283360000000002em;"></span>
+						<span class="strut bottom" style="height:3.1304490000000005em;vertical-align:-1.302113em;"></span>
+						<span class="base">
+							<span class="mord mathit" style="margin-right:0.05764em;">S</span>
+							<span class="mopen">(</span>
+							<span class="mord mathit" style="margin-right:0.07153em;">K</span>
+							<span class="mpunct">,</span>
+							<span class="mord mathit" style="margin-right:0.10903em;">N</span>
+							<span class="mclose">)</span>
+							<span class="mrel">=</span>
+							<span class="mop op-limits">
+								<span class="vlist-t vlist-t2">
+									<span class="vlist-r">
+										<span class="vlist" style="height:1.8283360000000002em;">
+											<span style="top:-1.8478869999999998em;margin-left:0em;">
+												<span class="pstrut" style="height:3.05em;"></span>
+												<span class="sizing reset-size6 size3 mtight">
+													<span class="mord mtight">
+														<span class="mord mathit mtight" style="margin-right:0.03148em;">k</span>
+														<span class="mrel mtight">=</span>
+														<span class="mord mathrm mtight">1</span>
+													</span>
+												</span>
+											</span>
+											<span style="top:-3.0500049999999996em;">
+												<span class="pstrut" style="height:3.05em;"></span>
+												<span>
+													<span class="mop op-symbol large-op">∑</span>
+												</span>
+											</span>
+											<span style="top:-4.300005em;margin-left:0em;">
+												<span class="pstrut" style="height:3.05em;"></span>
+												<span class="sizing reset-size6 size3 mtight">
+													<span class="mord mtight">
+														<span class="mord mathit mtight" style="margin-right:0.07153em;">K</span>
+													</span>
+												</span>
+											</span>
+										</span>
+										<span class="vlist-s">​</span>
+									</span>
+									<span class="vlist-r">
+										<span class="vlist" style="height:1.302113em;"></span>
+									</span>
+								</span>
+							</span>
+							<span class="mord">
+								<span class="mord mathit">u</span>
+								<span class="mopen">(</span>
+								<span class="mord mathit" style="margin-right:0.03148em;">k</span>
+								<span class="mpunct">,</span>
+								<span class="mord mathit" style="margin-right:0.10903em;">N</span>
+								<span class="mclose">)</span>
+							</span>
+							<span class="mrel">=</span>
+							<span class="mop op-limits">
+								<span class="vlist-t vlist-t2">
+									<span class="vlist-r">
+										<span class="vlist" style="height:1.8283360000000002em;">
+											<span style="top:-1.8478869999999998em;margin-left:0em;">
+												<span class="pstrut" style="height:3.05em;"></span>
+												<span class="sizing reset-size6 size3 mtight">
+													<span class="mord mtight">
+														<span class="mord mathit mtight" style="margin-right:0.03148em;">k</span>
+														<span class="mrel mtight">=</span>
+														<span class="mord mathrm mtight">1</span>
+													</span>
+												</span>
+											</span>
+											<span style="top:-3.0500049999999996em;">
+												<span class="pstrut" style="height:3.05em;"></span>
+												<span>
+													<span class="mop op-symbol large-op">∑</span>
+												</span>
+											</span>
+											<span style="top:-4.300005em;margin-left:0em;">
+												<span class="pstrut" style="height:3.05em;"></span>
+												<span class="sizing reset-size6 size3 mtight">
+													<span class="mord mtight">
+														<span class="mord mathit mtight" style="margin-right:0.07153em;">K</span>
+													</span>
+												</span>
+											</span>
+										</span>
+										<span class="vlist-s">​</span>
+									</span>
+									<span class="vlist-r">
+										<span class="vlist" style="height:1.302113em;"></span>
+									</span>
+								</span>
+							</span>
+							<span class="mord">
+								<span class="mopen">(</span>
+								<span class="mop op-limits">
+									<span class="vlist-t vlist-t2">
+										<span class="vlist-r">
+											<span class="vlist" style="height:1.8283360000000002em;">
+												<span style="top:-1.882887em;margin-left:0em;">
+													<span class="pstrut" style="height:3.05em;"></span>
+													<span class="sizing reset-size6 size3 mtight">
+														<span class="mord mtight">
+															<span class="mord mathit mtight">n</span>
+															<span class="mrel mtight">=</span>
+															<span class="mord mathrm mtight">1</span>
+														</span>
+													</span>
+												</span>
+												<span style="top:-3.050005em;">
+													<span class="pstrut" style="height:3.05em;"></span>
+													<span>
+														<span class="mop op-symbol large-op">∑</span>
+													</span>
+												</span>
+												<span style="top:-4.3000050000000005em;margin-left:0em;">
+													<span class="pstrut" style="height:3.05em;"></span>
+													<span class="sizing reset-size6 size3 mtight">
+														<span class="mord mtight">
+															<span class="mord mathit mtight" style="margin-right:0.10903em;">N</span>
+														</span>
+													</span>
+												</span>
+											</span>
+											<span class="vlist-s">​</span>
+										</span>
+										<span class="vlist-r">
+											<span class="vlist" style="height:1.267113em;"></span>
+										</span>
+									</span>
+								</span>
+								<span class="mord">
+									<span class="mord mathit" style="margin-right:0.03588em;">v</span>
+									<span class="mopen">(</span>
+									<span class="mord mathit" style="margin-right:0.03148em;">k</span>
+									<span class="mpunct">,</span>
+									<span class="mord mathit">n</span>
+									<span class="mclose">)</span>
+								</span>
+								<span class="mclose">)</span>
+							</span>
+						</span>
+					</span>
+				</span>
+			</span>
+		</eqn>
+	</section>
+	<p data-line="6" class="code-line">Write a C# function that does that last function.</p>
+
+</body>
+
+</html>
