@@ -1,8 +1,10 @@
+module PiApproximation
+
 open System
 
+
 /// Computes the difference between x and y
-let diff x y = x - y 
-    |> abs
+let diff x y = x - y |> abs
 
 
 /// Computes the Nth fraction in the Leibniz Pi generation sequence, 

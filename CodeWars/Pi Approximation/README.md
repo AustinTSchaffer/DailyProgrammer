@@ -39,4 +39,7 @@ Unfortunately, this series converges too slowly to be useful, as it takes over
 of PI, it was calculated that one would need to use at least 10^50 terms of 
 this expansion! 
 
-About PI : http://www.geom.uiuc.edu/~huberty/math5337/groupe/expresspi.html 
+## About
+
+About PI: http://www.geom.uiuc.edu/~huberty/math5337/groupe/expresspi.html
+This Code Challenge: https://www.codewars.com/kata/550527b108b86f700000073f
