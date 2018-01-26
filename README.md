@@ -17,3 +17,6 @@ Google's recruitment beta, "foobar." I completed three of the five challenges,
 but the beta crashed, so I was unable to complete all five. Most of the 
 solutions are currently undocumented, but may be at a later date. Some of the 
 solutions have postmortems, to evaluate how bad my speed-code was. 
+
+The directory labelled "CodeWars" contains challenges that were completed on 
+CodeWars.com. 
