@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.4.1/github-markdown.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/default.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.css">
+    <link rel="stylesheet" href="https://gitcdn.xyz/repo/goessner/mdmath/master/css/texmath.css">
+    <link rel="stylesheet" href="https://gitcdn.xyz/repo/goessner/mdmath/master/css/vscode-texmath.css">
+
+</head>
+
+<body class="markdown-body">
+    <h1 data-line="0" class="code-line" id="pi-approximation-6-kyu">Pi Approximation (6 kyu)</h1>
+    <p data-line="2" class="code-line">The aim of the kata is to try to show how difficult it can be to calculate decimals of an irrational number with a certain
+        precision. We have chosen to get a few decimals of the number &quot;pi&quot; using the following infinite series
+        (Leibniz 1646–1716):</p>
+    <blockquote data-line="7" class="code-line">
+        <p data-line="7" class="code-line">
+            <eq>
+                <span class="katex">
+                    <span class="katex-mathml">
+                        <math>
+                            <semantics>
+                                <mrow>
+                                    <mi>π</mi>
+                                    <mi mathvariant="normal">/</mi>
+                                    <mn>4</mn>
+                                    <mo>=</mo>
+                                    <mn>1</mn>
+                                    <mo>−</mo>
+                                    <mn>1</mn>
+                                    <mi mathvariant="normal">/</mi>
+                                    <mn>3</mn>
+                                    <mo>+</mo>
+                                    <mn>1</mn>
+                                    <mi mathvariant="normal">/</mi>
+                                    <mn>5</mn>
+                                    <mo>−</mo>
+                                    <mn>1</mn>
+                                    <mi mathvariant="normal">/</mi>
+                                    <mn>7</mn>
+                                    <mo>+</mo>
+                                    <mi mathvariant="normal">.</mi>
+                                    <mi mathvariant="normal">.</mi>
+                                    <mi mathvariant="normal">.</mi>
+                                </mrow>
+                                <annotation encoding="application/x-tex">\pi/4 = 1 - 1/3 + 1/5 - 1/7 + ...</annotation>
+                            </semantics>
+                        </math>
+                    </span>
+                    <span class="katex-html" aria-hidden="true">
+                        <span class="strut" style="height:0.75em;"></span>
+                        <span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span>
+                        <span class="base">
+                            <span class="mord mathit" style="margin-right:0.03588em;">π</span>
+                            <span class="mord mathrm">/</span>
+                            <span class="mord mathrm">4</span>
+                            <span class="mrel">=</span>
+                            <span class="mord mathrm">1</span>
+                            <span class="mbin">−</span>
+                            <span class="mord mathrm">1</span>
+                            <span class="mord mathrm">/</span>
+                            <span class="mord mathrm">3</span>
+                            <span class="mbin">+</span>
+                            <span class="mord mathrm">1</span>
+                            <span class="mord mathrm">/</span>
+                            <span class="mord mathrm">5</span>
+                            <span class="mbin">−</span>
+                            <span class="mord mathrm">1</span>
+                            <span class="mord mathrm">/</span>
+                            <span class="mord mathrm">7</span>
+                            <span class="mbin">+</span>
+                            <span class="mord mathrm">.</span>
+                            <span class="mord mathrm">.</span>
+                            <span class="mord mathrm">.</span>
+                        </span>
+                    </span>
+                </span>
+            </eq>
+        </p>
+        <p data-line="9" class="code-line">which gives an approximation of
+            <eq>
+                <span class="katex">
+                    <span class="katex-mathml">
+                        <math>
+                            <semantics>
+                                <mrow>
+                                    <mi>π</mi>
+                                    <mi mathvariant="normal">/</mi>
+                                    <mn>4</mn>
+                                </mrow>
+                                <annotation encoding="application/x-tex">\pi/4</annotation>
+                            </semantics>
+                        </math>
+                    </span>
+                    <span class="katex-html" aria-hidden="true">
+                        <span class="strut" style="height:0.75em;"></span>
+                        <span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span>
+                        <span class="base">
+                            <span class="mord mathit" style="margin-right:0.03588em;">π</span>
+                            <span class="mord mathrm">/</span>
+                            <span class="mord mathrm">4</span>
+                        </span>
+                    </span>
+                </span>
+            </eq>.</p>
+        <p data-line="11" class="code-line">
+            <a href="http://en.wikipedia.org/wiki/Leibniz_formula_for_%CF%80">http://en.wikipedia.org/wiki/Leibniz_formula_for_π</a>
+        </p>
+    </blockquote>
+    <p data-line="13" class="code-line">To have a measure of the difficulty we will count how many iterations are needed to calculate PI with a given precision.</p>
+    <p data-line="16" class="code-line">There are several ways to determine the precision of the calculus but to keep things easy we will calculate to within
+        epsilon of your language Math::PI constant. In other words we will stop the iterative process when the absolute value
+        of the difference between our calculation and the Math::PI constant of the given language is less than epsilon.</p>
+    <p data-line="22" class="code-line">Your function returns an array or an arryList or a string or a tuple depending on the language (See sample tests) where
+        your approximation of PI has 10 decimals
+    </p>
+    <p data-line="26" class="code-line">In Haskell you can use the function &quot;trunc10Dble&quot; (see &quot;Your solution&quot;); in Clojure you can use the
+        function &quot;round&quot; (see &quot;Your solution&quot;);in OCaml or Rust the function &quot;rnd10&quot; (see &quot;Your
+        solution&quot;) in order to avoid discusssions about the result.</p>
+    <h2 data-line="31" class="code-line" id="example">Example</h2>
+    <p data-line="33" class="code-line">your function calculates 1000 iterations and 3.140592653839794 but returns: iter_pi(0.001) --&gt; [1000, 3.1405926538]</p>
+    <p data-line="36" class="code-line">Unfortunately, this series converges too slowly to be useful, as it takes over 300 terms to obtain a 2 decimal place
+        precision. To obtain 100 decimal places of PI, it was calculated that one would need to use at least 10^50 terms
+        of this expansion!</p>
+    <p data-line="41" class="code-line">About PI :
+        <a href="http://www.geom.uiuc.edu/~huberty/math5337/groupe/expresspi.html">http://www.geom.uiuc.edu/~huberty/math5337/groupe/expresspi.html</a>
+    </p>
+
+</body>
+
+</html>
