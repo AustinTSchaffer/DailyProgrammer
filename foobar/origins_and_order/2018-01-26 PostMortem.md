@@ -1,6 +1,6 @@
 # Postmortem
 
-Last Updated: 
+Last Updated: January 26, 2018
 
 Looking back on this challenge, there is a lot I would have changed and not 
 much that I would keep the same. This document outlines some of the issues 
