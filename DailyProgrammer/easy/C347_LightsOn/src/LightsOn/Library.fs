@@ -3,6 +3,8 @@
 /// much total time is covered. 
 module PunchCardTotalTimeCalculator
 
+open System
+
 type PunchCard = {
     In : float;
     Out : float;
@@ -35,3 +37,13 @@ let mergeAll punchcards =
 let totalHours =
     mergeAll >>
     List.fold (fun total card -> total + (card.Out - card.In)) 0.0
+
+/// Converts a string list, formatted `[ "in out"; ... ]`
+/// where "in" and "out" are integers or floats, into a 
+/// PunchCard list 
+let convertToPunchCardsList = 
+    List.map (
+        (fun (str:string) -> str.Split [|' '|]) >>
+        (Array.map Double.Parse) >> 
+        (fun arr -> { In = arr.[0]; Out = arr.[1] })
+    )
