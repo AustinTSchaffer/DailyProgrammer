@@ -31,18 +31,16 @@ number of hours the lights would be on. From the above input.
 
 ## Examples
 
-**Input:**
+### Example 1
 
 	2 4  
 	3 6  
 	1 3  
 	6 8
 
-**Output:**
+Output: `7`
 
-	7
-
-**Input:**
+### Example 2
 
 	6 8
 	5 8
@@ -50,11 +48,9 @@ number of hours the lights would be on. From the above input.
 	5 7
 	4 7
 
-**Output:**
+Output: `5`
 
-	5
-
-**Bonus Input:**
+### Example 3
 
 	15 18
 	13 16
@@ -71,6 +67,8 @@ number of hours the lights would be on. From the above input.
 	2 3
 	15 17
 	13 14
+
+Output: `14`
 
 
 ## Credit
