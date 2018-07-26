@@ -61,3 +61,25 @@ let carpark =
 ```fs
 let result = ["L4"; "D1"; "R4"]
 ```
+
+## Solution
+
+The current solution works, but it is not very elegant. The solve function first
+strings solutions for individual rows together, which leads to solutions that
+look some thing like:
+
+```fs
+let carpark = 
+    [[1; 0; 0; 0; 2]
+     [0; 1; 0; 0; 0]
+     [0; 1; 0; 0; 0]
+     [0; 0; 0; 0; 0]]
+
+CarParkEscape.solve carpark
+// ["L4"; "D1"; "R1"; "D1"; "D1"; "R3"]
+```
+
+The consecutive `D1`s are then cleaned up after the fact. This required a new
+type to be created, so the consecutive down instructions could be cleaned up.
+This should be fixed by including the cleanup instructions while individual rows
+are being processed, which would require some refactoring.

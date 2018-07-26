@@ -1,3 +1,5 @@
+module CarParkEscape
+
 type Instruction(direction: string, distance: int) =
     member this.Direction = direction
     member this.Distance = distance
