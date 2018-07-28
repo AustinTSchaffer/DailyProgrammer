@@ -67,3 +67,27 @@ Your interpreter should return the final state of the data storage (tape) as a
 string in the same format that it was passed in. For example, if the tape in
 your interpreter ends up being `[1, 1, 1, 1, 1]` then return the string
 `"11111"`.
+
+## Solution
+
+I had a 2 hour bug with this program because I did not read the exit conditions
+carefully. Make sure that you're detail-oriented folks. I read some of the
+instructions to mean that any modifications of the tape pointer (`>` and `<`
+operations) should be safe and should not cause the program to crash due to
+off-tape accesses. Instead, that signifies that the program should exit.
+
+Overall, I'm happy with the solution. It's easy to add new commands, like a safe
+move left and right commands, or a global invert command. Personally, I don't
+see why non-language characters should be allowed in the code. That feels
+dangerous. I would have liked to be tasked with a SF Syntax checker as part of
+this challenge as well.
+
+I'm really happy with the pre-calculated jump addresses. It feels like the
+interpreter performs some rudimentary compilation actions, making the execution
+slightly more advanced than pure interpretation. I feel that the performance
+impact of precalculating the jump addresses would be inefficient on programs
+that have a lot of unused jumps, but would be more efficient on programs that
+just a lot.
+
+The upload to CodeWars only accepts one file with no module declarations, but
+I've split this project into separate files.
