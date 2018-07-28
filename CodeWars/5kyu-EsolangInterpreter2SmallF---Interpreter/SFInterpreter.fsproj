@@ -5,7 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="app.fs" />
+    <Compile Include="branchMap.fs" />
+    <Compile Include="interpreter.fs" />
+    <Compile Include="main.fs" />
   </ItemGroup>
 
 </Project>
