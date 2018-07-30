@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="branchMap.fs" />
+    <Compile Include="interpreter.fs" />
+    <Compile Include="main.fs" />
+  </ItemGroup>
+
+</Project>
