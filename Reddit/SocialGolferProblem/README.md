@@ -41,7 +41,7 @@ The python script in `sgp.py` models this rephrasing of the problem, except it u
 the terms `groups` and `objects` wherever appropriate, to genericize the problem
 as much as possible.
 
-Given that 11 is prime, I suspect that the solution for any prime number of groups is
-the same as the number of groups, as long as the number of objects per group is less than
+Given that 11 is prime, I suspect that using this script for any prime number of groups will result
+in a value that is equal to the number of groups, as long as the number of objects per group is less than
 or equal to the number of groups. As long as those input conditions are met, this terrible
 script should work.
