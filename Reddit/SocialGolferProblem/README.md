@@ -41,10 +41,7 @@ The python script in `sgp.py` models this rephrasing of the problem, except it u
 the terms `groups` and `objects` wherever appropriate, to genericize the problem
 as much as possible.
 
-Given that 11 is prime, I suspect that it is possible to solve this problem for any
-number of groups, with any number of objects per group, making sure that the numerator 
-of the rotation for each group is co-prime with the number of groups, and that the number
-of objects in each group is equal to or less than the total number of groups.
-
-I changed the variables at the top of the file to 101 and 101, and it came back with
-a result of 101.
+Given that 11 is prime, I suspect that the solution for any prime number of groups is
+the same as the number of groups, as long as the number of objects per group is less than
+or equal to the number of groups. As long as those input conditions are met, this terrible
+script should work.
