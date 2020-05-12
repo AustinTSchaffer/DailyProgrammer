@@ -1,7 +1,8 @@
-from hol import enums
+from hol import cards
 
-ALL_CARDS = [
-    (card, suit)
-    for card in enums.Card
-    for suit in enums.Suit
-]
+
+ALL_CARDS = {
+    cards.Card(rank, suit)
+    for rank in cards.Rank
+    for suit in cards.Suit
+}
