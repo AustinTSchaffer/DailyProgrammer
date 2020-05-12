@@ -1,5 +1,6 @@
 import enum
 
+
 class Card(enum.Enum):
     Two = 2
     Three = 3
@@ -15,11 +16,13 @@ class Card(enum.Enum):
     King = 13
     Ace = 14
 
+
 class Suit(enum.Enum):
     Clubs = 1
     Diamonds = 2
     Hearts = 3
     Spades = 4
+
 
 class Comparison(enum.Enum):
     Higher = 1
