@@ -1,0 +1,73 @@
+{
+    "number_of_cards": 4,
+    "total_games": 6497400,
+    "games_won": 2274240,
+    "games_lost": 4223160,
+    "starting_card_stats": {
+        "two": {
+            "total_games": 499800,
+            "games_won": 231712,
+            "games_lost": 268088
+        },
+        "three": {
+            "total_games": 499800,
+            "games_won": 207648,
+            "games_lost": 292152
+        },
+        "four": {
+            "total_games": 499800,
+            "games_won": 186144,
+            "games_lost": 313656
+        },
+        "five": {
+            "total_games": 499800,
+            "games_won": 166944,
+            "games_lost": 332856
+        },
+        "six": {
+            "total_games": 499800,
+            "games_won": 149792,
+            "games_lost": 350008
+        },
+        "seven": {
+            "total_games": 499800,
+            "games_won": 134432,
+            "games_lost": 365368
+        },
+        "eight": {
+            "total_games": 499800,
+            "games_won": 120896,
+            "games_lost": 378904
+        },
+        "nine": {
+            "total_games": 499800,
+            "games_won": 134432,
+            "games_lost": 365368
+        },
+        "ten": {
+            "total_games": 499800,
+            "games_won": 149792,
+            "games_lost": 350008
+        },
+        "jack": {
+            "total_games": 499800,
+            "games_won": 166944,
+            "games_lost": 332856
+        },
+        "queen": {
+            "total_games": 499800,
+            "games_won": 186144,
+            "games_lost": 313656
+        },
+        "king": {
+            "total_games": 499800,
+            "games_won": 207648,
+            "games_lost": 292152
+        },
+        "ace": {
+            "total_games": 499800,
+            "games_won": 231712,
+            "games_lost": 268088
+        }
+    }
+}
