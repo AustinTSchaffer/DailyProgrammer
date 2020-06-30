@@ -12,10 +12,7 @@ def find_islands_seed_algorithm(map_: List[List[int]]) -> List[set]:
     # that have not yet been grouped as being part of any island. A set is
     # appropriate because O(1) lookup time will be useful later.
     ungrouped_land_coordinates = {
-        (i, j)
-        for i, row in enumerate(map_)
-        for j, cell in enumerate(row)
-        if cell == 1
+        (i, j) for i, row in enumerate(map_) for j, cell in enumerate(row) if cell == 1
     }
 
     while any(ungrouped_land_coordinates):
@@ -35,8 +32,7 @@ def find_islands_seed_algorithm(map_: List[List[int]]) -> List[set]:
                 # current seed and check to see if any of them exist in
                 # the set of ungrouped coordinates. Coordinates are only
                 # connected vertically and horizontally.
-                connected_coordinates = generate_bordering_coordinates(
-                    current_seed)
+                connected_coordinates = generate_bordering_coordinates(current_seed)
 
                 for coordinate in connected_coordinates:
                     if coordinate in ungrouped_land_coordinates:
@@ -67,7 +63,9 @@ def manhattan(coord_1: Tuple[int, int], coord_2: Tuple[int, int]) -> int:
     return abs(coord_1[0] - coord_2[0]) + abs(coord_1[1] - coord_2[1])
 
 
-def generate_bordering_coordinates(coordinate: Tuple[int, int], include_diagonals=False) -> Iterable[Tuple[int, int]]:
+def generate_bordering_coordinates(
+    coordinate: Tuple[int, int], include_diagonals=False
+) -> Iterable[Tuple[int, int]]:
     """
     Generates the coordinates that border the specified coordinate.
     """
@@ -95,20 +93,20 @@ def determine_boundary(island: set) -> set:
     features.
     """
     return {
-        coordinate for coordinate in island
-        if any(filter(
-            lambda _coordinate: _coordinate not in island,
-            generate_bordering_coordinates(coordinate)
-        ))
+        coordinate
+        for coordinate in island
+        if any(
+            filter(
+                lambda _coordinate: _coordinate not in island,
+                generate_bordering_coordinates(coordinate),
+            )
+        )
     }
 
 
 class Solution:
     def shortestBridge(self, A: List[List[int]]) -> int:
-        return self.shortest_bridge(
-            A,
-            find_islands_seed_algorithm,
-        )
+        return self.shortest_bridge(A, find_islands_seed_algorithm,)
 
     @staticmethod
     def shortest_bridge(map_: List[List[int]], find_islands_alg) -> int:
@@ -126,8 +124,7 @@ class Solution:
         # where n and m are the size of each island.
         island_1_coordinate = next(iter(island_1_boundary))
         island_2_coordinate = next(iter(island_2_boundary))
-        shortest_distance = manhattan(
-            island_1_coordinate, island_2_coordinate)
+        shortest_distance = manhattan(island_1_coordinate, island_2_coordinate)
         for coord_1 in island_1_boundary:
             for coord_2 in island_2_boundary:
                 current_distance = manhattan(coord_1, coord_2)
@@ -152,23 +149,19 @@ class Tests(unittest.TestCase):
 
     def test_example_1(self):
         for alg in self.algs:
-            self.assertEqual(Solution().shortest_bridge(
-                example_maps.EXAMPLE_1, alg), 1)
+            self.assertEqual(Solution().shortest_bridge(example_maps.EXAMPLE_1, alg), 1)
 
     def test_example_2(self):
         for alg in self.algs:
-            self.assertEqual(Solution().shortest_bridge(
-                example_maps.EXAMPLE_2, alg), 1)
+            self.assertEqual(Solution().shortest_bridge(example_maps.EXAMPLE_2, alg), 1)
 
     def test_example_3(self):
         for alg in self.algs:
-            self.assertEqual(Solution().shortest_bridge(
-                example_maps.EXAMPLE_3, alg), 1)
+            self.assertEqual(Solution().shortest_bridge(example_maps.EXAMPLE_3, alg), 1)
 
     def test_example_4(self):
         for alg in self.algs:
-            self.assertEqual(Solution().shortest_bridge(
-                example_maps.EXAMPLE_4, alg), 1)
+            self.assertEqual(Solution().shortest_bridge(example_maps.EXAMPLE_4, alg), 1)
 
 
 if __name__ == "__main__":
