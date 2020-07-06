@@ -20,7 +20,7 @@ def find_islands_seed_algorithm(map_: List[List[int]]) -> List[set]:
         # coordinates as a "seed". Island 1 will be grown from
         # that seed by scanning outward from that seed.
         first_seed = next(iter(ungrouped_land_coordinates))
-        current_island = {first_seed}
+        current_island = [first_seed]
         ungrouped_land_coordinates.remove(first_seed)
         ungrown_seeds = [first_seed]
 
@@ -37,7 +37,7 @@ def find_islands_seed_algorithm(map_: List[List[int]]) -> List[set]:
                 for coordinate in connected_coordinates:
                     if coordinate in ungrouped_land_coordinates:
                         # Coordinate is now grouped under the current island
-                        current_island.add(coordinate)
+                        current_island.append(coordinate)
                         ungrouped_land_coordinates.remove(coordinate)
                         # We'll want to see if that coordinate also has neighbors.
                         next_round_of_seeds.append(coordinate)
@@ -52,8 +52,43 @@ def find_islands_disjoint_sets_algorithm(map_: List[List[int]]) -> List[set]:
     raise NotImplementedError()
 
 
-def find_islands_depth_first_search(map_: List[List[int]]) -> List[set]:
-    raise NotImplementedError()
+def find_islands_depth_first_search(map_: List[List[int]]) -> list:
+    visited_coordinates = set()
+
+    def in_bounds(coordinate: tuple) -> bool:
+        return (
+            coordinate[0] >= 0 and
+            coordinate[0] < len(map_) and
+            coordinate[1] >= 0 and
+            coordinate[1] < len(map_[0])
+        )
+
+    def dfs_add_to_island(coordinate: tuple, current_island: list):
+        if coordinate in visited_coordinates:
+            return
+        visited_coordinates.add(coordinate)
+
+        if not in_bounds(coordinate):
+            return
+
+        if not map_[coordinate[0]][coordinate[1]]:
+            return
+
+        current_island.append(coordinate)
+
+        for _coordinate in generate_bordering_coordinates(coordinate):
+            dfs_add_to_island(_coordinate, current_island)
+
+    islands = []
+    for i, row in enumerate(map_):
+        for j, cell in enumerate(row):
+            coordinate = (i,j)
+            if cell and (coordinate not in visited_coordinates):
+                current_island = []
+                islands.append(current_island)
+                dfs_add_to_island(coordinate, current_island)
+
+    return islands
 
 
 def manhattan(coord_1: Tuple[int, int], coord_2: Tuple[int, int]) -> int:
@@ -106,7 +141,7 @@ def determine_boundary(island: set) -> set:
 
 class Solution:
     def shortestBridge(self, A: List[List[int]]) -> int:
-        return self.shortest_bridge(A, find_islands_seed_algorithm,)
+        return self.shortest_bridge(A, find_islands_depth_first_search,)
 
     @staticmethod
     def shortest_bridge(map_: List[List[int]], find_islands_alg) -> int:
@@ -142,26 +177,28 @@ class Solution:
 
 
 class Tests(unittest.TestCase):
-    def __init__(self):
-        self.algs = [
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.find_island_algorithms = [
             find_islands_seed_algorithm,
+            find_islands_depth_first_search,
         ]
 
     def test_example_1(self):
-        for alg in self.algs:
+        for alg in self.find_island_algorithms:
             self.assertEqual(Solution().shortest_bridge(example_maps.EXAMPLE_1, alg), 1)
 
     def test_example_2(self):
-        for alg in self.algs:
-            self.assertEqual(Solution().shortest_bridge(example_maps.EXAMPLE_2, alg), 1)
+        for alg in self.find_island_algorithms:
+            self.assertEqual(Solution().shortest_bridge(example_maps.EXAMPLE_2, alg), 2)
 
     def test_example_3(self):
-        for alg in self.algs:
+        for alg in self.find_island_algorithms:
             self.assertEqual(Solution().shortest_bridge(example_maps.EXAMPLE_3, alg), 1)
 
     def test_example_4(self):
-        for alg in self.algs:
-            self.assertEqual(Solution().shortest_bridge(example_maps.EXAMPLE_4, alg), 1)
+        for alg in self.find_island_algorithms:
+            self.assertEqual(Solution().shortest_bridge(example_maps.EXAMPLE_4, alg), 44)
 
 
 if __name__ == "__main__":
