@@ -63,15 +63,21 @@ def find_islands_depth_first_search(map_: List[List[int]]) -> list:
             coordinate[1] < len(map_[0])
         )
 
+    def is_land(coordinate: tuple) -> bool:
+        return (
+            in_bounds(coordinate) and
+            map_[coordinate[0]][coordinate[1]]
+        )
+
     def dfs_add_to_island(coordinate: tuple, current_island: list):
-        if coordinate in visited_coordinates:
-            return
+        is_actionable_coordinate = (
+            is_land(coordinate) and
+            coordinate not in visited_coordinates
+        )
+
         visited_coordinates.add(coordinate)
 
-        if not in_bounds(coordinate):
-            return
-
-        if not map_[coordinate[0]][coordinate[1]]:
+        if not is_actionable_coordinate:
             return
 
         current_island.append(coordinate)
