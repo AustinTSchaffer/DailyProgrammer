@@ -1,6 +1,7 @@
 from typing import List, Tuple, Iterable
 import unittest
 
+
 class Solution:
     def islandPerimeter(self, grid: List[List[int]]) -> int:
         # Find the first non-0 cell
@@ -8,9 +9,9 @@ class Solution:
             for j, cell in enumerate(row):
                 if cell:
                     # Return perimeter starting from that cell.
-                    return determine_perimeter_bfs((i,j), grid)
+                    return determine_perimeter_bfs((i, j), grid)
 
-    
+
 def determine_perimeter_bfs(coordinate, map_: List[List[int]]) -> list:
     visited_coordinates = set()
     seeds_current_round = [coordinate]
@@ -42,10 +43,7 @@ def determine_perimeter_bfs(coordinate, map_: List[List[int]]) -> list:
     return perimeter
 
 
-
-def generate_bordering_coordinates(
-    coordinate: Tuple[int, int], include_diagonals=False
-) -> Iterable[Tuple[int, int]]:
+def generate_bordering_coordinates(coordinate: Tuple[int, int]) -> Iterable[Tuple[int, int]]:
     """
     Generates the coordinates that border the specified coordinate.
     """
@@ -58,11 +56,12 @@ def generate_bordering_coordinates(
 
 
 TEST_MAP = [
-    [0,1,0,0],
-    [1,1,1,0],
-    [0,1,0,0],
-    [1,1,0,0],
+    [0, 1, 0, 0],
+    [1, 1, 1, 0],
+    [0, 1, 0, 0],
+    [1, 1, 0, 0],
 ]
+
 
 class Tests(unittest.TestCase):
     def test_1(self):
