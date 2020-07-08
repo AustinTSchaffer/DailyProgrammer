@@ -66,4 +66,5 @@ TEST_MAP = [
 
 class Tests(unittest.TestCase):
     def test_1(self):
-        self.assertEqual(determine_perimeter(TEST_MAP), 16)
+        s = Solution()
+        self.assertEqual(s.islandPerimeter(TEST_MAP), 16)
