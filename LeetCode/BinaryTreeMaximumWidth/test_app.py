@@ -2,7 +2,7 @@ import unittest
 
 import app
 
-class TestApp(unittest.TestCase):
+class Tests(unittest.TestCase):
     solution = app.Solution()
 
     def test_tree_1(self):
