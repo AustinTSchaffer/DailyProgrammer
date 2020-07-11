@@ -26,7 +26,7 @@ After flattening the multilevel linked list it becomes:
 
 ![](img/Example_1_output.png)
 
-## Example 2:
+## Example 2
 
 ```
 Input: head = [1,2,null,3]
