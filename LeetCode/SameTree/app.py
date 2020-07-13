@@ -7,19 +7,19 @@ class _TreeNode:
 
 class Solution:
     def isSameTree(self, p: _TreeNode, q: _TreeNode) -> bool:
+        # If both are none, the nodes are the same.
         if p is None and q is None:
-            # If both are none, the nodes are the same.
             return True
 
+        # If either is none, one is not.
         if p is None or q is None:
-            # If either is none, one is not.
             return False
 
+        # No need to recurse if they're the same object.
         if id(p) == id(q):
-            # No need to recurse if they're the same object.
             return True
 
-        # Check the values and recurse symmetrically, DFS.
+        # Check the values and recurse, DFS.
         return (
             p.val == q.val
             and self.isSameTree(p.left, q.left)
