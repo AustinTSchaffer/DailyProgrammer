@@ -1,7 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-
 #include <Python.h>
 
 static PyObject *method_fputs(PyObject *self, PyObject *args) {
@@ -34,4 +30,3 @@ static struct PyModuleDef fputsmodule = {
 PyMODINIT_FUNC PyInit_fputs(void) {
     return PyModule_Create(&fputsmodule);
 }
-
