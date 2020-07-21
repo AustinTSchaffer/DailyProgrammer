@@ -12,13 +12,9 @@ The three directories inside the "DailyProgrammer" directory, labeled "easy",
 subreddit](https://www.reddit.com/r/DailyProgrammer). Each subdirectory under one
 of these is labeled by the convention "C[challenge#]-[ChallengeName]".
 
-## Foo-Bar
+## InterviewChallenges
 
-The "foobar" directory contains challenges that were given to me by Google's
-recruitment beta, "foobar." I completed three of the five challenges, but the
-beta crashed so I was unable to complete all five. Most of the solutions are
-currently undocumented but may be at a later date. Some of the solutions have
-postmortems which evaluate how bad my speed-code was.
+This directory contains challenges that were completed for 
 
 ## CodeWars
 
@@ -27,5 +23,11 @@ CodeWars.com.
 
 ## DailyPython
 
-The "DailyPython" directory contains various Python projects for miscellaneous
-challenges that do not fit into any of the above categories.
+The "DailyPython" directory contains various Python solutions for miscellaneous
+challenges that do not fit into any of the other categories and aren't big
+enough on their own to merit their own repository.
+
+## Rustlang.Org
+
+Rustlang.Org has an online documentation book with example programs that you can
+work through when learning how to use Rust.
