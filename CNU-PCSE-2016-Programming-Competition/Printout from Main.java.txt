@@ -1,0 +1,77 @@
+/// -----------------------------------
+/// Excel-lent! Challenge Demonstration
+/// -----------------------------------
+A1
+A3
+C1
+Z299999999
+AZ52
+YYZ53
+YZZ53
+0
+/// ------------------------------------
+/// Sinus Rhythm Challenge Demonstration
+/// ------------------------------------
+     +                   +       
+    + +                 + +      
+   +   +               +   +     
+  +   @ +     @       +     +    
+ +   @ @ +   @ @     +       +   
+@---@---@-+-@---@---+---------+--
+ @ @     @ @     @ @             
+  @       @ +     @              
+             +   +               
+              + +                
+               +                 
+
+   s           o           e           c        
+  i C         s B         n r         n e       
+ h   l       l   e       e   a       e   C      
+T     a     A     U     G     t     F     i     
+       s   n       s   o       e   l       p   s
+        s a         e T         R i         h r 
+         C           d           a           e  
+
+/// -----------------------------------------------
+/// Kickin' it Old School Challenge Demonstration 1
+/// -----------------------------------------------
+AP
+AQ
+AR
+AS
+BP
+BQ
+BR
+BS
+CP
+CQ
+CR
+CS
+/// -----------------------------------------------
+/// Kickin' it Old School Challenge Demonstration 2
+/// -----------------------------------------------
+BAD
+JOVE
+LOUD
+LOUD
+/// ---------------------------------------
+/// HTML Tag Matching and Nesting Challenge
+/// ---------------------------------------
+VALID
+Expected </d>, found #
+Expected </C>, found </B>
+Expected #, found </C>
+Expected </B>, found #
+VALID
+/// -----------------------------------
+/// YOLO TTL Network Sample 1 Challenge
+/// -----------------------------------
+5 nodes unreachable from node 35 with TTL = 2
+1 node unreachable from node 35 with TTL = 3
+/// -----------------------------------
+/// YOLO TTL Network Sample 2 Challenge
+/// -----------------------------------
+8 nodes unreachable from node 1 with TTL = 1
+5 nodes unreachable from node 1 with TTL = 2
+3 nodes unreachable from node 3 with TTL = 2
+1 node unreachable from node 3 with TTL = 3
