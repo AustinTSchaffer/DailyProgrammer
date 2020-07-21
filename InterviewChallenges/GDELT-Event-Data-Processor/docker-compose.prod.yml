@@ -1,0 +1,27 @@
+version: '3.2'
+
+services:
+  db:
+    image: mysql/mysql-server:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: INSECURE_PASSWORD_DO_NOT_USE
+      MYSQL_DATABASE: data
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: app_user123
+    volumes:
+      - ./mysql/initialize.sql:/docker-entrypoint-initdb.d/initialize.sql
+      - mysql_data:/var/lib/mysql
+
+  app:
+    image: austintschaffer/gdelt_data_processor
+    depends_on:
+      - db
+    environment:
+      FLASK_ENV: production
+    ports:
+      - 80:5000
+    volumes:
+      - ./config.local.ini:/app/config.local.ini
+
+volumes:
+  mysql_data:

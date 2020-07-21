@@ -1,0 +1,35 @@
+version: '3.2'
+
+services:
+  db:
+    image: mysql/mysql-server:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: data
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: app_user123
+    volumes:
+      - ./mysql/initialize.sql:/docker-entrypoint-initdb.d/initialize.sql
+      - mysql_data:/var/lib/mysql
+    ports:
+      - 3306:3306
+
+  app:
+    image: austintschaffer/gdelt_data_processor
+    build: .
+    depends_on:
+      - db
+    environment:
+      FLASK_ENV: development
+    ports:
+      - 5000:5000
+
+  adminer:
+    image: adminer
+    depends_on:
+      - db
+    ports:
+      - 8080:8080
+
+volumes:
+  mysql_data:
