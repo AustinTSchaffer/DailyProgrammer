@@ -1,9 +1,13 @@
 # Daily Programmer
 
-This is a repository for solutions to problems proposed by either 
-<https://www.reddit.com/r/DailyProgrammer> or by some other medium. Most of the 
-contained problems are have a small scope, usually only requiring a single 
-module as a solution. 
+This repository contains solutions to challenging programming problems, most of
+them with a heavy emphasis on algorithms and data structures. This repository
+gets its name from <https://www.reddit.com/r/DailyProgrammer>, but contains
+challenges from a variety of sources. Most of the contained problems are:
+
+- not large enough to merit their own repository,
+- typically only require a single source file for the solution, and
+- usually not generic enough to be applicable to other programs.
 
 ## CNU-PCSE-2016-Programming-Competition
 
@@ -32,6 +36,13 @@ enough on their own to merit their own repository.
 ## InterviewChallenges
 
 This directory contains challenges that were completed for 
+
+## LeetCode
+
+LeetCode.Com is the newest and currently (July 2020) most popular online forum
+for completing programming challenges and competing with other developers who
+are completing the same programming challenges. This directory contains my
+solutions to problems from that site.
 
 ## Rustlang.Org
 
