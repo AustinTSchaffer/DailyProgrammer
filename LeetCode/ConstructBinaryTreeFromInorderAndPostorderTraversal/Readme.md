@@ -56,3 +56,12 @@ information between these 2 lists.
   the current node. Recurse using the left halves of preorder/postorder.
 - If any in the right half of preorder, create a treenode, set it as "right" on
   the current node. Recurse using the right halves of preorder/postorder.
+
+This solution works, but it's a bit space and time inefficient. Slicing Python
+lists creates new lists, copying the object ids or primitive values from one
+list to another. It would be advantageous to rewrite the recursive function so
+it kept track of beginning and ending indexes of the sub-lists, making space
+complexity linear with the depth of the tree, as opposed to quadratic with the
+depth of the tree. The hard part about this new approach would be correctly
+performing those calculations each time and debugging it if you got it wrong the
+first time.
