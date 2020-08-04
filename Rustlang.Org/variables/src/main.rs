@@ -1,6 +1,6 @@
 #![allow(unused_variables)]
-#![allow(unused_constant)]
 #![allow(unused_mut)]
+#![allow(dead_code)]
 fn main() {
     // Constants
     const MAX_POINTS: u32 = 100_000;
