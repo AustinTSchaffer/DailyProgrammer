@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import List, Tuple, Optional
 from collections import namedtuple
 import math
@@ -7,9 +8,16 @@ OPERATIONS = (
     0.5,
 )
 
-def get_neighbors(value: int) -> List[Tuple[int, dict]]:
+@dataclass
+class Connection:
+    value: int
+    transformation: dict
+    new_value: int
+
+
+def get_neighbors(value: int) -> List[Connection]:
     """
-    Returns a list of all of the neighbots of the value, including a dict describing the transformation:
+    Returns a list of all of the neighbors of the value, each including a dict describing the transformation:
 
         sample_transformation = {
             "start": int,
@@ -31,7 +39,7 @@ def get_neighbors(value: int) -> List[Tuple[int, dict]]:
     ]
 
 
-def apply_transformation(value: int, *, start:int, end: int, operation: float) -> Optional[Tuple[int, dict]]:
+def apply_transformation(value: int, *, start:int, end: int, operation: float) -> Optional[Connection]:
     # Substring must have a non-zero length
     if start == end:
         return None
@@ -41,9 +49,10 @@ def apply_transformation(value: int, *, start:int, end: int, operation: float) -
 
     # Substring must be even if dividing it by 2
     if (substring % 2 == 0) or float(operation).is_integer():
-        return (
-            int(str_value[:start] + str(int(substring * operation)) + str_value[end:]),
-            {
+        return Connection(
+            value=value,
+            new_value=int(str_value[:start] + str(int(substring * operation)) + str_value[end:]),
+            transformation={
                 "start": start,
                 "end": end,
                 "operation": operation,
