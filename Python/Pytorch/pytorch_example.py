@@ -2,8 +2,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
-
 from torchvision import datasets, transforms
+import matplotlib.pyplot as plt
 
 class Network(nn.Module):
     def __init__(self):
@@ -55,4 +55,33 @@ network = Network()
 learn_rate = optim.Adam(network.parameters(), lr=0.01)
 epochs = 5
 
+for epoch in range(epochs):
+    for data in train_set:
+        # image is all of the params of an image in a flattened tensor object
+        # output is the "labels" for each image (the labels)
+        image, output = data
+        network.zero_grad()
+        result = network(image.view(-1, 28*28))
+        # Using "loss" (error) to help train the network
+        loss = F.nll_loss(result, output)
+        loss.backward()
+        learn_rate.step()
+    print(loss)
 
+# Puts the network in eval mode
+network.eval()
+correct = 0
+total = 0
+
+# Turns off learning
+with torch.no_grad():
+    for data in test_set:
+        image, output = data
+        results = network(image.view(-1, 28*28))
+        for index, tensor_value in enumerate(results):
+            total += 1
+            if torch.argmax(tensor_value) == output[index]:
+                correct += 1
+
+accuracy = correct / total
+print("Accuracy:", accuracy)
