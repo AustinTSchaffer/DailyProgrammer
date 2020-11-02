@@ -29,8 +29,8 @@ class Network(nn.Module):
         data = F.relu(self.input_layer(data))
         data = F.relu(self.hidden_1(data))
         data = F.relu(self.hidden_2(data))
-        data = F.relu(self.output_layer(data))
-        
+        data = self.output_layer(data)
+
         # Softmax will give us a probability of each choice
         # that sums up to 1.
         return F.log_softmax(data, dim=1)
