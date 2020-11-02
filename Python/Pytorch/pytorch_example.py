@@ -68,7 +68,7 @@ for epoch in range(epochs):
         learn_rate.step()
     print(loss)
 
-# Puts the network in eval mode
+# Puts the network in eval mode for testing
 network.eval()
 correct = 0
 total = 0
@@ -85,3 +85,24 @@ with torch.no_grad():
 
 accuracy = correct / total
 print("Accuracy:", accuracy)
+
+# Look at image processing. This is the work that pytorch does for us
+# when setting up test data.
+from PIL import Image
+import numpy as np
+import PIL.ImageOps
+
+img = Image.open("./6.jpg")
+# convert to grayscale
+img = img.resize((28, 28))
+img.convert("L")
+
+plt.imshow(img)
+
+img = np.array(img)
+img = img / 255
+image = torch.from_numpy(img)
+image = image.float()
+
+result = network.forward(image.view(-1, 28*28))
+print(torch.argmax(output))
