@@ -1,6 +1,7 @@
 import dataclasses
 from typing import Any, Optional, Tuple, List
 
+
 @dataclasses.dataclass(frozen=True)
 class Action:
     """
@@ -107,15 +108,20 @@ def apply_action(state: GameState, action: Action) -> GameState:
     """
 
     containers = list(state.containers)
-    
+
     # Apply change to starting container
     starting_container = containers[action.starting_container]
     new_starting = starting_container[action.count:]
+
     containers[action.starting_container] = new_starting
 
     # Apply change to ending container
     ending_container = containers[action.ending_container]
-    new_ending = (*(action.color for _ in range(action.count)), *ending_container)
+    new_ending = (
+        *(action.color for _ in range(action.count)),
+        *ending_container
+    )
+
     containers[action.ending_container] = new_ending
 
     return GameState.copy(
