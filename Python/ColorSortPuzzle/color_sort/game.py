@@ -1,4 +1,5 @@
 import dataclasses
+import functools
 from typing import Any, Optional, Tuple, List
 
 
@@ -130,11 +131,30 @@ def apply_action(state: GameState, action: Action) -> GameState:
     )
 
 
-def game_won(containers: Tuple[tuple]) -> bool:
+def game_won(state: GameState) -> bool:
     """
-    Returns true if the game can be considered "won" and the player may advance to the next level.
+    Returns true if the game can be considered "won" and the player
+    may advance to the next level and/or watch more ads.
     """
-    raise NotImplementedError()
+
+    for container in state.containers:
+        if len(container) == 0:
+            continue
+
+        # All containers with at least 1 element should be completely filled with 1 color.
+        if len(container) != state.container_size:
+            return False
+
+        # For filled containers, make sure all elements are the same.
+        all_same = all(
+            container[0] == container[index]
+            for index in range(1, len(container))
+        )
+
+        if not all_same:
+            return False
+
+    return True
 
 
 def game_lost(state: GameState) -> bool:
@@ -144,4 +164,4 @@ def game_lost(state: GameState) -> bool:
     if not any(possible_actions(state)):
         return True
 
-    raise NotImplementedError()
+    raise NotImplementedError("Unable to determine if game is not solved because the dev hasn't accounted for cases where you can still make moves but there's no route to the end. What a dingus.")
