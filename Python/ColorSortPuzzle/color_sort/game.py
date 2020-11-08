@@ -1,6 +1,6 @@
 import dataclasses
 import functools
-from typing import Any, Optional, Tuple, List
+from typing import Any, Optional, Tuple, List, Callable
 
 
 @dataclasses.dataclass(frozen=True)
@@ -171,11 +171,20 @@ def game_won(state: GameState) -> bool:
     return True
 
 
-def game_lost(state: GameState) -> bool:
+def game_lost(state: GameState, is_solvable: Callable[[GameState], bool]=None) -> bool:
     """
-    Returns true if the game reaches a state with no possible actions, or if all possible actions create a cycle.
+    Returns true if the game reaches a state with no possible actions, or if the
+    optional function arg returns "False" on the GameState, indicating the state
+    is not solvable from its current configuration. If no function is provided
+    and there are possible moves from the current GameState, raises a ValueError.
+
+    Not reccommended for use within a solver, since this function essentially
+    requires a wrapper around a solver function in order to work.
     """
     if not any(possible_actions(state)):
         return True
 
-    raise NotImplementedError("Unable to determine if game is not solved because the dev hasn't accounted for cases where you can still make moves but there's no route to the end. What a dingus.")
+    if is_solvable is None:
+        raise ValueError("Unable to determine if game is not solved without a function.")
+
+    return not is_solvable(state)

@@ -38,3 +38,12 @@ def solve(state: game.GameState) -> Tuple[List[game.Action], bool]:
             seed_states.append(new_seed)
 
     return [], False
+
+def game_lost(state: game.GameState) -> bool:
+    def is_solvable(_state: game.GameState) -> bool:
+        _, solvable = solve(_state)
+        return solvable
+
+    return game.game_lost(state, is_solvable=is_solvable)
+
+game_lost.__doc__ = game.game_lost.__doc__
