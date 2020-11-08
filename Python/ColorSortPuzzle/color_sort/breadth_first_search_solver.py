@@ -8,6 +8,7 @@ def solve(state: game.GameState) -> List[game.Action]:
     Solves the game using a BFS algorithm with no optimizations. Warning, will use multiple GBs of RAM.
     """
     seed_states = [(state, [])]
+    states_visited = {state}
 
     while len(seed_states) > 0:
         state, actions_so_far = seed_states.pop(0)
@@ -20,9 +21,15 @@ def solve(state: game.GameState) -> List[game.Action]:
             continue
 
         for action in possible_actions:
+            new_state = game.apply_action(state, action)
+            if new_state in states_visited:
+                continue
+
+            states_visited.add(new_state)
+
             new_seed = (
-                game.apply_action(state, action),
-                [*actions_so_far, action]
+                new_state,
+                [*actions_so_far, action],
             )
 
             seed_states.append(new_seed)
