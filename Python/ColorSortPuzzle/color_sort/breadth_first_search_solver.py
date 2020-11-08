@@ -3,9 +3,11 @@ from typing import List, Tuple
 
 import color_sort.game as game
 
-def solve(state: game.GameState) -> List[game.Action]:
+def solve(state: game.GameState) -> Tuple[List[game.Action], bool]:
     """
-    Solves the game using a BFS algorithm with no optimizations. Warning, will use multiple GBs of RAM.
+    Solves the game using a BFS algorithm. Returns the list of actions required to take
+    the initial state to a completed state, along with a boolean indicating whether the
+    initial state is solvable.
     """
 
     seed_states = [(state, [])]
@@ -15,7 +17,7 @@ def solve(state: game.GameState) -> List[game.Action]:
         current_state, actions_so_far = seed_states.pop(0)
 
         if game.game_won(current_state):
-            return actions_so_far
+            return actions_so_far, True
 
         possible_actions = game.possible_actions(current_state)
         if len(possible_actions) <= 0:
@@ -35,4 +37,4 @@ def solve(state: game.GameState) -> List[game.Action]:
 
             seed_states.append(new_seed)
 
-    raise ValueError(f"Game cannot be won: {state}")
+    return [], False

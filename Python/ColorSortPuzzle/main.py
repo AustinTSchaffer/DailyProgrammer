@@ -18,7 +18,8 @@ starting_configuration = (
 )
 
 state = color_sort.game.GameState(starting_configuration, 4, False)
-actions = color_sort.breadth_first_search_solver.solve(state)
+actions, solvable = color_sort.breadth_first_search_solver.solve(state)
 
+assert solvable
 for action in actions:
     print(f"Move {action.color} from {action.starting_container + 1} to {action.ending_container + 1}")
