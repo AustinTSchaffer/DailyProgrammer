@@ -47,7 +47,7 @@ class GameState:
 
     def __hash__(self) -> int:
         return hash((
-            sorted(self.containers),
+            tuple(sorted(self.containers)),
             self.container_size,
             self.one_at_a_time,
         ))
