@@ -14,7 +14,7 @@ class Action:
     count: int
 
 
-@dataclasses.dataclass(frozen=True)
+@dataclasses.dataclass(frozen=True, eq=False)
 class GameState:
     """
     Models the current state of the game.
@@ -37,6 +37,20 @@ class GameState:
             container_size=container_size if container_size is not None else self.container_size,
             one_at_a_time=one_at_a_time if one_at_a_time is not None else self.one_at_a_time,
         )
+
+    def __eq__(self, other) -> bool:
+        return (
+            sorted(self.containers) == sorted(other.containers) and
+            self.container_size == other.container_size and
+            self.one_at_a_time == other.one_at_a_time
+        )
+
+    def __hash__(self) -> int:
+        return hash((
+            sorted(self.containers),
+            self.container_size,
+            self.one_at_a_time,
+        ))
 
 
 def top_color_and_depth(container: tuple) -> Optional[Tuple[Any, int]]:
