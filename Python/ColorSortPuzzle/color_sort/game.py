@@ -1,6 +1,6 @@
 import dataclasses
 import functools
-from typing import Any, Optional, Tuple, List, Callable
+from typing import Any, Optional, Tuple, List, Callable, Union
 
 
 @dataclasses.dataclass(frozen=True)
@@ -17,9 +17,11 @@ class Action:
 @dataclasses.dataclass(frozen=True, eq=False)
 class GameState:
     """
-    Models the current state of the game.
+    Models the current state of the game. Containers can be
+    either a tuple of tuples or a tuple of strings. Any immutable,
+    sliceable, and comparable data type should work as well.
     """
-    containers: Tuple[tuple]
+    containers: Union[Tuple[tuple], Tuple[str]]
     container_size: int
     one_at_a_time: bool
 
@@ -132,10 +134,7 @@ def apply_action(state: GameState, action: Action) -> GameState:
 
     # Apply change to ending container
     ending_container = containers[action.ending_container]
-    new_ending = (
-        *(action.color for _ in range(action.count)),
-        *ending_container
-    )
+    new_ending = starting_container[:action.count] + ending_container
 
     containers[action.ending_container] = new_ending
 
