@@ -1,24 +1,24 @@
 import color_sort
 
 starting_configuration = (
-    "b263",
-    "7a51",
-    "84ac",
-    "a451",
-    "3699",
-    "cb72",
-    "8c6c",
+    "cc21",
+    "4b59",
+    "63a7",
+    "98a8",
+    "6664",
+    "2a93",
+    "48c1",
 
-    "73a7",
-    "5938",
-    "5618",
-    "bb22",
-    "1449",
+    "bc82",
+    "14a5",
+    "7177",
+    "b253",
+    "b359",
     "",
     "",
 )
 
-state = color_sort.game.GameState(starting_configuration, 4, False)
+state = color_sort.game.GameState(starting_configuration, 4, True)
 actions, solvable = color_sort.breadth_first_search_solver.solve(state)
 
 assert solvable
