@@ -1,6 +1,6 @@
 import dataclasses
 import functools
-from typing import Any, Optional, Tuple, List, Callable, Union
+from typing import Any, Optional, Tuple, List, Callable, Union, Hashable
 
 
 @dataclasses.dataclass(frozen=True)
@@ -17,11 +17,14 @@ class Action:
 @dataclasses.dataclass(frozen=True, eq=False)
 class GameState:
     """
-    Models the current state of the game. Containers can be
+    Models the current state of the game. `containers` can be
     either a tuple of tuples or a tuple of strings. Any immutable,
-    sliceable, and comparable data type should work as well.
+    sliceable, ordered, iterable, hashable, and comparable container
+    type should work as well, basically anything that has the same
+    general behavior as a string or a tuple 🦆. The "top" of each
+    container should be the 0th index.
     """
-    containers: Union[Tuple[tuple], Tuple[str]]
+    containers: Union[Tuple[Tuple[Hashable]], Tuple[str]]
     container_size: int
     one_at_a_time: bool
 
