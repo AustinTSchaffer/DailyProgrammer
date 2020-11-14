@@ -2,25 +2,15 @@
 # Hough Circle Transform
 # https://docs.opencv.org/3.4/d4/d70/tutorial_hough_circle.html
 
+#%%
+
+import dataclasses
 
 from cv2 import cv2 as cv
 import numpy as np
+from matplotlib import pyplot as plt
 
 original_image = cv.imread("./images/level_153.png")
-
-# Helps the output of my phone's screenshots fit on my monitor when displaying, without rotating
-# Phone: 1080x2220
-# Monitor: 1920x1080
-DOWNSCALE_FACTOR = 2.5
-def display_image(title: str, image, downscale_factor: int=DOWNSCALE_FACTOR):
-    cv.imshow(
-        title,
-        cv.resize(
-            image,
-            (int(image.shape[1]/2.5), int(image.shape[0]/2.5))
-        )
-    )
-
 
 # Trimming factors to remove irrelevant portions of the image which might contain circles.
 HEADER_TRIM = 150
@@ -41,19 +31,27 @@ assert circles is not None, "Could not detect any circles"
 circles = np.round(circles[0, :]).astype("int")
 
 # Convert the circle coordinates to the 2D space of the original image
+@dataclasses.dataclass
+class Circle:
+    column: int
+    row: int
+    radius: int
+
 circles = [
-    (x, y+HEADER_TRIM, r)
+    Circle(x, y+HEADER_TRIM, r)
     for (x, y, r) in
     circles
 ]
 
+#%%
+
 # loop over the (x, y) coordinates and radius of the circles
-image_with_circles_circled = original_image.copy()
-for (x, y, r) in circles:
+display_image = original_image.copy()
+for circle in circles:
     # draw the circle in the output image
-    cv.circle(image_with_circles_circled, (x, y), r, (0, 255, 0), 4)
-    cv.circle(image_with_circles_circled, (x, y), 1, (0, 255, 0), 4)
+    cv.circle(display_image, (circle.column, circle.row), circle.radius, (0, 255, 0), 4)
+    cv.circle(display_image, (circle.column, circle.row), 1, (0, 255, 0), 4)
 
 # Show the original image side-by-side with circles circled
-display_image("Circled", cv.hconcat([original_image, image_with_circles_circled]))
-cv.waitKey(0)
+plt.imshow(cv.hconcat([original_image, display_image]))
+plt.show()

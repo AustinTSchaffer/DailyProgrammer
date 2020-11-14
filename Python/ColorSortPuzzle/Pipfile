@@ -12,6 +12,8 @@ pylint = "*"
 autopep8 = "*"
 rope = "*"
 bpython = "*"
+ipykernel = "*"
+matplotlib = "*"
 
 [requires]
 python_version = "3.8"
