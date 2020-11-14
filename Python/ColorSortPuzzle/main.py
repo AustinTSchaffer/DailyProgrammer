@@ -18,7 +18,7 @@ FOOTER_TRIM = 150
 
 working_image = cv.cvtColor(original_image, cv.COLOR_BGR2GRAY)
 working_image = cv.medianBlur(working_image, 5)
-working_image = working_image[HEADER_TRIM:-FOOTER_TRIM, 0:]
+working_image = working_image[HEADER_TRIM:-FOOTER_TRIM, :]
 
 # TODO: What do these params mean?
 circles = cv.HoughCircles(working_image, cv.HOUGH_GRADIENT, 1, 50,
