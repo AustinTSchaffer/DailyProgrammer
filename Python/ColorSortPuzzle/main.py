@@ -66,3 +66,33 @@ for circle in circles:
 # Show the original image side-by-side with circles circled
 plt.imshow(cv.cvtColor(cv.hconcat([original_image, display_image]), cv.COLOR_BGR2RGB))
 plt.show()
+
+#%% Group Circles into Containers
+
+# Group circles into containers. This first sorts them
+# by column with some flex to allow for issues related to imperfect circle
+# detection, then groups them into their respective containers.
+
+import collections
+
+column_flex = 2
+grouped_by_column = collections.defaultdict(list)
+for circle in circles:
+    found_friends = False
+    for column_num, circle_group in grouped_by_column.items():
+        if abs(circle.column - column_num) <= column_flex:
+            found_friends = True
+            circle_group.append(circle)
+    if not found_friends:
+        grouped_by_column[circle.column].append(circle)
+
+# TODO: Determine this from the data somehow. Maybe in the future it would be
+# better to determine the bounding boxes using opencv instead.
+container_size = 4
+empty_containers = 2
+
+grouped_by_container = []
+for column_group in grouped_by_column.values():
+    pass
+
+puzzle = ()
