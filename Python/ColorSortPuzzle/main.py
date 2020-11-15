@@ -11,7 +11,8 @@ from cv2 import cv2 as cv
 import numpy as np
 from matplotlib import pyplot as plt
 
-original_image = cv.imread("./images/level_153.png")
+IMAGE_LEVEL_NAME = "level_153.png"
+original_image = cv.imread(f"./images/{IMAGE_LEVEL_NAME}")
 
 # Trimming factors to remove irrelevant portions of the image which might contain circles.
 header_trim = 150
@@ -50,49 +51,113 @@ circles: List[Circle] = [
         # antialiased colors.
         color=1
     )
-    for (x, y, r) in
-    circles
+    for (x, y, r) in circles
 ]
 
-#%% Highlight Circles and Show
+#%% Detect Containers in Source Image
+
+import os
+
+# Converts working_image to a black/white image which makes the countours algorithm
+# work better. WHITE_THRESHOLD sets the lower/upper bounds on what brightnesses
+# should be considered "white". These values were selected through trial and error,
+# visually inspecting the resulting `thresh` with `plt.imshow`
+WHITE_THRESHOLD = (200, 255)
+_, thresh = cv.threshold(working_image, *WHITE_THRESHOLD, cv.THRESH_BINARY)
+
+# Uses cv.findContours to sketch out the boundaries of all objects that passed the
+# threshold filter.
+contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+
+# TODO: What is hierarchy for?
+
+def draw_contour(*, contour_index=-1, show, save):
+    output = cv.drawContours(
+        image=cv.cvtColor(working_image.copy(), cv.COLOR_GRAY2BGR),
+        contours=contours,
+        contourIdx=contour_index,
+        color=(0,0,255), # "Red" in BGR colorspace
+        thickness=2,
+    )
+
+    if show:
+        plt.imshow(output)
+        plt.show()
+
+    if save:
+        os.makedirs(f"./images/contours/{IMAGE_LEVEL_NAME}", exist_ok=True)
+        cv.imwrite(f"./images/contours/{IMAGE_LEVEL_NAME}/contour_{contour_index}.png", output)
+
+    return output
+
+# Saves all contours to storage so they can be easily viewed in series.
+for i, contour in enumerate(contours):
+    draw_contour(contour_index=i, show=False, save=True)
+
+@dataclasses.dataclass
+class Rectangle:
+    """
+    Names the properties of the rectangle, where col/row refer
+    to the location of the upper left corner of the rectangle.
+    """
+    column: int
+    row: int
+    width: int
+    height: int
+
+# Generates bounding rectangles for all 
+bounding_rectangles: List[Rectangle] = []
+for contour in contours:
+    bounds = cv.boundingRect(contour)
+    rectangle = Rectangle(
+        column=bounds[0],
+        row=bounds[1] + header_trim,
+        width=bounds[2],
+        height=bounds[3],
+    )
+    bounding_rectangles.append(rectangle)
+
+# Determine which rectangles are not bounded by any of the other bounding rectangles.
+# That should result in a list that we can consider the "containers".
+containers: List[Rectangle] = []
+
+def r1_contains_r2(r1: Rectangle, r2: Rectangle):
+    return (
+        r2.row >= r1.row and
+        r2.row <= (r1.row + r1.height) and
+        r2.column >= r1.column and
+        r2.column <= (r1.column + r1.width)
+    )
+
+# Casual N^2 Alg
+for current in bounding_rectangles:
+    contained_by_one = any(filter(lambda other: other != current and r1_contains_r2(other, current), bounding_rectangles))
+    if not contained_by_one:
+        containers.append(current)
+
+#%% Highlight Objects and Show
 
 # loop over the (x, y) coordinates and radius of the circles
 display_image = original_image.copy()
 for circle in circles:
     # draw the circle in the output image
-    cv.circle(display_image, (circle.column, circle.row), circle.radius, (0, 0, 0), 4)
+    cv.circle(display_image, (circle.column, circle.row), circle.radius, (0, 0, 0), 2)
     cv.circle(display_image, (circle.column, circle.row), 1, (0, 0, 0), 4)
 
+for rectangle in containers:
+    cv.rectangle(
+        display_image,
+        (rectangle.column, rectangle.row),
+        (rectangle.column + rectangle.width, rectangle.row + rectangle.height),
+        (0,0,0),
+        2,
+    )
+
 # Show the original image side-by-side with circles circled
+cv.imwrite(f"./images/objects_identified_{IMAGE_LEVEL_NAME}", display_image)
 plt.imshow(cv.cvtColor(cv.hconcat([original_image, display_image]), cv.COLOR_BGR2RGB))
 plt.show()
 
 #%% Group Circles into Containers
 
-# Group circles into containers. This first sorts them
-# by column with some flex to allow for issues related to imperfect circle
-# detection, then groups them into their respective containers.
-
-import collections
-
-column_flex = 2
-grouped_by_column = collections.defaultdict(list)
-for circle in circles:
-    found_friends = False
-    for column_num, circle_group in grouped_by_column.items():
-        if abs(circle.column - column_num) <= column_flex:
-            found_friends = True
-            circle_group.append(circle)
-    if not found_friends:
-        grouped_by_column[circle.column].append(circle)
-
-# TODO: Determine this from the data somehow. Maybe in the future it would be
-# better to determine the bounding boxes using opencv instead.
-container_size = 4
-empty_containers = 2
-
-grouped_by_container = []
-for column_group in grouped_by_column.values():
-    pass
-
-puzzle = ()
+# TODO:
