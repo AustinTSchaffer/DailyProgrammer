@@ -129,7 +129,7 @@ def r1_contains_r2(r1: Rectangle, r2: Rectangle):
         r2.column <= (r1.column + r1.width)
     )
 
-# Casual N^2 Alg
+# Casual N^2 Alg to make sure that each bounding rectangle is contained by no other bounding rectangles
 for current in bounding_rectangles:
     contained_by_one = any(filter(lambda other: other != current and r1_contains_r2(other, current), bounding_rectangles))
     if not contained_by_one:
