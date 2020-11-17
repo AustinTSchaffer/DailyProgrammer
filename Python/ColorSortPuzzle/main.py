@@ -189,11 +189,9 @@ cv.imwrite(f"./images/objects_identified/{IMAGE_LEVEL_NAME}", display_image)
 import collections
 
 # Group each circle based on the container they are contained in
-containers = collections.OrderedDict((
-    (container, [])
-    for container in
-    containers
-))
+grouped_by_container = collections.OrderedDict()
+for container in containers:
+    grouped_by_container[container] = []
 
 for circle in circles:
     container = next((
@@ -201,10 +199,30 @@ for circle in circles:
         if rect_contains_point(container, row=circle.row, column=circle.column)
     ))
 
-    containers[container].append(circle)
+    grouped_by_container[container].append(circle)
 
 # Sort the circles within each container based on their Y coordinate.
-for container, circles in containers.items():
-    containers[container] = sorted(circles, key=lambda circle: circle.row)
+for container, circles in grouped_by_container.items():
+    grouped_by_container[container] = sorted(circles, key=lambda circle: circle.row)
 
-print(containers)
+# TODO: Determine the effective color of each circle.
+color_map = {}
+MAX_DISTANCE = 10
+
+import math
+def color_distance(c1: Circle, c2: Circle) -> float:
+    return math.sqrt(
+        (c1.color[0] - c2.color[0])**2 +
+        (c1.color[1] - c2.color[1])**2 +
+        (c1.color[2] - c2.color[2])**2
+    )
+
+for circle in circles:
+    # TODO: ?
+    pass
+
+#%% Calculate winning moves
+
+import color_sort
+
+
