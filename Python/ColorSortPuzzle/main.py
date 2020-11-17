@@ -86,10 +86,8 @@ WHITE_THRESHOLD = (200, 255)
 _, thresh = cv.threshold(working_image, *WHITE_THRESHOLD, cv.THRESH_BINARY)
 
 # Uses cv.findContours to sketch out the boundaries of all objects that passed the
-# threshold filter.
+# threshold filter. TODO: What is hierarchy for?
 contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
-
-# TODO: What is hierarchy for?
 
 def draw_contour(*, contour_index=-1, show, save):
     output = cv.drawContours(
