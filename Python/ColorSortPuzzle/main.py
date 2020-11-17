@@ -188,11 +188,12 @@ cv.imwrite(f"./images/objects_identified/{IMAGE_LEVEL_NAME}", display_image)
 
 import collections
 
-containers = {
-    container: []
+# Group each circle based on the container they are contained in
+containers = collections.OrderedDict((
+    (container, [])
     for container in
     containers
-}
+))
 
 for circle in circles:
     container = next((
@@ -201,5 +202,9 @@ for circle in circles:
     ))
 
     containers[container].append(circle)
+
+# Sort the circles within each container based on their Y coordinate.
+for container, circles in containers.items():
+    containers[container] = sorted(circles, key=lambda circle: circle.row)
 
 print(containers)
