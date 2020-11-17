@@ -5,32 +5,36 @@
 #%% Detect Circles in Source Image
 
 import dataclasses
-from typing import List
+from typing import List, Tuple
 
 from cv2 import cv2 as cv
 import numpy as np
 from matplotlib import pyplot as plt
 
 IMAGE_LEVEL_NAME = "level_153.png"
-original_image = cv.imread(f"./images/{IMAGE_LEVEL_NAME}")
+ORIGINAL_IMAGE = cv.imread(f"./images/{IMAGE_LEVEL_NAME}")
 
 # Trimming factors to remove irrelevant portions of the image which might contain circles.
-header_trim = 150
-footer_trim = 150
+HEADER_TRIM = 150
+FOOTER_TRIM = 150
 
-working_image = cv.cvtColor(original_image, cv.COLOR_BGR2GRAY)
+working_image = cv.cvtColor(ORIGINAL_IMAGE, cv.COLOR_BGR2GRAY)
 working_image = cv.medianBlur(working_image, 5)
-working_image = working_image[header_trim:-footer_trim, :]
+working_image = working_image[HEADER_TRIM:-FOOTER_TRIM, :]
+
+def show_image(image):
+    plt.imshow(cv.cvtColor(image, cv.COLOR_BGR2RGB))
+    plt.show()
 
 # TODO: What do these params mean?
-circles = cv.HoughCircles(working_image, cv.HOUGH_GRADIENT, 1, 50,
+hough_circles = cv.HoughCircles(working_image, cv.HOUGH_GRADIENT, 1, 50,
                             param1=100, param2=30,
                             minRadius=30, maxRadius=50)
 
-assert circles is not None, "Could not detect any circles"
+assert hough_circles is not None, "Could not detect any circles"
 
 # convert the (x, y) coordinates and radius of the circles to integers
-circles = np.round(circles[0, :]).astype("int")
+hough_circles = np.round(hough_circles[0, :]).astype("int")
 
 # Convert the circle coordinates to the 2D space of the original image
 @dataclasses.dataclass
@@ -38,21 +42,37 @@ class Circle:
     column: int
     row: int
     radius: int
-    # TODO: Better datatype for color
-    color: int
+    color: Tuple[float]
 
-circles: List[Circle] = [
-    Circle(
-        column=x,
-        row=y+header_trim,
-        radius=r,
-        # TODO: Determine color of dot in image. Either color of center point pixel
-        # or average color of all pixels within a slightly smaller circle, to avoid
-        # antialiased colors.
-        color=1
+circles: List[Circle] = []
+for (column, row, radius) in hough_circles:
+    # Add the header trim back
+    row = row + HEADER_TRIM
+
+    # Determines the color of the circle in the original image using a mask. Masks the color
+    # of the circle with a circle of half the radius, to help reduce color issues due to
+    # shadows and anti-aliasing.
+    mask = np.zeros(ORIGINAL_IMAGE.shape[:2], dtype="uint8")
+    mask = cv.circle(
+        mask,
+        center=(column, row),
+        radius=int(radius / 2),
+        color=(255, 255, 255),
+        thickness=cv.FILLED,
     )
-    for (x, y, r) in circles
-]
+
+    mean_color = cv.mean(ORIGINAL_IMAGE, mask=mask)
+    mean_color = mean_color[:3]
+
+    circle = Circle(
+        column=column,
+        row=row,
+        radius=radius,
+        color=mean_color,
+    )
+
+    circles.append(circle)
+
 
 #%% Detect Containers in Source Image
 
@@ -111,7 +131,7 @@ for contour in contours:
     bounds = cv.boundingRect(contour)
     rectangle = Rectangle(
         column=bounds[0],
-        row=bounds[1] + header_trim,
+        row=bounds[1] + HEADER_TRIM,
         width=bounds[2],
         height=bounds[3],
     )
@@ -121,24 +141,31 @@ for contour in contours:
 # That should result in a list that we can consider the "containers".
 containers: List[Rectangle] = []
 
-def r1_contains_r2(r1: Rectangle, r2: Rectangle):
+def rect_contains_point(rectangle: Rectangle, row: int, column: int):
     return (
-        r2.row >= r1.row and
-        r2.row <= (r1.row + r1.height) and
-        r2.column >= r1.column and
-        r2.column <= (r1.column + r1.width)
+        row >= rectangle.row and
+        row <= (rectangle.row + rectangle.height) and
+        column >= rectangle.column and
+        column <= (rectangle.column + rectangle.width)
     )
 
 # Casual N^2 Alg to make sure that each bounding rectangle is contained by no other bounding rectangles
 for current in bounding_rectangles:
-    contained_by_one = any(filter(lambda other: other != current and r1_contains_r2(other, current), bounding_rectangles))
-    if not contained_by_one:
+    contained_by = next(
+        (
+            other for other in bounding_rectangles
+            if other != current and rect_contains_point(other, current.row, current.column)
+        ),
+        None
+    )
+
+    if contained_by is None:
         containers.append(current)
 
 #%% Highlight Objects and Show
 
 # loop over the (x, y) coordinates and radius of the circles
-display_image = original_image.copy()
+display_image = ORIGINAL_IMAGE.copy()
 for circle in circles:
     # draw the circle in the output image
     cv.circle(display_image, (circle.column, circle.row), circle.radius, (0, 0, 0), 2)
@@ -155,7 +182,7 @@ for rectangle in containers:
 
 # Show the original image side-by-side with circles circled
 cv.imwrite(f"./images/objects_identified_{IMAGE_LEVEL_NAME}", display_image)
-plt.imshow(cv.cvtColor(cv.hconcat([original_image, display_image]), cv.COLOR_BGR2RGB))
+plt.imshow(cv.cvtColor(cv.hconcat([ORIGINAL_IMAGE, display_image]), cv.COLOR_BGR2RGB))
 plt.show()
 
 #%% Group Circles into Containers
