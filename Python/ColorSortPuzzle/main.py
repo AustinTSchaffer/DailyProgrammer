@@ -11,7 +11,7 @@ from cv2 import cv2 as cv
 import numpy as np
 from matplotlib import pyplot as plt
 
-IMAGE_LEVEL_NAME = "level_153.png"
+IMAGE_LEVEL_NAME = "level_135.png"
 ORIGINAL_IMAGE = cv.imread(f"./images/{IMAGE_LEVEL_NAME}")
 
 # Trimming factors to remove irrelevant portions of the image which might contain circles.
@@ -37,7 +37,7 @@ assert hough_circles is not None, "Could not detect any circles"
 hough_circles = np.round(hough_circles[0, :]).astype("int")
 
 # Convert the circle coordinates to the 2D space of the original image
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class Circle:
     column: int
     row: int
@@ -112,7 +112,7 @@ def draw_contour(*, contour_index=-1, show, save):
 for i, contour in enumerate(contours):
     draw_contour(contour_index=i, show=False, save=True)
 
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class Rectangle:
     """
     Names the properties of the rectangle, where col/row refer
@@ -180,10 +180,26 @@ for rectangle in containers:
     )
 
 # Show the original image side-by-side with circles circled
-cv.imwrite(f"./images/objects_identified_{IMAGE_LEVEL_NAME}", display_image)
-plt.imshow(cv.cvtColor(cv.hconcat([ORIGINAL_IMAGE, display_image]), cv.COLOR_BGR2RGB))
-plt.show()
+cv.imwrite(f"./images/objects_identified/{IMAGE_LEVEL_NAME}", display_image)
+# plt.imshow(cv.cvtColor(cv.hconcat([ORIGINAL_IMAGE, display_image]), cv.COLOR_BGR2RGB))
+# plt.show(block=False)
 
 #%% Group Circles into Containers
 
-# TODO:
+import collections
+
+containers = {
+    container: []
+    for container in
+    containers
+}
+
+for circle in circles:
+    container = next((
+        container for container in containers
+        if rect_contains_point(container, row=circle.row, column=circle.column)
+    ))
+
+    containers[container].append(circle)
+
+print(containers)
