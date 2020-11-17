@@ -167,9 +167,10 @@ for current in bounding_rectangles:
 # loop over the (x, y) coordinates and radius of the circles
 display_image = ORIGINAL_IMAGE.copy()
 for circle in circles:
-    # draw the circle in the output image
-    cv.circle(display_image, (circle.column, circle.row), circle.radius, (0, 0, 0), 2)
-    cv.circle(display_image, (circle.column, circle.row), 1, (0, 0, 0), 4)
+    # Outline the circle in the output image using an inverted color to improve contrast
+    inv_color = (255 - circle.color[0], 255 - circle.color[1], 255 - circle.color[2])
+    cv.circle(display_image, (circle.column, circle.row), circle.radius, inv_color, 2)
+    cv.circle(display_image, (circle.column, circle.row), 1, inv_color, 4)
 
 for rectangle in containers:
     cv.rectangle(
