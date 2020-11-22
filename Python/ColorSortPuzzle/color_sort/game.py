@@ -32,7 +32,11 @@ class GameState:
 
     @classmethod
     def copy(
-        cls, self, containers=None, container_size=None, one_at_a_time=None,
+        cls,
+        self,
+        containers=None,
+        container_size=None,
+        one_at_a_time=None,
     ):
         """
         Duplicates self, overriding any class properties.
@@ -56,14 +60,18 @@ class GameState:
 
     def __hash__(self) -> int:
         return hash(
-            (tuple(sorted(self.containers)), self.container_size, self.one_at_a_time,)
+            (
+                tuple(sorted(self.containers)),
+                self.container_size,
+                self.one_at_a_time,
+            )
         )
 
 
 def top_color_and_depth(container: tuple) -> Optional[Tuple[Any, int]]:
     """
     Returns the top color from the container, along with the number
-    of continuous segments that are that color. 
+    of continuous segments that are that color.
     """
     if len(container) == 0:
         return None
@@ -143,7 +151,10 @@ def apply_action(state: GameState, action: Action) -> GameState:
 
     containers[action.ending_container] = new_ending
 
-    return GameState.copy(state, containers=tuple(containers),)
+    return GameState.copy(
+        state,
+        containers=tuple(containers),
+    )
 
 
 def game_won(state: GameState) -> bool:
