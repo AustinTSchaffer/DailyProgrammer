@@ -8,6 +8,7 @@ class Action:
     """
     Models actions that can be taken against the game.
     """
+
     starting_container: int
     ending_container: int
     color: Any
@@ -24,38 +25,39 @@ class GameState:
     general behavior as a string or a tuple 🦆. The "top" of each
     container should be the 0th index.
     """
+
     containers: Union[Tuple[Tuple[Hashable]], Tuple[str]]
     container_size: int
     one_at_a_time: bool
 
     @classmethod
-    def copy(cls, self,
-             containers=None,
-             container_size=None,
-             one_at_a_time=None,
-             ):
+    def copy(
+        cls, self, containers=None, container_size=None, one_at_a_time=None,
+    ):
         """
         Duplicates self, overriding any class properties.
         """
         return cls(
             containers=containers if containers is not None else self.containers,
-            container_size=container_size if container_size is not None else self.container_size,
-            one_at_a_time=one_at_a_time if one_at_a_time is not None else self.one_at_a_time,
+            container_size=container_size
+            if container_size is not None
+            else self.container_size,
+            one_at_a_time=one_at_a_time
+            if one_at_a_time is not None
+            else self.one_at_a_time,
         )
 
     def __eq__(self, other) -> bool:
         return (
-            sorted(self.containers) == sorted(other.containers) and
-            self.container_size == other.container_size and
-            self.one_at_a_time == other.one_at_a_time
+            sorted(self.containers) == sorted(other.containers)
+            and self.container_size == other.container_size
+            and self.one_at_a_time == other.one_at_a_time
         )
 
     def __hash__(self) -> int:
-        return hash((
-            tuple(sorted(self.containers)),
-            self.container_size,
-            self.one_at_a_time,
-        ))
+        return hash(
+            (tuple(sorted(self.containers)), self.container_size, self.one_at_a_time,)
+        )
 
 
 def top_color_and_depth(container: tuple) -> Optional[Tuple[Any, int]]:
@@ -97,27 +99,27 @@ def possible_actions(state: GameState) -> List[Action]:
             if ec_index == sc_index:
                 continue
 
-            can_move_here = (
-                (len(ending_container) < state.container_size) and
-                (
-                    len(ending_container) <= 0 or
-                    ending_container[0] == color_to_move
-                )
+            can_move_here = (len(ending_container) < state.container_size) and (
+                len(ending_container) <= 0 or ending_container[0] == color_to_move
             )
 
             amount_to_move = (
-                1 if state.one_at_a_time else
+                1
+                if state.one_at_a_time
+                else
                 # Partial pours are possible
                 min(color_depth, state.container_size - len(ending_container))
             )
 
             if can_move_here:
-                actions.append(Action(
-                    starting_container=sc_index,
-                    ending_container=ec_index,
-                    color=color_to_move,
-                    count=amount_to_move,
-                ))
+                actions.append(
+                    Action(
+                        starting_container=sc_index,
+                        ending_container=ec_index,
+                        color=color_to_move,
+                        count=amount_to_move,
+                    )
+                )
 
     return actions
 
@@ -131,20 +133,17 @@ def apply_action(state: GameState, action: Action) -> GameState:
 
     # Apply change to starting container
     starting_container = containers[action.starting_container]
-    new_starting = starting_container[action.count:]
+    new_starting = starting_container[action.count :]
 
     containers[action.starting_container] = new_starting
 
     # Apply change to ending container
     ending_container = containers[action.ending_container]
-    new_ending = starting_container[:action.count] + ending_container
+    new_ending = starting_container[: action.count] + ending_container
 
     containers[action.ending_container] = new_ending
 
-    return GameState.copy(
-        state,
-        containers=tuple(containers),
-    )
+    return GameState.copy(state, containers=tuple(containers),)
 
 
 def game_won(state: GameState) -> bool:
@@ -163,8 +162,7 @@ def game_won(state: GameState) -> bool:
 
         # For filled containers, make sure all elements are the same.
         all_same = all(
-            container[0] == container[index]
-            for index in range(1, len(container))
+            container[0] == container[index] for index in range(1, len(container))
         )
 
         if not all_same:
@@ -173,7 +171,9 @@ def game_won(state: GameState) -> bool:
     return True
 
 
-def game_lost(state: GameState, is_solvable: Callable[[GameState], bool]=None) -> bool:
+def game_lost(
+    state: GameState, is_solvable: Callable[[GameState], bool] = None
+) -> bool:
     """
     Returns true if the game reaches a state with no possible actions, or if the
     optional function arg returns "False" on the GameState, indicating the state
@@ -187,6 +187,8 @@ def game_lost(state: GameState, is_solvable: Callable[[GameState], bool]=None) -
         return True
 
     if is_solvable is None:
-        raise ValueError("Unable to determine if game is not solved without a function.")
+        raise ValueError(
+            "Unable to determine if game is not solved without a function."
+        )
 
     return not is_solvable(state)

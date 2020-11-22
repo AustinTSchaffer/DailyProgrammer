@@ -9,9 +9,14 @@ class BaseAgent:
     Base class for agent implementations.
     """
 
-    def make_move(self, state: game.GameState, possible_actions: List[game.Action]) -> game.Action:
+    def make_move(
+        self, state: game.GameState, possible_actions: List[game.Action]
+    ) -> game.Action:
         raise NotImplementedError()
 
+
 class RandomAgent(BaseAgent):
-    def make_move(self, containers: Tuple[tuple], possible_actions: List[game.Action]) -> game.Action:
+    def make_move(
+        self, containers: Tuple[tuple], possible_actions: List[game.Action]
+    ) -> game.Action:
         return random.choice(possible_actions)

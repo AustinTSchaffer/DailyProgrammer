@@ -3,6 +3,7 @@ from typing import List, Tuple
 
 import color_sort.game as game
 
+
 def solve(state: game.GameState) -> Tuple[List[game.Action], bool]:
     """
     Solves the game using a BFS algorithm. Returns the list of actions required to take
@@ -39,11 +40,13 @@ def solve(state: game.GameState) -> Tuple[List[game.Action], bool]:
 
     return [], False
 
+
 def game_lost(state: game.GameState) -> bool:
     def is_solvable(_state: game.GameState) -> bool:
         _, solvable = solve(_state)
         return solvable
 
     return game.game_lost(state, is_solvable=is_solvable)
+
 
 game_lost.__doc__ = game.game_lost.__doc__
