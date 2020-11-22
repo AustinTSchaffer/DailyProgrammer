@@ -1,4 +1,4 @@
-# Using OpenCV to 
+# Using OpenCV to
 # Hough Circle Transform
 # https://docs.opencv.org/3.4/d4/d70/tutorial_hough_circle.html
 
@@ -23,7 +23,9 @@ grouped_by_container = android_game.game_objects.group_circles_by_containers(
     containers=containers,
 )
 
-color_map = android_game.image_processing.generate_color_map(circles=circles)
+color_map = android_game.image_processing.generate_color_map(
+    circles=circles,
+)
 
 #%% Highlight Objects and Show
 
@@ -40,7 +42,7 @@ for rectangle in containers:
         display_image,
         (rectangle.column, rectangle.row),
         (rectangle.column + rectangle.width, rectangle.row + rectangle.height),
-        (0,0,0),
+        (0, 0, 0),
         2,
     )
 
@@ -52,10 +54,12 @@ cv.imwrite(f"./images/objects_identified/{IMAGE_LEVEL_NAME}", display_image)
 #%% Calculate winning moves
 
 game_state = color_sort.game.GameState(
-    containers=tuple((
-        tuple(color_map[_circle.color] for _circle in _circles)
-        for container, _circles in grouped_by_container.items()
-    )),
+    containers=tuple(
+        (
+            tuple(color_map[_circle.color] for _circle in _circles)
+            for container, _circles in grouped_by_container.items()
+        )
+    ),
     container_size=max((len(_circles) for _circles in grouped_by_container.values())),
     one_at_a_time=True,
 )
