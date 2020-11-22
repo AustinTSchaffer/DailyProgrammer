@@ -202,27 +202,51 @@ for circle in circles:
     grouped_by_container[container].append(circle)
 
 # Sort the circles within each container based on their Y coordinate.
-for container, circles in grouped_by_container.items():
-    grouped_by_container[container] = sorted(circles, key=lambda circle: circle.row)
+for container, _circles in grouped_by_container.items():
+    grouped_by_container[container] = sorted(_circles, key=lambda circle: circle.row)
 
-# TODO: Determine the effective color of each circle.
-color_map = {}
-MAX_DISTANCE = 10
+#%% Group Circles into Colors
 
 import math
-def color_distance(c1: Circle, c2: Circle) -> float:
+def color_distance(color_1: Tuple[float], color_2: Tuple[float]) -> float:
+    assert len(color_1) == len(color_2) == 3
     return math.sqrt(
-        (c1.color[0] - c2.color[0])**2 +
-        (c1.color[1] - c2.color[1])**2 +
-        (c1.color[2] - c2.color[2])**2
+        (color_1[0] - color_2[0])**2 +
+        (color_1[1] - color_2[1])**2 +
+        (color_1[2] - color_2[2])**2
     )
 
+color_map = {}
+MAX_DISTANCE = 3
+next_color = 0
 for circle in circles:
-    # TODO: ?
-    pass
+    matching_color = next(
+        (
+            color for color in color_map
+            if color_distance(circle.color, color) <= MAX_DISTANCE
+        ),
+        None,
+    )
+
+    if matching_color:
+        color_map[circle.color] = color_map[matching_color]
+    else:
+        color_map[circle.color] = next_color
+        next_color += 1
 
 #%% Calculate winning moves
 
 import color_sort
 
+game_state = color_sort.game.GameState(
+    containers=tuple((
+        tuple(color_map[_circle.color] for _circle in reversed(_circles))
+        for container, _circles in grouped_by_container.items()
+    )),
+    container_size=max((len(_circles) for _circles in grouped_by_container.values())),
+    one_at_a_time=True,
+)
 
+actions, solveable = color_sort.breadth_first_search_solver.solve(game_state)
+
+# %%
