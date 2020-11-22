@@ -1,9 +1,3 @@
-# Using OpenCV to
-# Hough Circle Transform
-# https://docs.opencv.org/3.4/d4/d70/tutorial_hough_circle.html
-
-#%% Detect Circles in Source Image
-
 import dataclasses
 from typing import List, Tuple
 
@@ -13,18 +7,20 @@ from matplotlib import pyplot as plt
 import android_game
 import color_sort
 
+#%% Detect Game Objects in Source Image
+
 IMAGE_LEVEL_NAME = "level_135.png"
 ORIGINAL_IMAGE = cv.imread(f"./images/{IMAGE_LEVEL_NAME}")
 
 circles = android_game.image_processing.find_circles(ORIGINAL_IMAGE)
+color_map = android_game.image_processing.generate_color_map(
+    circles=circles,
+)
+
 containers = android_game.image_processing.find_containers(ORIGINAL_IMAGE)
 grouped_by_container = android_game.game_objects.group_circles_by_containers(
     circles=circles,
     containers=containers,
-)
-
-color_map = android_game.image_processing.generate_color_map(
-    circles=circles,
 )
 
 #%% Highlight Objects and Show
@@ -48,8 +44,8 @@ for rectangle in containers:
 
 # Show the original image side-by-side with circles circled
 cv.imwrite(f"./images/objects_identified/{IMAGE_LEVEL_NAME}", display_image)
-# plt.imshow(cv.cvtColor(cv.hconcat([ORIGINAL_IMAGE, display_image]), cv.COLOR_BGR2RGB))
-# plt.show(block=False)
+plt.imshow(cv.cvtColor(cv.hconcat([ORIGINAL_IMAGE, display_image]), cv.COLOR_BGR2RGB))
+plt.show(block=False)
 
 #%% Calculate winning moves
 
@@ -65,3 +61,7 @@ game_state = color_sort.game.GameState(
 )
 
 actions, solveable = color_sort.breadth_first_search_solver.solve(game_state)
+
+#%% Automate Clicks on Android Device
+
+
