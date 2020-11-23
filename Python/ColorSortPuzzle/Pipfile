@@ -5,7 +5,6 @@ name = "pypi"
 
 [packages]
 opencv-python = "==4.2.0.34"
-adb-shell = "*"
 
 [dev-packages]
 pylint = "*"

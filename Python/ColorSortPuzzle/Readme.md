@@ -1,5 +1,13 @@
 # Color Sort Puzzle Automation
 
+## Demo
+
+TODO: add gif
+- Add logging to script to make terminal output more interseting
+- `PS1="$ "`
+- Record screen with terminal next to Vysor window
+- Either make the auto-clicks faster or speed up vid
+
 ## Puzzle Description
 
 TODO:
@@ -15,12 +23,3 @@ Screenshots
 ```bash
 adb exec-out screencap -p > screen.png
 ```
-
-Using this package for automating levels from Python
-
-https://github.com/JeffLIrion/adb_shell
-
-## Demo
-
-TODO: add gif
-
