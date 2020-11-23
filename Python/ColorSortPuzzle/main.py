@@ -73,12 +73,18 @@ game_state = color_sort.game.GameState(
 actions, solveable = color_sort.breadth_first_search_solver.solve(game_state)
 
 #%% Automate Clicks on Android Device
-with subprocess.Popen(
+process = subprocess.Popen(
     args=["adb", "shell"], stdin=subprocess.PIPE, stdout=subprocess.PIPE
-) as process:
+)
+
+import time
+
+with process as process:
     for action in actions:
         for container_id in (action.starting_container, action.ending_container):
             container = containers[container_id]
             center_x = container.column + int(container.width / 2)
             center_y = container.row + int(container.height / 2)
-            process.stdin.write(f"input tap {center_x} {center_y}\n".encode("utf8"))
+            process.stdin.write(f"input tap {center_x} {center_y} &\n".encode("utf8"))
+            process.stdin.flush()
+            time.sleep(0.2)
