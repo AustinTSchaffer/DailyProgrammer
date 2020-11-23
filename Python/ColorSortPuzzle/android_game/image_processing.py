@@ -72,10 +72,7 @@ def find_circles(
         mean_color = mean_color[:3]
 
         circle = game_objects.Circle(
-            column=column,
-            row=row,
-            radius=radius,
-            color=mean_color,
+            column=column, row=row, radius=radius, color=mean_color,
         )
 
         circles.append(circle)
@@ -84,9 +81,7 @@ def find_circles(
 
 
 def find_containers(
-    original_image,
-    header_trim=150,
-    footer_trim=150,
+    original_image, header_trim=150, footer_trim=150,
 ) -> List[game_objects.Container]:
     """
     Finds all rectangles in the source image, excluding any rectangles that

@@ -4,8 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-adb-shell = "*"
 opencv-python = "==4.2.0.34"
+adb-shell = "*"
 
 [dev-packages]
 pylint = "*"
