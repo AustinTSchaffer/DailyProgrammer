@@ -13,12 +13,18 @@ import io
 
 #%% Detect Game Objects in Source Image
 
+print("Taking screenshot")
+
 with tempfile.NamedTemporaryFile("w", suffix=".png") as temp_png:
     subprocess.call("adb exec-out screencap -p".split(" "), stdout=temp_png)
     ORIGINAL_IMAGE = cv.imread(temp_png.name)
 
+print("Finding circles")
+
 circles = android_game.image_processing.find_circles(ORIGINAL_IMAGE)
 color_map = android_game.image_processing.generate_color_map(circles=circles,)
+
+print("Finding containers")
 
 containers = android_game.image_processing.find_containers(ORIGINAL_IMAGE)
 grouped_by_container = android_game.game_objects.group_circles_by_containers(
@@ -54,10 +60,12 @@ for rectangle in containers:
     )
 
 # Show the original image side-by-side with circles circled
-plt.imshow(cv.cvtColor(cv.hconcat([ORIGINAL_IMAGE, display_image]), cv.COLOR_BGR2RGB))
-plt.show(block=False)
+# plt.imshow(cv.cvtColor(cv.hconcat([ORIGINAL_IMAGE, display_image]), cv.COLOR_BGR2RGB))
+# plt.show(block=False)
 
 #%% Calculate winning moves
+
+print("Calculating winning moves...")
 
 game_state = color_sort.game.GameState(
     containers=tuple(
@@ -72,6 +80,8 @@ game_state = color_sort.game.GameState(
 
 actions, solveable = color_sort.breadth_first_search_solver.solve(game_state)
 
+print(f"Solution requires {len(actions)} moves.")
+
 #%% Automate Clicks on Android Device
 process = subprocess.Popen(
     args=["adb", "shell"], stdin=subprocess.PIPE, stdout=subprocess.PIPE
@@ -81,10 +91,14 @@ import time
 
 with process as process:
     for action in actions:
+        print(f"Moving {action.count} from {action.starting_container} to {action.ending_container}")
         for container_id in (action.starting_container, action.ending_container):
             container = containers[container_id]
             center_x = container.column + int(container.width / 2)
             center_y = container.row + int(container.height / 2)
-            process.stdin.write(f"input tap {center_x} {center_y} &\n".encode("utf8"))
+            command = f"input tap {center_x} {center_y} &\n"
+            process.stdin.write(command.encode("utf8"))
             process.stdin.flush()
-            time.sleep(0.2)
+            time.sleep(0.3)
+
+print("Done.")
