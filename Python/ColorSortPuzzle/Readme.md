@@ -1,24 +1,5 @@
 # Color Sort Puzzle Automation
 
-## Demo
+Mern and I have been obsessed with this game on our phones, so I decided to write a solver for it.
 
-TODO: add gif
-- Add logging to script to make terminal output more interseting
-- `PS1="$ "`
-- Record screen with terminal next to Vysor window
-
-## Puzzle Description
-
-TODO:
-
-## Solver Implementation
-
-TODO:
-
-## Automating Android
-
-Screenshots
-
-```bash
-adb exec-out screencap -p > screen.png
-```
+![](./images/Color%20Sort%20Puzzle%20Solver%20Example.gif)
