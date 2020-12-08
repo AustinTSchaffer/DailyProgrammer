@@ -54,17 +54,17 @@ for instruction_index in range(len(instructions)):
     instruction, value = instructions[instruction_index]
 
     if instruction == "nop":
-        updated_instructions = instructions.copy()
-        updated_instructions[instruction_index] = ("jmp", value)
-        exited_properly, accumulator = execute(updated_instructions)
+        instructions[instruction_index] = ("jmp", value)
+        exited_properly, accumulator = execute(instructions)
         if exited_properly:
             break
+        instructions[instruction_index] = ("nop", value)
 
     if instruction == "jmp":
-        updated_instructions = instructions.copy()
-        updated_instructions[instruction_index] = ("nop", value)
-        exited_properly, accumulator = execute(updated_instructions)
+        instructions[instruction_index] = ("nop", value)
+        exited_properly, accumulator = execute(instructions)
         if exited_properly:
             break
+        instructions[instruction_index] = ("jmp", value)
 
 print("Part 2:", accumulator)
