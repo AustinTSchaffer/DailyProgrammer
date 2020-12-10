@@ -32,23 +32,24 @@ print("Part 1:", bad_number)
 
 # %%
 
-data # list of integers
-target = bad_number # result of Part 1
+def find_range_that_sums_to(data, target):
+    # keeps track of a rolling sum between starting/ending indexes
+    rolling_sum = 0
+    starting_index = 0
+    ending_index = 0
 
-# keeps track of a rolling sum between starting/ending indexes
-rolling_sum = 0
-starting_index = 0
-ending_index = 0
+    # O(2n)
+    while rolling_sum != target:
+        if rolling_sum < target:
+            rolling_sum += data[ending_index]
+            ending_index += 1
+        else:
+            rolling_sum -= data[starting_index]
+            starting_index += 1
 
-# O(2n)
-while rolling_sum != target:
-    if rolling_sum < target:
-        rolling_sum += data[ending_index]
-        ending_index += 1
-    else:
-        rolling_sum -= data[starting_index]
-        starting_index += 1
+    return starting_index, ending_index
 
 # O(3m) time, O(m) space
+starting_index, ending_index = find_range_that_sums_to(data, bad_number)
 slice_ = data[starting_index:ending_index]
 print("Part 2:", min(slice_) + max(slice_))
