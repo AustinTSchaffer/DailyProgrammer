@@ -17,6 +17,8 @@ def copy_seat_layout(seat_layout):
         seat_layout
     ]
 
+# %% Part 1
+
 def get_neighbors(row, col, seat_layout):
     return [
         seat_layout[_row][_col]
@@ -29,32 +31,37 @@ def get_neighbors(row, col, seat_layout):
         )
     ]
 
-def simulate(seat_layout):
-    output = copy_seat_layout(seat_layout)
-    anything_changed = False
+def simulate(seat_layout, get_neighbors_alg=get_neighbors):
+    next_state = copy_seat_layout(seat_layout)
+    anything_changed = True
 
-    for row_index, row in enumerate(seat_layout):
-        for col_index, seat in enumerate(row):
-            neighbors = get_neighbors(row_index, col_index, seat_layout)
-            if seat == OPEN_SEAT:
-                if neighbors.count(OCCUPIED) <= 0:
-                    anything_changed = True
-                    output[row_index][col_index] = OCCUPIED
-            elif seat == OCCUPIED:
-                if neighbors.count(OCCUPIED) >= 4:
-                    anything_changed = True
-                    output[row_index][col_index] = OPEN_SEAT
+    while anything_changed:
+        current_state = next_state
+        next_state = copy_seat_layout(current_state)
 
-    return output, anything_changed
+        anything_changed = False
+        for row_index, row in enumerate(current_state):
+            for col_index, seat in enumerate(row):
+                neighbors = get_neighbors_alg(row_index, col_index, current_state)
+                if seat == OPEN_SEAT:
+                    if neighbors.count(OCCUPIED) <= 0:
+                        anything_changed = True
+                        next_state[row_index][col_index] = OCCUPIED
+                elif seat == OCCUPIED:
+                    if neighbors.count(OCCUPIED) >= 4:
+                        anything_changed = True
+                        next_state[row_index][col_index] = OPEN_SEAT
 
-simulated_seat_layout = seat_layout
-anything_changed = True
-while anything_changed:
-    simulated_seat_layout, anything_changed = simulate(simulated_seat_layout)
+    return current_state
 
-seats_occupied = sum((
-    row.count(OCCUPIED)
-    for row in simulated_seat_layout
-))
+def seats_occupied(seat_layout):
+    return sum((
+        row.count(OCCUPIED)
+        for row in seat_layout
+    ))
 
-print("Part 1:", seats_occupied)
+print("Part 1:", seats_occupied(simulate(seat_layout)))
+
+# %% Part 2
+
+
