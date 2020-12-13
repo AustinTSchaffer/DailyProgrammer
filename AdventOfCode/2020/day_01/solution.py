@@ -1,4 +1,4 @@
-# Solves Day 1 parts 1 and 2, using a single statement.
+# Solves Day 1 parts 1 and 2 using a single statement.
 
 print(
     "\n".join(
