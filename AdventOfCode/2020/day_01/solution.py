@@ -1,23 +1,21 @@
-# Solves Day 1 parts 1 and 2, using only 2
-# statements without repeating any code.
+# Solves Day 1 parts 1 and 2, using a single statement.
 
 print(
-    "Part 1:",
-    __import__("math").prod([
-        combo for combo in
-        __import__("itertools").combinations([
-            int(expense.strip())
-            for expense in
-            open("expenses.txt").readlines()
-        ], int(2.0))
-        if sum(combo) == 2020
-    ][0])
-)
-
-exec(
-    open("solution.py")
-        .read()
-        .replace("Part 1", "Part 2")
-        .replace("2.0", "3.0")
-        .replace("exec", "")
+    "\n".join(
+        f"Part {n+1}: {result}"
+        for n, result in
+        enumerate((
+           __import__("math").prod(next((
+                combo
+                for combo in
+                __import__("itertools").combinations([
+                    int(expense.strip())
+                    for expense in
+                    open("expenses.txt").readlines()
+                ], number_of_values)
+                if sum(combo) == 2020
+            )))
+            for number_of_values in range(2, 4)
+        ))
+    )
 )
