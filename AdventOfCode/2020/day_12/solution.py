@@ -65,7 +65,7 @@ print("Part 1:", abs(x) + abs(y))
 
 # %% Part 2
 
-def simulate_part_2(directions: List[Tuple[str, int]]) -> Tuple[int, int, int]:
+def simulate_part_2(directions: List[Tuple[str, int]]) -> Tuple[int, int]:
     ship_x, ship_y = 0, 0
     waypoint_x, waypoint_y = 10, 1
 
