@@ -1,5 +1,5 @@
 # Solves Day 1 parts 1 and 2, using only 2
-# expressions without repeating any code.
+# statements without repeating any code.
 
 print(
     "Part 1:",
