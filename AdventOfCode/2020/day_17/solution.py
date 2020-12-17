@@ -123,25 +123,27 @@ def simulate(state: List[List[int]], n: int, d: int) -> Set[tuple]:
                 yield ()
             else:
                 yield from (
-                    _
-                    for tuple_ in _neighboring_coords(index + 1, coordinate)
-                    for _ in (
-                        (1 + coordinate[index], *tuple_),
-                        (0 + coordinate[index], *tuple_),
-                        (-1 + coordinate[index], *tuple_),
+                    neighbor_coordinate
+                    for sub_coordinate in _neighboring_coords(index + 1, coordinate)
+                    for neighbor_coordinate in (
+                        (1 + coordinate[index], *sub_coordinate),
+                        (0 + coordinate[index], *sub_coordinate),
+                        (-1 + coordinate[index], *sub_coordinate),
                     )
-                    if _ != coordinate
                 )
 
-        return _neighboring_coords(0, coordinate)
+        yield from (
+            coord for coord in
+            _neighboring_coords(0, coordinate)
+            if coord != coordinate
+        )
 
     for _ in range(n):
 
         state_tracker = collections.defaultdict(int)
         for coords in currently_active_cells:
             for new_coord in neighboring_coords(coords):
-                if new_coord != coords:
-                    state_tracker[new_coord] += 1
+                state_tracker[new_coord] += 1
 
         next_state = set()
         for coords, num_neighbors in state_tracker.items():
