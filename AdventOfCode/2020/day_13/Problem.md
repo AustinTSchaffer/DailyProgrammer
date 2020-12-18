@@ -174,3 +174,56 @@ Find `t` such that
     19a - 0 = t
     17i - 67 = t
     13e - 32 = t
+
+## Notes from Matt Schaffer
+
+The first thing I noticed are all the prime numbers in your equations.  All the variables are multiplied by unique primes (787, 571, 41, etc.). The second thing I noticed is that, if you combine some of the equations, you can start to see some of the prime factors of two of the variables, namely `d` and `h`.  Here’s how to see that:
+
+Notice that, if you subtract the second and third equations below, the result factors nicely.  Specifically you get
+
+    571h - 50 - (41b - 9) = 0
+
+Doing the algebra gives you the following:
+
+    571h - 50 - 41b + 9 = 571h - 41b - 41 = 571h - 41(b + 1) = 0
+    (or)
+    571h = 41(b+1)
+
+This means `h` must be divisible by 41. Now subtract the second and fourth equations, and you get
+
+    571h = 37(c + 1), which means h must be divisible by 37
+
+If you subtract the first and last equations, you get
+
+    787d = 13(e - 1)
+
+So your nine equations below can be re-written to the following seven equations
+
+    571h = 41(b+1)
+    571h = 37(c+1)
+    571h = 17(i-1)
+
+    787d = 19(a+1)
+    787d = 13(e-1)
+    787d = 29(g-1)
+    787d = 23(f-1)
+
+These equations tell you something about the prime factorization of `d` and `h`, namely that
+
+    d = 13*19*23*29*D
+    h = 17*37*41*H
+
+So you can write the above seven equations as follows:
+
+    571*17*37*H = b+1
+    571*17*41*H = c+1
+    571*37*41*H = i-1
+
+    787*13*23*29*D = a+1
+    787*19*23*29*D = e-1
+    787*13*19*23*D = g-1
+    787*13*19*29*D = f-1
+
+## Conclusion
+
+You can check values of `t` by incrementing `d` by `13*19*23*29` in the equation `787d - 19 = t`, since `d` must be divisible by `13*19*23*29`.
