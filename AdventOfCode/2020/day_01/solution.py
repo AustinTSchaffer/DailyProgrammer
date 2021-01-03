@@ -15,8 +15,7 @@ print(
                 ], number_of_values)
                 if sum(combo) == 2020
             ))
-            for number_of_values in
-            range(2, 4)
+            for number_of_values in [2, 3]
         )
     )
 )
