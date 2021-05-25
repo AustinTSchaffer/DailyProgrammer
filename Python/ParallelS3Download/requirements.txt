@@ -1,1 +1,1 @@
-aiobotocore[boto3]
+aiobotocore[boto3]==1.3.0

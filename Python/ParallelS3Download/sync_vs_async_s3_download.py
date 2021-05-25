@@ -23,7 +23,7 @@ keys = []
 for i in range(101):
     key = f"{DATA_PREFIX}test_data.{i}.csv"
     keys.append(key)
-    s3.put_object(Body=TEST_DATA, Bucket=BUCKET_NAME, Key=key)
+    # s3.put_object(Body=TEST_DATA, Bucket=BUCKET_NAME, Key=key)
 
 #%% Synchronous Download (Prefix)
 
@@ -33,12 +33,12 @@ time.sleep(2)
 print("Initiating synchronous S3 object download (by prefix) in 2 seconds...")
 time.sleep(2)
 
-data = []
+data = {}
 bucket = s3_resource.Bucket(BUCKET_NAME)
 for obj_handle in bucket.objects.filter(Prefix=DATA_PREFIX):
     print("Downloading:", obj_handle.key)
     obj = s3.get_object(Bucket=BUCKET_NAME, Key=obj_handle.key)
-    data.append(obj["Body"].read())
+    data[key] = obj["Body"].read()
 
 print("Objects Downloaded (synchronous prefix method):", len(data))
 
@@ -51,12 +51,12 @@ time.sleep(2)
 print("Initiating synchronous S3 object download (list of keys) in 2 seconds...")
 time.sleep(2)
 
-data = []
+data = {}
 bucket = s3_resource.Bucket(BUCKET_NAME)
 for key in keys:
     print("Downloading:", key)
     obj = s3.get_object(Bucket=BUCKET_NAME, Key=key)
-    data.append(obj["Body"].read())
+    data[key] = obj["Body"].read()
 
 print("Objects Downloaded (synchronous keys method):", len(data))
 
@@ -70,7 +70,7 @@ print("Initiating async S3 object download (by prefix) in 2 seconds...")
 time.sleep(2)
 
 async def get_objects_by_prefix(bucket, prefix):
-    data = []
+    data = {}
     session = aiobotocore.get_session()
     async with session.create_client('s3') as s3_client:
         async def _get_object(key):
@@ -84,7 +84,7 @@ async def get_objects_by_prefix(bucket, prefix):
             for future in asyncio.as_completed(map(_get_object, contents)):
                 key, s3_object = await future
                 print("Downloaded:", key)
-                data.append(await s3_object["Body"].read())
+                data[key] = await s3_object["Body"].read()
 
     return data
 
@@ -98,17 +98,19 @@ print("Initiating async S3 object download (list of keys) in 2 seconds...")
 time.sleep(2)
 
 async def get_objects(bucket, keys):
-    data = []
+    data = {}
     session = aiobotocore.get_session()
     async with session.create_client('s3') as s3_client:
+
         async def _get_object(key):
             if isinstance(key, dict):
                 key = key["Key"]
             return (key, await s3_client.get_object(Bucket=bucket, Key=key))
+
         for future in asyncio.as_completed(map(_get_object, keys)):
             key, s3_object = await future
             print("Downloaded:", key)
-            data.append(await s3_object["Body"].read())
+            data[key] = await s3_object["Body"].read()
 
     return data
 
