@@ -38,7 +38,7 @@ bucket = s3_resource.Bucket(BUCKET_NAME)
 for obj_handle in bucket.objects.filter(Prefix=DATA_PREFIX):
     print("Downloading:", obj_handle.key)
     obj = s3.get_object(Bucket=BUCKET_NAME, Key=obj_handle.key)
-    data[key] = obj["Body"].read()
+    data[obj_handle.key] = obj["Body"].read()
 
 print("Objects Downloaded (synchronous prefix method):", len(data))
 
