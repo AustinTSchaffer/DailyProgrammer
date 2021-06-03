@@ -40,7 +40,7 @@ def square():
         return __
     return _
 
-def pow(n):
+def raise_to_the_power(n):
     def _(f):
         @functools.wraps(f)
         def __(*a, **b):
@@ -61,9 +61,9 @@ def quadratic(a, b, c):
     def four_a_c():
         return 0
 
-    @pow(0.5)
+    @raise_to_the_power(0.5)
     @subtract(four_a_c())
-    @pow(2)
+    @raise_to_the_power(2)
     @add(b)
     def sqrt_of_b_squared_minus_four_a_c():
         return 0
