@@ -48,7 +48,7 @@ def raise_to_the_power(n):
         return __
     return _
 
-def quadratic(a, b, c):
+def quadratic_equation(a, b, c):
     @multiply(-1)
     @add(b)
     def negative_b():
