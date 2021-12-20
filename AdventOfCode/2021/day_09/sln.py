@@ -57,6 +57,3 @@ for local_minimum_location in local_minimum_locations:
 largest_basins = sorted(basins.values(), key=lambda basin: len(basin), reverse=True)
 
 print("Part 2:", len(largest_basins[0]) * len(largest_basins[1]) * len(largest_basins[2]))
-
-
-# TODO: DFS
