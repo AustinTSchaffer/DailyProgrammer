@@ -7,9 +7,7 @@ that would produce suitable materials to reinforce the submarine, and
 the nearby volcanically-active caves should even have the necessary
 input elements in sufficient quantities.
 
-The submarine manual contains <span title="HO
-
-HO -&gt; OH">instructions</span> for finding the optimal polymer
+The submarine manual contains <span title="HOHO -&gt; OH">instructions</span> for finding the optimal polymer
 formula; specifically, it offers a *polymer template* and a list of
 *pair insertion* rules (your puzzle input). You just need to work out
 what polymer would result after repeating the pair insertion process a

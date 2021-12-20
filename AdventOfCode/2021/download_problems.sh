@@ -3,7 +3,7 @@ echo "$COOKIE_HEADER"
 
 PROBABLY_MAX_NUM_LINES=10000
 
-for day in $(seq -w 25); do
+for day in $(seq -w 1 25); do
     day_no_leading_0=$(echo $day | sed 's/^0//')
     mkdir -p day_$day/
     curl "https://adventofcode.com/2021/day/$day_no_leading_0" -H "$COOKIE_HEADER" \
