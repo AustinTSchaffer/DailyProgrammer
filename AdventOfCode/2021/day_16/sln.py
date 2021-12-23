@@ -149,5 +149,4 @@ def sum_packet_versions(packets: List[Packet]):
     return packet_version_sum
 
 print("Part 1:", sum_packet_versions(packets))
-
 print("Part 2:", packets[0].value)
