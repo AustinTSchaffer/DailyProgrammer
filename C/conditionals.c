@@ -2,8 +2,8 @@
 #include <stdbool.h>
 
 #define BOOL char
-#define TRUE 0
-#define FALSE 1
+#define TRUE 1
+#define FALSE 0
 
 int main()
 {
