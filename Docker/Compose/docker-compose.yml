@@ -1,0 +1,13 @@
+services:
+  linux:
+    image: debian:latest
+    volumes:
+      - linux:/mnt/data
+    networks:
+      - linux
+
+networks:
+  linux:
+
+volumes:
+  linux:
