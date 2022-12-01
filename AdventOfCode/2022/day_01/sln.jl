@@ -14,6 +14,8 @@ open("./input.txt", "r") do f
     push!(elves, calories)
 end
 
+using BenchmarkTools
+
 function part1(elves::Array{Array{Int}})::Int
     return maximum(sum, elves)
 end
@@ -22,12 +24,22 @@ function part2(elves::Array{Array{Int}})::Int
     maximums = [0, 0, 0]
     for elf in elves
         push!(maximums, sum(elf))
-        maximums = sort(maximums)
+        sort!(maximums)
         deleteat!(maximums, 1)
     end
 
     return sum(maximums)
 end
 
-println(part1(elves))
-println(part2(elves))
+function part2_old(elves::Array{Array{Int}})::Int
+    elves = map(sum, elves)
+    elves = sort(elves, rev=true)
+    return elves[1] + elves[2] + elves[3]
+end
+
+print("Part 1: ")
+println(@btime part1(elves))
+print("Part 2 (minimized sorting): ")
+println(@btime part2(elves))
+print("Part 2 (full sort): ")
+println(@btime part2_old(elves))
