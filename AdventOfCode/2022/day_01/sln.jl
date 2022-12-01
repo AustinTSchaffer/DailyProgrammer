@@ -10,6 +10,8 @@ open("./input.txt", "r") do f
             push!(calories, parse(Int, line))
         end
     end
+
+    push!(elves, calories)
 end
 
 function part1(elves::Array{Array{Int}})::Int
@@ -17,9 +19,14 @@ function part1(elves::Array{Array{Int}})::Int
 end
 
 function part2(elves::Array{Array{Int}})::Int
-    elves = map(sum, elves)
-    elves = sort(elves, rev=true)
-    return elves[1] + elves[2] + elves[3]
+    maximums = [0, 0, 0]
+    for elf in elves
+        push!(maximums, sum(elf))
+        maximums = sort(maximums)
+        deleteat!(maximums, 1)
+    end
+
+    return sum(maximums)
 end
 
 println(part1(elves))
