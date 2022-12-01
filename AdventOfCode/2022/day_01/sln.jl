@@ -14,8 +14,6 @@ open("./input.txt", "r") do f
     push!(elves, calories)
 end
 
-using BenchmarkTools
-
 function part1(elves::Array{Array{Int}})::Int
     return maximum(sum, elves)
 end
@@ -36,6 +34,8 @@ function part2_old(elves::Array{Array{Int}})::Int
     elves = sort(elves, rev=true)
     return elves[1] + elves[2] + elves[3]
 end
+
+using BenchmarkTools
 
 print("Part 1: ")
 println(@btime part1(elves))
