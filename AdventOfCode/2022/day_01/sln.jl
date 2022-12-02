@@ -21,9 +21,14 @@ end
 function part2(elves::Array{Array{Int}})::Int
     maximums = [0, 0, 0]
     for elf in elves
-        push!(maximums, sum(elf))
-        sort!(maximums)
-        deleteat!(maximums, 1)
+        elfsum = sum(elf)
+        for maxidx in eachindex(maximums)
+            if elfsum >= maximums[maxidx]
+                insert!(maximums, maxidx, elfsum)
+                deleteat!(maximums, length(maximums))
+                break
+            end
+        end
     end
 
     return sum(maximums)
