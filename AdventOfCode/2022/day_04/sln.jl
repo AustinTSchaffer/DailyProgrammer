@@ -27,7 +27,7 @@ for pair in assignmentPairs
         )
     )
 
-    if in(union, pair)
+    if union == pair[1] || union == pair[2]
         global part1 += 1
     end
 end
