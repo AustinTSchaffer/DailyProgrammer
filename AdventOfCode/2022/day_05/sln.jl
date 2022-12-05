@@ -127,20 +127,22 @@ function moveContainers!(
     return String(map(last, stacks))
 end
 
-function part1!(stacks::Vector{Vector{Char}}, instructions::Vector{Instruction})
-    print("Part 1: ")
+function part1!(stacks::Vector{Vector{Char}}, instructions::Vector{Instruction})::String
     foreach(i -> applyInstructionP1!(stacks, i), instructions)
-    foreach(print ∘ last, stacks)
-    println()
+    return String(map(last, stacks))
 end
 
-function part2!(stacks::Vector{Vector{Char}}, instructions::Vector{Instruction})
-    print("Part 2: ")
+function part2!(stacks::Vector{Vector{Char}}, instructions::Vector{Instruction})::String
     foreach(i -> applyInstructionP2!(stacks, i), instructions)
-    foreach(print ∘ last, stacks)
-    println()
+    return String(map(last, stacks))
 end
+
+sampleInstructions = loadInstructions("./sample_instructions.txt")
+
+println("Part 1 (sample): ", part1!(generateSampleStacks(), sampleInstructions))
+println("Part 2 (sample): ", part2!(generateSampleStacks(), sampleInstructions))
 
 instructions = loadInstructions("./instructions.txt")
-part1!(generateStacks(), instructions)
-part2!(generateStacks(), instructions)
+
+println("Part 1: ", part1!(generateStacks(), instructions))
+println("Part 2: ", part2!(generateStacks(), instructions))
