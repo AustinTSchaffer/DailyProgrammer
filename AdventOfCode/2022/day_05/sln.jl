@@ -1,12 +1,16 @@
 """
     generateStacks()::Vector{Vector{Char}}
 
-Generates the stacks for the problem input. Each index
-"i" refers to "Stack i". Index 1 of each stack is the
-"top" of that stack.
+Generates the stacks for the problem input.
+
+Each index "i" refers to "Stack i". The last index
+of each stack is the "top" of that stack.
+
+TODO: Ask the data engineering team to serialize their
+representation of the stacks using JSON.
 """
 function generateStacks()::Vector{Vector{Char}}
-    return map(s -> collect(reverse(s)), [
+    return map(collect, [
         "SLW",
         "JTNQ",
         "SCHFJ",
@@ -22,19 +26,16 @@ end
 """
     generateSampleStacks()::Vector{Vector{Char}}
 
+Generates the stacks for the problem sample input.
 
+Each index "i" refers to "Stack i". The last index
+of each stack is the "top" of that stack.
 """
 function generateSampleStacks()::Vector{Vector{Char}}
-    return map(s -> collect(reverse(s)), [
-        "SLW",
-        "JTNQ",
-        "SCHFJ",
-        "TRMWNGB",
-        "TRLSDHQB",
-        "MJBVFHRL",
-        "DWRNJM",
-        "BZTFHNDJ",
-        "HLQNBFT",
+    return map(collect, [
+        "ZN",
+        "MCD",
+        "P",
     ])
 end
 
@@ -60,8 +61,10 @@ of the "to" stack.
 This function moves crates using the "towers of hanoi" methodology.
 """
 function applyInstructionP1!(stacks::Vector{Vector{Char}}, instruction::Instruction)
-    result = splice!(stacks[instruction.from], 1:instruction.qty)
-    foreach(char -> insert!(stacks[instruction.to], 1, char), result)
+    fromstack = stacks[instruction.from]
+    lastidx = length(fromstack)
+    itemsToMove = splice!(fromstack, ((lastidx - instruction.qty) + 1):lastidx)
+    foreach(char -> push!(stacks[instruction.to], char), Iterators.reverse(itemsToMove))
 end
 
 """
@@ -74,8 +77,10 @@ of the "to" stack.
 This function moves the crates assuming all crates are moved simultaneously.
 """
 function applyInstructionP2!(stacks::Vector{Vector{Char}}, instruction::Instruction)
-    result = splice!(stacks[instruction.from], 1:instruction.qty)
-    foreach(char -> insert!(stacks[instruction.to], 1, char), Iterators.reverse(result))
+    fromstack = stacks[instruction.from]
+    lastidx = length(fromstack)
+    itemsToMove = splice!(fromstack, ((lastidx - instruction.qty) + 1):lastidx)
+    foreach(char -> push!(stacks[instruction.to], char), itemsToMove)
 end
 
 """
@@ -109,22 +114,33 @@ function loadInstructions(filename::String)::Vector{Instruction}
     return instructions
 end
 
-function part1(instructions::Vector{Instruction})
+"""
+Applies the given instructions to the 
+"""
+function moveContainers!(
+    stacks::Vector{Vector{Char}},
+    instructions::Vector{Instruction},
+    applyInstruction!,
+    )::String
+
+    foreach(i -> applyInstruction!(stacks, i), instructions)
+    return String(map(last, stacks))
+end
+
+function part1!(stacks::Vector{Vector{Char}}, instructions::Vector{Instruction})
     print("Part 1: ")
-    part1_stacks = generateStacks()
-    foreach(i -> applyInstructionP1!(part1_stacks, i), instructions)
-    foreach(stack -> print(stack[1]), part1_stacks)
+    foreach(i -> applyInstructionP1!(stacks, i), instructions)
+    foreach(print ∘ last, stacks)
     println()
 end
 
-function part2(instructions::Vector{Instruction})
+function part2!(stacks::Vector{Vector{Char}}, instructions::Vector{Instruction})
     print("Part 2: ")
-    part2_stacks = generateStacks()
-    foreach(i -> applyInstructionP2!(part2_stacks, i), instructions)
-    foreach(stack -> print(stack[1]), part2_stacks)
+    foreach(i -> applyInstructionP2!(stacks, i), instructions)
+    foreach(print ∘ last, stacks)
     println()
 end
 
 instructions = loadInstructions("./instructions.txt")
-part1(instructions)
-part2(instructions)
+part1!(generateStacks(), instructions)
+part2!(generateStacks(), instructions)
