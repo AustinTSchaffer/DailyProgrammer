@@ -115,7 +115,7 @@ function loadInstructions(filename::String)::Vector{Instruction}
 end
 
 """
-Applies the given instructions to the 
+Applies the given instructions to the input "stacks"
 """
 function moveContainers!(
     stacks::Vector{Vector{Char}},
