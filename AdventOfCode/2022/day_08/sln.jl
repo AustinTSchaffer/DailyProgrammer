@@ -43,6 +43,10 @@ function scenicScore(idx::CartesianIndex, trees::Matrix{Int8})::Int
     end
     totalScore *= downScore
 
+    if totalScore == 0
+        return 0
+    end
+
     upScore = 0
     for upIdx in (idx[1]-1):-1:1
         upScore += 1
@@ -52,6 +56,10 @@ function scenicScore(idx::CartesianIndex, trees::Matrix{Int8})::Int
     end
     totalScore *= upScore
 
+    if totalScore == 0
+        return 0
+    end
+
     leftScore = 0
     for leftIdx in (idx[2]-1):-1:1
         leftScore += 1
@@ -60,6 +68,10 @@ function scenicScore(idx::CartesianIndex, trees::Matrix{Int8})::Int
         end
     end
     totalScore *= leftScore
+
+    if totalScore == 0
+        return 0
+    end
 
     rightScore = 0
     for rightIdx in (idx[2]+1):width
