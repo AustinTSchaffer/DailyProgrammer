@@ -39,7 +39,6 @@ end
 computeResult = compute(instructions)
 
 # The collect(enumerate(x)) is because Julia doesn't have a "filter enumeration"
-# overload.
 # https://github.com/JuliaLang/julia/issues/45337
 part_1 = sum(prod, filter(
     pair -> (pair[1] + 20) % 40 == 0,
@@ -48,14 +47,14 @@ part_1 = sum(prod, filter(
 
 println("Part 1: ", part_1)
 
-computeResult = compute(sample_input_2)
-
 screen = Vector{Char}()
 for (idx, spritepos) in enumerate(computeResult)
     hpos = ((idx - 1) % 40) + 1
     activePixel = hpos in spritepos:(spritepos+2)
     push!(screen, activePixel ? '#' : '.')
 end
+
+println("Part 2: ")
 
 using IterTools
 for line in partition(screen, 40)
