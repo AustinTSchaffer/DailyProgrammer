@@ -59,18 +59,37 @@ function move!(move::Move, head::CartesianIndex, tail::CartesianIndex, tailLocat
     return (head, tail)
 end
 
-function move!(move::Move, rope::Vector{CartesianIndex{2}}, tailLocations::Set{CartesianIndex})::Vector{CartesianIndex{2}}
+function move!(move::Move, rope::Vector{CartesianIndex}, tailLocations::Set{CartesianIndex})::Vector{CartesianIndex}
     for i = range(1, move.distance)
+        movements = Vector{CartesianIndex}()
         newrope = Vector{CartesianIndex}()
+        push!(movements, move.direction)
         push!(newrope, rope[1] + move.direction)
 
-        for (idx, tail) in enumerate(rope[2:length(rope)])
-            diff = newrope[idx] - tail
-            push!(newrope, maximum(map(abs, diff.I)) > 1 ? rope[idx] : tail)
+        for (prevIndex, curr) in enumerate(rope[2:length(rope)])
+            diff = newrope[prevIndex] - curr
+            absDiff = map(abs, diff.I)
+            newCurr = if maximum(absDiff) > 1
+                if absDiff == (0, 2) || absDiff == (2, 0)
+                    CartesianIndex(
+                        curr[1] + div(diff[1], 2),
+                        curr[2] + div(diff[2], 2),
+                    )
+                elseif map(abs, movements[prevIndex].I) == (1, 1)
+                    curr + movements[prevIndex]
+                else
+                    rope[prevIndex]
+                end
+            else
+                curr
+            end
+
+            push!(newrope, newCurr)
+            push!(movements, newCurr - curr)
         end
 
-        push!(tailLocations, last(rope))
         rope = newrope
+        push!(tailLocations, last(rope))
     end
 
     return rope
@@ -89,7 +108,7 @@ end
 println("Part 1: ", length(tailLocations))
 
 tailLocations = Set{CartesianIndex}([CartesianIndex(0, 0)])
-part2state::Vector{CartesianIndex{2}} = [
+part2state::Vector{CartesianIndex} = [
     CartesianIndex(0, 0), # H
     CartesianIndex(0, 0), # 1
     CartesianIndex(0, 0), # 2
@@ -102,7 +121,7 @@ part2state::Vector{CartesianIndex{2}} = [
     CartesianIndex(0, 0), # 9
 ]
 
-for move in largerSampleMoves
+for move in moves
     global part2state = move!(move, part2state, tailLocations)
 end
 
