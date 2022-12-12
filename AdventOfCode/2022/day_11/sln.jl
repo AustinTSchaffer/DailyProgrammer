@@ -29,6 +29,8 @@ function loadMonkey(input::AbstractString)::Monkey
 
     operation = match(operationRe, input)
     operation = eval(Meta.parse("(old) -> $(operation[1])"))
+    # Test
+    Base.invokelatest(operation, 1)
 
     modulus = parse(Int, match(modulusRe, input)[1])
     ifTrue = parse(Int, match(ifTrueRe, input)[1])
@@ -53,7 +55,7 @@ function monkeyDo!(monkeys::Vector{Monkey}; divBy3=true, modBy=0)
             monkey.itemsInspected += 1
             old = pop!(monkey.items)
 
-            new = monkey.operation(old)
+            new = Base.invokelatest(monkey.operation, old)
 
             if divBy3
                 new = div(new, 3)
@@ -75,17 +77,23 @@ function calcMonkeyBusiness(monkeys)
     mostActiveMonkeys[1].itemsInspected * mostActiveMonkeys[2].itemsInspected
 end
 
-part1_monkeys = loadMonkeys()
-for i in 1:20
-    monkeyDo!(part1_monkeys)
+function main()
+    part1_monkeys = loadMonkeys()
+    for _ in 1:20
+        monkeyDo!(part1_monkeys)
+    end
+
+    println("Part 1: ", calcMonkeyBusiness(part1_monkeys))
+
+    part2_monkeys = loadMonkeys()
+    lcm = prod(m->m.modulus, part2_monkeys)
+    for _ in 1:10000
+        monkeyDo!(part2_monkeys, divBy3=false, modBy=lcm)
+    end
+
+    println("Part 2: ", calcMonkeyBusiness(part2_monkeys))
 end
 
-println("Part 1: ", calcMonkeyBusiness(part1_monkeys))
-
-part2_monkeys = loadMonkeys()
-gcm = prod(m->m.modulus, part2_monkeys)
-for i in 1:10000
-    monkeyDo!(part2_monkeys, divBy3=false, modBy=gcm)
+if abspath(PROGRAM_FILE) == @__FILE__
+    main()
 end
-
-println("Part 2: ", calcMonkeyBusiness(part2_monkeys))
