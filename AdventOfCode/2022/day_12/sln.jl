@@ -47,7 +47,6 @@ for (idx, location) in locations
     end
 end
 
-# TODO: A* search
 function reconstructPath(cameFrom::Dict{CartesianIndex, CartesianIndex}, current::CartesianIndex)::Vector{CartesianIndex}
     path = [current]
     while haskey(cameFrom, current)
@@ -62,7 +61,7 @@ manhattan = (a::CartesianIndex, b::CartesianIndex) -> sum(map(z -> abs(z[2] - z[
 
 using DataStructures
 
-function astar(locations::Dict{CartesianIndex, Location}, start::CartesianIndex, goal::CartesianIndex, heuristic=euclidean)
+function astar(locations::Dict{CartesianIndex, Location}, start::CartesianIndex; heuristic, foundgoal)
     exploredNodes = Set{CartesianIndex}()
     unexploredNodes = PriorityQueue{CartesianIndex, Float64}(Base.Order.Forward)
     cameFrom = Dict{CartesianIndex, CartesianIndex}()
@@ -70,12 +69,12 @@ function astar(locations::Dict{CartesianIndex, Location}, start::CartesianIndex,
     getGScore = (idx::CartesianIndex) -> haskey(gScore, idx) ? gScore[idx] : typemax(Int)
     fScore = Dict{CartesianIndex, Float64}()
 
-    unexploredNodes[start] = fScore[start] = heuristic(start, goal)
+    unexploredNodes[start] = fScore[start] = heuristic(start)
     gScore[start] = 0
 
     while !isempty(unexploredNodes)
         currentIdx::CartesianIndex = dequeue!(unexploredNodes)
-        if currentIdx == goal
+        if foundgoal(currentIdx)
             return reconstructPath(cameFrom, currentIdx)
         end
 
@@ -84,7 +83,7 @@ function astar(locations::Dict{CartesianIndex, Location}, start::CartesianIndex,
             if tentativeGScore < getGScore(neighborIdx)
                 cameFrom[neighborIdx] = currentIdx
                 gScore[neighborIdx] = tentativeGScore
-                unexploredNodes[neighborIdx] = fScore[neighborIdx] = tentativeGScore + heuristic(neighborIdx, goal)
+                unexploredNodes[neighborIdx] = fScore[neighborIdx] = tentativeGScore + heuristic(neighborIdx)
             end
         end
 
@@ -94,10 +93,10 @@ function astar(locations::Dict{CartesianIndex, Location}, start::CartesianIndex,
     error("Path not found")
 end
 
-result = astar(locations, start.coords, finish.coords, manhattan)
+part1_result = astar(locations, start.coords, heuristic=currentIdx -> manhattan(currentIdx, finish.coords), foundgoal=currentIdx -> currentIdx == finish.coords)
 for (i, row) in enumerate(input)
     for (j, val) in enumerate(row)
-        if CartesianIndex(i, j) in result
+        if CartesianIndex(i, j) in part1_result
             printstyled(val, color=:red)
         else
             print(val)
@@ -106,5 +105,40 @@ for (i, row) in enumerate(input)
     println()
 end
 
-println("Part 1: ", length(result))
+println("Part 1: ", length(part1_result))
 
+reverseLocations = Dict{CartesianIndex, Location}()
+for (i, row) in enumerate(input)
+    for (j, val) in enumerate(row)
+        idx = CartesianIndex(i, j)
+        edges = Vector{CartesianIndex}()
+
+        val = val == 'S' ? 'a' : val == 'E' ? 'z' : val
+        reverseLocations[idx] = Location(idx, Int8(val - 'a'), edges)
+    end
+end
+
+for (idx, location) in reverseLocations
+    for nidx in neighborIdxes
+        nidx += idx
+        if haskey(reverseLocations, nidx) && location.height <= reverseLocations[nidx].height + 1
+            push!(location.edges, nidx)
+        end
+    end
+end
+
+println()
+
+part2_result = astar(reverseLocations, finish.coords, heuristic=_ -> 0, foundgoal=currentIdx -> reverseLocations[currentIdx].height == 0)
+for (i, row) in enumerate(input)
+    for (j, val) in enumerate(row)
+        if CartesianIndex(i, j) in part2_result
+            printstyled(val, color=:red)
+        else
+            print(val)
+        end
+    end
+    println()
+end
+
+println("Part 2: ", length(part2_result))
