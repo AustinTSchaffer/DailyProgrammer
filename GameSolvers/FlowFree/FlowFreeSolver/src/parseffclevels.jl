@@ -1,8 +1,8 @@
 using Graphs
+using Plots
+using GraphRecipes
 
-abstract type FlowGraphMetadata end
-
-struct RectangleGraphMetadata <: FlowGraphMetadata
+struct GraphMetadata
     input::String
     levelPackId::String
     collectionId::Int
@@ -13,7 +13,7 @@ end
 struct FlowGraph
     graph::Graph
     flows::Vector{Vector{Int}}
-    metadata::FlowGraphMetadata
+    metadata::GraphMetadata
 end
 
 function tryParseRectangleLevel(levelPackId::String, level::String, groups::AbstractVector)::Union{Nothing, FlowGraph}
@@ -79,7 +79,7 @@ function tryParseRectangleLevel(levelPackId::String, level::String, groups::Abst
     return FlowGraph(
         graph,
         flows,
-        RectangleGraphMetadata(
+        GraphMetadata(
             level,
             levelPackId,
             parse(Int, metadata[2]),
@@ -105,30 +105,88 @@ function tryParseEncodedLevel(levelPackId::String, level::String)::Union{Nothing
     end
 end
 
-function loadLevels(dir::String)::Tuple{Vector{FlowGraph}, Vector{String}}
+function loadLevels(dir::String)
     parsedGraphs = Vector{FlowGraph}()
-    unparseable = Vector{String}()
+    parsedGraphsDict = Dict{String, Vector{FlowGraph}}()
 
-    for filename in readdir(dir, join=true)
-        file = open(filename, "r")
+    unparseable = Vector{String}()
+    unparseableDict = Dict{String, Vector{String}}()
+
+    for filepath in readdir(dir, join=true)
+        file = open(filepath, "r")
+        filename = basename(filepath)
+
+        parsedGraphsDict[filename] = []
+        unparseableDict[filename] = []
 
         for line in eachline(file)
-            fg = tryParseEncodedLevel(basename(filename), line)
+            fg = tryParseEncodedLevel(filename, line)
             if fg === nothing
                 push!(unparseable, line)
+                push!(unparseableDict[filename], line)
             else
                 push!(parsedGraphs, fg)
+                push!(parsedGraphsDict[filename], fg)
             end
         end
 
         close(file)
     end
 
-    return parsedGraphs, unparseable
+    return parsedGraphs, parsedGraphsDict, unparseable, unparseableDict
 end
 
-dir = "data/ffc_levels/all_levels/"
-parsedGraphs, unparseable = loadLevels(dir)
+emptyCellColor = :gray
 
-println("Parsed Graphs: ", length(parsedGraphs))
-println("Unparseable Graphs: ", length(unparseable))
+flowColors = map(c -> Colors.RGBA(map(i -> i/255, c)...), (
+    (205,74,52), # Red
+    (87,136,57), # Green
+    (58,44,234), # Blue
+    (226,223,100), # Yellow
+    (215,147,73),  # Orange
+    (164,247,251), # Cyan
+    (208,76,188), # Magenta
+    (158,247,103), # Lime Green
+    (134,63,55), # Burnt Red
+    (150,139,95), # Olive
+    (219,137,224), # Pink
+    (105,37,119), # Purple
+    (38,30,146), # Dark Blue
+    (255,255,255), # White
+    (82,123,125), # Dark Cyan
+    (159,158,183), # Gray
+))
+
+function flowGraphPlot(flowGraph::FlowGraph; palette=flowColors, emptyCellColor=emptyCellColor, size=(1000,1000), fontsize=2.0, nodesize=1.0, showSolution=false)
+    nodeGroupsToColor = showSolution ? flowGraph.flows : [(first(f), last(f)) for f in flowGraph.flows]
+    vertexIndices = 1:Graphs.nv(flowGraph.graph)
+
+    if length(nodeGroupsToColor) > length(palette)
+        error("Not enough colors in the palette")
+    end
+
+    nodeColors = []
+
+    for i in vertexIndices
+        endfound = false
+        for (j, v) in enumerate(nodeGroupsToColor)
+            if (i-1) ∈ v
+                endfound = true
+                push!(nodeColors, palette[j])
+                break
+            end
+        end
+
+        if !endfound
+            push!(nodeColors, emptyCellColor)
+        end
+    end
+
+    return graphplot(flowGraph.graph, names=0:(Graphs.nv(flowGraph.graph)-1), curves=false, nodeshape=:rect, fontsize=fontsize, nodesize=nodesize, mc=nodeColors, size=size)
+end
+
+# dir = "../data/ffc_levels/all_levels/"
+# parsedGraphs, unparseable, parsedGraphsDict, unparseableDict = loadLevels(dir)
+
+# println("Parsed Graphs: ", length(parsedGraphs))
+# println("Unparseable Graphs: ", length(unparseable))
