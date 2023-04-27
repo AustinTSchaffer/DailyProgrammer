@@ -1,0 +1,38 @@
+This small project demonstrates interoperability between F# and C#.
+
+Creating a new shift register, which is type defined in an F# project.
+Calling the ShiftRegister's ToString() -> '0x0123456789ABCDEF'
+
+Lists have some interesting interoperability.
+Looping through XOR LFSR until a duplicate value is found...
+Iteration #1: 1
+Iteration #2: 16
+Iteration #3: 8
+Iteration #4: 4
+Iteration #5: 18
+Iteration #6: 9
+Iteration #7: 20
+Iteration #8: 26
+Iteration #9: 13
+Iteration #10: 6
+Iteration #11: 19
+Iteration #12: 25
+Iteration #13: 28
+Iteration #14: 30
+Iteration #15: 31
+Iteration #16: 15
+Iteration #17: 7
+Iteration #18: 3
+Iteration #19: 17
+Iteration #20: 24
+Iteration #21: 12
+Iteration #22: 22
+Iteration #23: 27
+Iteration #24: 29
+Iteration #25: 14
+Iteration #26: 23
+Iteration #27: 11
+Iteration #28: 21
+Iteration #29: 10
+Iteration #30: 5
+Iteration #31: 2
