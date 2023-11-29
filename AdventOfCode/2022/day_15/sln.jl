@@ -50,6 +50,8 @@ function part1(sensors::Vector{Sensor}, beacons::Set{CartesianIndex}, y::Int)::I
     leftMostX = minimum(xrange -> xrange[1], filter(xrange -> xrange !== nothing, scannableXRanges))
     rightMostX = maximum(xrange -> xrange[2], filter(xrange -> xrange !== nothing, scannableXRanges))
 
+    println("left: ", leftMostX, " right: ", rightMostX)
+
     scannableLocationsNoBeacons = 0
     for x in leftMostX:rightMostX
         location = CartesianIndex(x, y)
