@@ -1,5 +1,6 @@
 import dataclasses
 import re
+import functools
 
 @dataclasses.dataclass
 class Blueprint:
@@ -146,8 +147,8 @@ def prune_purchasing_decisions_part_2(minutes_remaining: int, available_purchasi
     # if there's not a lot of time left.
     round_based_rejections = [
         pd for pd in available_purchasing_decisions
-        if not (minutes_remaining < 20 and pd[0][0] > 0)
-        if not (minutes_remaining < 15 and pd[0][1] > 0)
+        if not (minutes_remaining < 25 and pd[0][0] > 0)
+        if not (minutes_remaining < 13 and pd[0][1] > 0)
         if not (minutes_remaining < 10 and pd[0][2] > 0)
     ]
 
@@ -171,13 +172,8 @@ def prune_purchasing_decisions_part_2(minutes_remaining: int, available_purchasi
 
 
 def optimal_geode_output(blueprint: Blueprint, total_minutes: int, purchasing_decions_pruning_strategy) -> int:
-    cache = {}
-
+    @functools.lru_cache(maxsize=1_000_000_000)
     def _optimal_geode_output(minutes_remaining: int, robots_owned: tuple[int, int, int, int], resources: tuple[int, int, int, int]):
-        cache_key = (minutes_remaining, robots_owned, resources)
-        if (cached_value := cache.get(cache_key)) is not None:
-            return cached_value
-
         if minutes_remaining <= 0:
             return resources[-1]
 
@@ -193,8 +189,10 @@ def optimal_geode_output(blueprint: Blueprint, total_minutes: int, purchasing_de
             resources,
         )
 
-        screened_purchasing_decisions = purchasing_decions_pruning_strategy(minutes_remaining, available_purchasing_decisions)
-        # screened_purchasing_decisions = available_purchasing_decisions
+        screened_purchasing_decisions = purchasing_decions_pruning_strategy(
+            minutes_remaining,
+            available_purchasing_decisions,
+        )
 
         pds_tried = 0
         best_geode_output = 0
@@ -219,7 +217,6 @@ def optimal_geode_output(blueprint: Blueprint, total_minutes: int, purchasing_de
             if candidate_geode_output > best_geode_output:
                 best_geode_output = candidate_geode_output
 
-        cache[cache_key] = best_geode_output
         return best_geode_output
 
     return _optimal_geode_output(total_minutes, (1, 0, 0, 0), (0, 0, 0, 0))
