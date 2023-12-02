@@ -40,12 +40,10 @@ def parse_input(filename: str) -> list[Game]:
 
 def game_is_possible(game: Game, color_quantities: list[int]) -> bool:
     for draw in game.draws:
-        if draw[0] > color_quantities[0]:
-            return False
-        if draw[1] > color_quantities[1]:
-            return False
-        if draw[2] > color_quantities[2]:
-            return False
+        for i in range(COLORS):
+            if draw[i] > color_quantities[i]:
+                return False
+
     return True
 
 
