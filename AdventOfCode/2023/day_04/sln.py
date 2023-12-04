@@ -42,6 +42,7 @@ def part_1(cards: list[ScratcherCard]):
                 if value == 0:
                     value = 1
                 else:
+                    # Is there a performance benefit to this over `value *= 2`?
                     value <<= 1
         total_points += value
     return total_points

@@ -13,7 +13,7 @@ class Expression:
 expression_re = re.compile(r"(?P<key>\w{4}): ((?P<value>\d+)|((?P<term_1_var>\w{4}) (?P<operator>.) (?P<term_2_var>\w{4})))")
 
 
-def apply(input: dict[int, int | Expression], expression: int | Expression, raise_if_number=False) -> int:
+def apply(input: dict[str, int | Expression], expression: int | Expression, raise_if_number=False) -> int:
     if isinstance(expression, int | float):
         if raise_if_number:
             raise ValueError()

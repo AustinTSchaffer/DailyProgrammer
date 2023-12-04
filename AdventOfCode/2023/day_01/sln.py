@@ -53,7 +53,7 @@ for line in input:
             if idx > last_index_of_named_number:
                 last_named_number = name
                 last_index_of_named_number = idx
-    
+
     if lnm is None or last_index_of_named_number > lnm.span(1)[0]:
         last_number = number_names.index(last_named_number) + 1
     else:
