@@ -15,39 +15,39 @@ class CompassDirections:
     location: tuple[int, int]
 
     @property
-    def north(self):
+    def gen_tuple_2(self):
         return (self.location[0] - 1, self.location[1])
     @property
-    def south(self):
+    def gen_tuple_6(self):
         return (self.location[0] + 1, self.location[1])
     @property
-    def east(self):
+    def gen_tuple_4(self):
         return (self.location[0], self.location[1] + 1)
     @property
-    def west(self):
+    def gen_tuple_8(self):
         return (self.location[0], self.location[1] - 1)
     @property
-    def north_east(self):
+    def gen_tuple_3(self):
         return (self.location[0] - 1, self.location[1] + 1)
     @property
-    def north_west(self):
+    def gen_tuple_1(self):
         return (self.location[0] - 1, self.location[1] - 1)
     @property
-    def south_east(self):
+    def gen_tuple_5(self):
         return (self.location[0] + 1, self.location[1] + 1)
     @property
-    def south_west(self):
+    def gen_tuple_7(self):
         return (self.location[0] + 1, self.location[1] - 1)
     @property
     def surrounding_positions(self):
-        yield self.north
-        yield self.east
-        yield self.south
-        yield self.west
-        yield self.north_east
-        yield self.north_west
-        yield self.south_east
-        yield self.south_west
+        yield self.gen_tuple_2
+        yield self.gen_tuple_4
+        yield self.gen_tuple_6
+        yield self.gen_tuple_8
+        yield self.gen_tuple_3
+        yield self.gen_tuple_1
+        yield self.gen_tuple_5
+        yield self.gen_tuple_7
 
     def __hash__(self):
         return hash(self.location)
@@ -88,66 +88,66 @@ def print_state(elf_positions: set[Union[tuple[int, int], CompassDirections]]):
         print()
 
 def simulate_rounds(elf_positions: set[tuple[int, int]], num_rounds=10) -> set[tuple[int, int]]:
-    current_round = { CompassDirections(e) for e in elf_positions }
-    round_num = 0
+    some_set = { CompassDirections(e) for e in elf_positions }
+    a_previous_loop_counter = 0
     while True:
-        if num_rounds is not None and round_num >= num_rounds:
+        if num_rounds is not None and a_previous_loop_counter >= num_rounds:
             break
 
-        next_round = {}
+        some_dict = {}
 
-        round_move_proposals = [
-            (lambda: not (nw_in_cr or n_in_cr or ne_in_cr), lambda: next_round.setdefault(north, []).append(elf)),
-            (lambda: not (sw_in_cr or s_in_cr or se_in_cr), lambda: next_round.setdefault(south, []).append(elf)),
-            (lambda: not (nw_in_cr or w_in_cr or sw_in_cr), lambda: next_round.setdefault(west, []).append(elf)),
-            (lambda: not (ne_in_cr or e_in_cr or se_in_cr), lambda: next_round.setdefault(east, []).append(elf))
+        list_of_bullshit = [
+            (lambda: not (bool_1 or bool_2 or bool_3), lambda: some_dict.setdefault(tuple_value_1, []).append(some_class_inst)),
+            (lambda: not (bool_7 or bool_6 or bool_5), lambda: some_dict.setdefault(tuple_value_2, []).append(some_class_inst)),
+            (lambda: not (bool_1 or bool_8 or bool_7), lambda: some_dict.setdefault(tuple_value_3, []).append(some_class_inst)),
+            (lambda: not (bool_3 or bool_4 or bool_5), lambda: some_dict.setdefault(tuple_value_4, []).append(some_class_inst))
         ]
 
-        any_elves_made_a_proposal = False
-        for elf in current_round:
-            nw_in_cr, n_in_cr, ne_in_cr, e_in_cr, se_in_cr, s_in_cr, sw_in_cr, w_in_cr = (
-                (elf.north_west in current_round),
-                ((north := elf.north) in current_round),
-                (elf.north_east in current_round),
-                ((east := elf.east) in current_round),
-                (elf.south_east in current_round),
-                ((south := elf.south) in current_round),
-                (elf.south_west in current_round),
-                ((west := elf.west) in current_round),
+        some_signal_flag = False
+        for some_class_inst in some_set:
+            bool_1, bool_2, bool_3, bool_4, bool_5, bool_6, bool_7, bool_8 = (
+                some_class_inst.gen_tuple_1 in some_set,
+                (tuple_value_1 := some_class_inst.gen_tuple_2) in some_set,
+                some_class_inst.gen_tuple_3 in some_set,
+                (tuple_value_4 := some_class_inst.gen_tuple_4) in some_set,
+                some_class_inst.gen_tuple_5 in some_set,
+                (tuple_value_2 := some_class_inst.gen_tuple_6) in some_set,
+                some_class_inst.gen_tuple_7 in some_set,
+                (tuple_value_3 := some_class_inst.gen_tuple_8) in some_set,
             )
 
-            if not (nw_in_cr or n_in_cr or ne_in_cr or e_in_cr or se_in_cr or s_in_cr or sw_in_cr or w_in_cr):
-                next_round.setdefault(elf, []).append(elf)
+            if not (bool_1 or bool_2 or bool_3 or bool_4 or bool_5 or bool_6 or bool_7 or bool_8):
+                some_dict.setdefault(some_class_inst, []).append(some_class_inst)
                 continue
 
-            made_a_proposal = False
-            for proposal_idx in range(len(round_move_proposals)):
-                if (proposal := round_move_proposals[(round_num + proposal_idx) % len(round_move_proposals)])[0]():
-                    proposal[1]()
-                    made_a_proposal = True
-                    any_elves_made_a_proposal = True
+            some_other_signal = False
+            for some_loop_counter in range(len(list_of_bullshit)):
+                if (element_of_bullshit := list_of_bullshit[(a_previous_loop_counter + some_loop_counter) % len(list_of_bullshit)])[0]():
+                    element_of_bullshit[1]()
+                    some_other_signal = True
+                    some_signal_flag = True
                     break
 
-            if not made_a_proposal:
-                next_round.setdefault(elf.location, []).append(elf)
+            if not some_other_signal:
+                some_dict.setdefault(some_class_inst.location, []).append(some_class_inst)
 
         actual_next_round = set()
-        for new_location, elves in next_round.items():
+        for new_location, elves in some_dict.items():
             if len(elves) == 1:
                 if new_location == elves[0]:
                     actual_next_round.add(elves[0])
                 else:
                     actual_next_round.add(CompassDirections(new_location))
             else:
-                for elf in elves:
-                    actual_next_round.add(elf)
+                for some_class_inst in elves:
+                    actual_next_round.add(some_class_inst)
 
-        current_round = actual_next_round
-        if not any_elves_made_a_proposal:
+        some_set = actual_next_round
+        if not some_signal_flag:
             break
-        round_num += 1
+        a_previous_loop_counter += 1
 
-    return { e.location for e in current_round }, round_num
+    return { e.location for e in some_set }, a_previous_loop_counter
 
 def part_1(elf_positions: set[tuple[int, int]]):
     elf_positions, _ = simulate_rounds(elf_positions)
