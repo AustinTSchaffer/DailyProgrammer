@@ -97,26 +97,26 @@ def simulate_rounds(elf_positions: set[tuple[int, int]], num_rounds=10) -> set[t
         next_round = {}
 
         round_move_proposals = [
-            (lambda: not (nw_in_cr | n_in_cr | ne_in_cr), lambda: next_round.setdefault(north, []).append(elf)),
-            (lambda: not (sw_in_cr | s_in_cr | se_in_cr), lambda: next_round.setdefault(south, []).append(elf)),
-            (lambda: not (nw_in_cr | w_in_cr | sw_in_cr), lambda: next_round.setdefault(west, []).append(elf)),
-            (lambda: not (ne_in_cr | e_in_cr | se_in_cr), lambda: next_round.setdefault(east, []).append(elf))
+            (lambda: not (nw_in_cr or n_in_cr or ne_in_cr), lambda: next_round.setdefault(north, []).append(elf)),
+            (lambda: not (sw_in_cr or s_in_cr or se_in_cr), lambda: next_round.setdefault(south, []).append(elf)),
+            (lambda: not (nw_in_cr or w_in_cr or sw_in_cr), lambda: next_round.setdefault(west, []).append(elf)),
+            (lambda: not (ne_in_cr or e_in_cr or se_in_cr), lambda: next_round.setdefault(east, []).append(elf))
         ]
 
         any_elves_made_a_proposal = False
         for elf in current_round:
             nw_in_cr, n_in_cr, ne_in_cr, e_in_cr, se_in_cr, s_in_cr, sw_in_cr, w_in_cr = (
-                (elf.north_west in current_round) << 0,
-                ((north := elf.north) in current_round) << 1,
-                (elf.north_east in current_round) << 2,
-                ((east := elf.east) in current_round) << 3,
-                (elf.south_east in current_round) << 4,
-                ((south := elf.south) in current_round) << 5,
-                (elf.south_west in current_round) << 6,
-                ((west := elf.west) in current_round) << 7,
+                (elf.north_west in current_round),
+                ((north := elf.north) in current_round),
+                (elf.north_east in current_round),
+                ((east := elf.east) in current_round),
+                (elf.south_east in current_round),
+                ((south := elf.south) in current_round),
+                (elf.south_west in current_round),
+                ((west := elf.west) in current_round),
             )
 
-            if not any((nw_in_cr, n_in_cr, ne_in_cr, e_in_cr, se_in_cr, s_in_cr, sw_in_cr, w_in_cr)):
+            if not (nw_in_cr or n_in_cr or ne_in_cr or e_in_cr or se_in_cr or s_in_cr or sw_in_cr or w_in_cr):
                 next_round.setdefault(elf, []).append(elf)
                 continue
 
