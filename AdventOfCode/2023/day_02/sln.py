@@ -88,4 +88,3 @@ if __name__ == '__main__':
 
     print("Part 2 (sample):", part_2(sample_input))
     print("Part 2:", part_2(input))
-
