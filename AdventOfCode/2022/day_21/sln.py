@@ -193,8 +193,8 @@ def part_2_attempt_2(input: dict[str, int | Expression], starting_guess: int, nu
 
 
 if __name__ == "__main__":
-    sample_input = parse_input("sample_input.yaml")
-    input = parse_input("input.yaml")
+    sample_input = parse_input("sample_input.txt")
+    input = parse_input("input.txt")
 
     print(f"Part 1 (sample):", part_1(sample_input))
     print(f"Part 1:", part_1(input))
