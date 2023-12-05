@@ -23,29 +23,32 @@ class MaybePartNumber:
 @dataclasses.dataclass
 class ParsedInput:
     num_rows: int
-    maybe_part_numbers: list[MaybePartNumber]
+    numbers: list[MaybePartNumber]
     symbols: dict[tuple[int, int], str]
 
     def part_numbers(self) -> Iterable[MaybePartNumber]:
-        for number in self.maybe_part_numbers:
+        for number in self.numbers:
             for location in number.surrounding_locations():
                 if location in self.symbols:
                     yield number
 
     def gears(self) -> Iterable[tuple[tuple[int, int], MaybePartNumber, MaybePartNumber]]:
-        line_to_num_lookup: list[list[MaybePartNumber]] = [[] for _ in range(self.num_rows+2)]
-        for number in self.maybe_part_numbers:
-            line_to_num_lookup[number.location[0]+1].append(number)
+        location_to_number_map: dict[tuple[int, int], MaybePartNumber] = {}
+        for number in self.numbers:
+            for i in range(number.strlen):
+                location_to_number_map[(number.location[0], number.location[1] + i)] = number
 
         for location, symbol in self.symbols.items():
             if symbol == '*':
-                adj_nums = []
-                for nearby_rows in line_to_num_lookup[location[0]:location[0]+3]:
-                    for number in nearby_rows:
-                        if any(loc == location for loc in number.surrounding_locations()):
-                            adj_nums.append(number)
+                adj_nums: dict[int, MaybePartNumber] = {}
+                for i in range(-1, 2):
+                    for j in range(-1, 2):
+                        if i != 0 or j != 0:
+                            if (number := location_to_number_map.get((location[0]+i, location[1]+j))) is not None:
+                                adj_nums[id(number)] = number
+
                 if len(adj_nums) == 2:
-                    yield (location, adj_nums[0], adj_nums[1])
+                    yield (location, *adj_nums.values())
 
 
 def parse_input(filename: str) -> ParsedInput:
@@ -65,7 +68,7 @@ def parse_input(filename: str) -> ParsedInput:
                 ))
 
     return ParsedInput(
-        maybe_part_numbers=maybe_part_numbers,
+        numbers=maybe_part_numbers,
         symbols=symbols,
         num_rows=row_idx+1,
     )
