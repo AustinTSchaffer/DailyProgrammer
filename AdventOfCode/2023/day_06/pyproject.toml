@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "day-06"
+version = "0.1.0"
+description = ""
+authors = ["Austin Schaffer <austin.schaffer@everactive.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+matplotlib = "^3.8.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
