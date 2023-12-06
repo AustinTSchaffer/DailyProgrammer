@@ -45,12 +45,21 @@ def solve_equation(race: Race) -> tuple[int, int]:
 
     return tuple(sorted((left_sln, right_sln)))
 
-
 def get_num_winning_values(race: Race) -> int:
     left_sln, right_sln = solve_equation(race)
     leading_edge = int(left_sln)
     falling_edge = int(right_sln)
-    return falling_edge - leading_edge + (-1 if leading_edge == left_sln and falling_edge == right_sln else 0)
+
+    num_winning_values = falling_edge - leading_edge
+
+    # This is necessary because if your time matches the record
+    # exactly, then you didn't really break the record. This took
+    # a little trial and error, and it begs the question as to why
+    # you can't hold the button for fractions of a millisecond.
+    if leading_edge == left_sln and falling_edge == right_sln:
+        num_winning_values -= 1
+
+    return num_winning_values
 
 def part_1(input: Input):
     product = 1
