@@ -2,6 +2,7 @@ import re
 import dataclasses
 import functools
 import itertools
+import random
 
 @dataclasses.dataclass
 class MappingRange:
@@ -61,9 +62,16 @@ class Input:
             itertools.batched(self.seeds, 2)
         )
 
+    def seed_ranges(self) -> list[tuple[int, int]]:
+        return [
+            (start, start + length)
+            for start, length in itertools.batched(self.seeds, 2)
+        ]
+
     def iter_seed_ranges(self) -> list[int]:
-        for start, length in itertools.batched(self.seeds, 2):
-            yield from range(start, start + length)
+        for range in self.seed_ranges():
+            yield from (range[0], range[1])
+
 
     def get_location(self, seed: int) -> int:
         maps = [
@@ -104,15 +112,120 @@ def part_1(input: Input):
             min_ = location
     return min_
 
-def part_2(input: Input):
-    min_ = None
-    for i, seed in enumerate(input.iter_seed_ranges()):
-        if i % 1000000 == 0:
-            print("Processing seed number", i)
-        location = input.get_location(seed)
-        if min_ is None or location < min_:
-            min_ = location
-    return min_
+def part_2(input: Input, num_samples_per_range = 100000) -> tuple[int, int]:
+    seed_ranges = input.seed_ranges()
+
+    total_locations_calculated = 0
+
+    print("Generating samples...")
+
+    min_location_parent_range = None
+    min_location_seed = None
+    min_location = None
+    for i, seed_range in enumerate(seed_ranges):
+        seed_generator = itertools.chain(
+            (
+                random.randint(seed_range[0], seed_range[1])
+                for _ in range(num_samples_per_range)
+            ),
+            [
+                seed_range[0],
+                seed_range[1],
+            ]
+        )
+
+        for seed in seed_generator:
+            location = input.get_location(seed)
+            if min_location is None or location < min_location:
+                min_location = location
+                min_location_seed = seed
+                min_location_parent_range = seed_range
+
+    total_locations_calculated += len(seed_ranges) * (num_samples_per_range + 2)
+
+    print("Searching backwards...")
+
+    current_seed = min_location_seed
+    while current_seed >= min_location_parent_range[0]:
+        current_seed -= 1
+        location = input.get_location(current_seed)
+        total_locations_calculated += 1
+
+        if location > min_location:
+            break
+
+        min_location = location
+
+    return min_location, total_locations_calculated
+
+def analyze_input(input_: Input):
+    seed_ranges = input_.seed_ranges()
+
+    sum_range_lengths = input_.total_numbers_to_consider()
+    min_seed_number = min(range[0] for range in seed_ranges)
+    max_seed_number = max(range[1] for range in seed_ranges)
+    overall_range = max_seed_number - min_seed_number
+
+    print(f"min_seed_number    :   {min_seed_number:,}")
+    print(f"max_seed_number    : {max_seed_number:,}")
+    print(f"overall_range      : {overall_range:,}")
+    print(f"sum_range_lengths  : {sum_range_lengths:,}")
+
+    def overlapping(r1, r2):
+        if r2[0] < r1[0]:
+            r1, r2 = r2, r1
+        return (r1, r2) if r2[0] < r1[1] else None
+
+    overlapping_ranges = {
+        ors
+        for i, range_1 in enumerate(seed_ranges)
+        for j, range_2 in enumerate(seed_ranges)
+        if i != j
+        if (ors := overlapping(range_1, range_2)) is not None
+    }
+
+    sorted_seed_ranges = sorted(seed_ranges, key=lambda r: r[0])
+
+    gap_lengths = [
+        (range_2[0] - range_1[1])
+        for (range_1, range_2) in itertools.pairwise(sorted_seed_ranges)
+    ]
+
+    print(f"overlapping_ranges : {overlapping_ranges}")
+    print(f"gaps_lengths       : {gap_lengths}")
+    print(f"total_seeds_dne    : {sum(gap_lengths):,}")
+
+    import random
+
+    full_sample_x = []
+    full_sample_y = []
+
+    for i, seed_range in enumerate(sorted_seed_ranges):
+        num_random_samples = 10000
+        sample = [0] * (num_random_samples + 2)
+        sample[0] = seed_range[0]
+        sample[-1] = seed_range[1]
+
+        for j in range(num_random_samples):
+            sample[j+1] = random.randint(seed_range[0]+1, seed_range[1]-1)
+
+        values = [input.get_location(x) for x in sample]
+
+        import matplotlib.pyplot as plt
+        plt.scatter(sample, values)
+        plt.suptitle(f"Seed Range {i+1} ({num_random_samples:,} samples)")
+        plt.title(f"({seed_range[0]:,}) to ({seed_range[1]:,})")
+        plt.savefig(f"./figures/seed_range_{i+1}.{seed_range[0]}-{seed_range[1]}.png")
+
+        full_sample_x.extend(sample)
+        full_sample_y.extend(values)
+
+        plt.clf()
+
+    plt.scatter(full_sample_x, full_sample_y)
+    plt.title(f"All Seed Ranges")
+    plt.savefig("./figures/all_seed_ranges.png")
+
 
 if __name__ == '__main__':
     sample_input = parse_input('sample_input.txt')
@@ -121,8 +234,11 @@ if __name__ == '__main__':
     print('Part 1 (sample):', part_1(sample_input))
     print('Part 1:', part_1(input))
 
-    print(f'Part 2 (sample): Processing {sample_input.total_numbers_to_consider()} seeds...')
-    print('Part 2 (sample):', part_2(sample_input))
+    part_2_result = part_2(sample_input, 10)
+    print('Part 2 (sample):', part_2_result[0])
+    print(f'\tGenerated {part_2_result[1]:,} locations\n\tTotal seeds: {sample_input.total_numbers_to_consider():,}\n\tPercentage of seed space searched: {(part_2_result[1]/sample_input.total_numbers_to_consider())*100:.4}%')
 
-    print(f'Part 2: Processing {input.total_numbers_to_consider()} seeds...')
-    print('Part 2:', part_2(input))
+    part_2_result = part_2(input, 10_000)
+    print('Part 2:', part_2_result[0])
+    print(f'\tGenerated {part_2_result[1]:,} locations\n\tTotal seeds: {input.total_numbers_to_consider():,}\n\tPercentage of seed space searched: {(part_2_result[1]/input.total_numbers_to_consider())*100:.4}%')
+

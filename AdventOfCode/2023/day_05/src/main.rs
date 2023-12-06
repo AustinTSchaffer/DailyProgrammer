@@ -3,12 +3,14 @@ extern crate lazy_static;
 
 mod structs;
 
+use rayon::collections::hash_map;
 use regex::Regex;
 use structs::Input;
 use structs::MappingRange;
 use structs::SrcToDstMap;
 use rayon::prelude::*;
-
+use rand::{seq::IteratorRandom, thread_rng};
+use std::collections::HashMap;
 use std::fs;
 
 lazy_static! {
@@ -62,13 +64,47 @@ fn part_2(input: &Input) -> u64 {
         }).min().unwrap()
 }
 
+fn get_stats(input: &Input) {
+    let ranges: Vec<(u64, u64)> = input.seeds
+        .chunks(2)
+        .map(|c| {
+            (c[0], (c[0] + c[1]))
+        })
+        .collect();
+
+    let min = ranges.iter().map(|(start, _)| start).min().unwrap();
+    let max = ranges.iter().map(|(_, end)| end).min().unwrap();
+    let total_range = max - min;
+    let naive_range = input.total_seeds_to_consider();
+
+    dbg!(min, max, total_range, naive_range);
+
+    let mut overlapping_ranges: HashMap<u64, u64> = HashMap::new();
+
+    let mut sorted_ranges = ranges.clone();
+    sorted_ranges.sort_by(|(starta,_), (startb, _)| starta.cmp(startb));
+
+    for (i, range) in sorted_ranges.iter().enumerate() {
+        current_nesting += 1;
+        overlapping_ranges.insert(range.0, current_nesting);
+        let range_end = range.0 + range.1;
+        let mut j = 1;
+        while sorted_ranges[j].0 <= range_end {
+
+        }
+    }
+
+}
+
 fn main() {
     let sample_input = parse_input("sample_input.txt");
     let input = parse_input("input.txt");
 
-    println!("Part 1 (sample): {}", part_1(&sample_input));
-    println!("Part 1: {}", part_1(&input));
+    get_stats(&input);
 
-    println!("Part 2 (sample): {}", part_2(&sample_input));
-    println!("Part 2: {}", part_2(&input));
+    // println!("Part 1 (sample): {}", part_1(&sample_input));
+    // println!("Part 1: {}", part_1(&input));
+
+    // println!("Part 2 (sample): {}", part_2(&sample_input));
+    // println!("Part 2: {}", part_2(&input));
 }
