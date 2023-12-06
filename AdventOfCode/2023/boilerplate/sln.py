@@ -1,13 +1,18 @@
 import re
 import dataclasses
 
-def parse_input(filename: str):
+@dataclasses.dataclass
+class Input:
     ...
 
-def part_1(input):
+def parse_input(filename: str) -> Input:
+    with open(filename, 'r') as f:
+        ...
+
+def part_1(input: Input):
     ...
 
-def part_2(input):
+def part_2(input: Input):
     ...
 
 if __name__ == '__main__':
