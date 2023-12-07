@@ -42,7 +42,7 @@ def main():
     with open(output_dir / "input.txt", "w") as f:
         f.write(input_data)
 
-    if not os.stat(output_dir / 'sln.py'):
+    if not os.path.isfile(output_dir / 'sln.py'):
         shutil.copyfile(this_script_dir / 'sln.py', output_dir / 'sln.py')
 
 if __name__ == '__main__':
