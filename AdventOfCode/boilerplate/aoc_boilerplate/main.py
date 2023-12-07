@@ -6,8 +6,6 @@ import argparse
 import shutil
 import datetime
 
-from aoc_boilerplate import aoc_secrets
-
 import aocd
 import requests
 import bs4
@@ -15,22 +13,24 @@ import markdownify
 
 def main():
     argparser = argparse.ArgumentParser()
-    argparser.add_argument('--day', dest='day', required=False)
-    argparser.add_argument('--year', dest='year', required=False)
+    argparser.add_argument('--day', '-d', dest='day', required=False)
+    argparser.add_argument('--year', '-y', dest='year', required=False)
     argparser.add_argument('--dir', dest='dir', required=False)
+    argparser.add_argument('--session', dest='session', required=False)
 
     args = argparser.parse_args()
 
     today = datetime.datetime.now()
-    year = args.year or today.year
-    day = args.day or today.day
+    year = int(args.year or today.year)
+    day = int(args.day or today.day)
+    session = args.session or os.getenv("AOC_SESSION")
 
     this_script_dir = pathlib.Path(os.path.dirname(os.path.realpath(__file__)))
     output_dir = pathlib.Path(args.dir) if args.dir else pathlib.Path(this_script_dir / '..' / '..' / str(year) / f'day_{day:02d}')
 
     os.makedirs(output_dir, mode=0o755, exist_ok=True)
 
-    prompt_resp = requests.get(f"https://adventofcode.com/{year}/day/{day}", headers={'cookie': f'session={aoc_secrets.AOC_SESSION}'})
+    prompt_resp = requests.get(f"https://adventofcode.com/{year}/day/{day}", headers={'cookie': f'session={session}'})
     assert prompt_resp.ok
     soup = bs4.BeautifulSoup(prompt_resp.text, features="html.parser")
     main_article = soup.article
@@ -38,7 +38,7 @@ def main():
     with open(output_dir / "prompt.md", "w") as f:
         f.write(prompt_md)
 
-    input_data = aocd.get_data(session=aoc_secrets.AOC_SESSION, day=day, year=year)
+    input_data = aocd.get_data(session=session, day=day, year=year)
     with open(output_dir / "input.txt", "w") as f:
         f.write(input_data)
 
