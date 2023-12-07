@@ -25,8 +25,13 @@ def main():
     day = int(args.day or today.day)
     session = args.session or os.getenv("AOC_SESSION")
 
-    this_script_dir = pathlib.Path(os.path.dirname(os.path.realpath(__file__)))
-    output_dir = pathlib.Path(args.dir) if args.dir else pathlib.Path(this_script_dir / '..' / '..' / str(year) / f'day_{day:02d}')
+    this_script_dir = pathlib.Path(os.path.dirname(os.path.realpath(__file__))).resolve()
+
+    output_dir = (
+        pathlib.Path(args.dir)
+        if args.dir else
+        pathlib.Path(this_script_dir / '..' / '..' / str(year) / f'day_{day:02d}')
+    ).resolve()
 
     os.makedirs(output_dir, mode=0o755, exist_ok=True)
 
