@@ -3,17 +3,17 @@ import dataclasses
 import enum
 import collections
 
-CARD_VALUES = "AKQJT98765432"
-CARD_VALUES_JOKER = "AKQT98765432J"
+CARD_VALUES = "23456789TJQKA"
+CARD_VALUES_JOKER = "J23456789TQKA"
 
 class HandType(enum.Enum):
-    FiveOfAKind = 0
-    FourOfAKind = 1
-    FullHouse = 2
+    FiveOfAKind = 6
+    FourOfAKind = 5
+    FullHouse = 4
     ThreeOfAKind = 3
-    TwoPair = 4
-    OnePair = 5
-    HighCard = 6
+    TwoPair = 2
+    OnePair = 1
+    HighCard = 0
 
 @dataclasses.dataclass
 class HandBid:
@@ -21,6 +21,12 @@ class HandBid:
     bid: int
 
     def get_hand_type(self, jokers=False) -> HandType:
+        """
+        Returns the type of the hand based on the 5 cards it contains
+        (see HandType). If `jokers` is set True, this method will attempt
+        to upgrade the hand type based on the number of jokers it contains.
+        """
+
         counter = collections.Counter(self.hand)
         hand_type: int
         match sorted(counter.values(), reverse=True):
@@ -74,7 +80,15 @@ class HandBid:
                 return hand_type
 
 
-    def get_score(self, jokers=False, card_strengths=CARD_VALUES):
+    def get_score(self, jokers=False, card_strengths=CARD_VALUES) -> tuple[int, int, int, int, int, int]:
+        """
+        Returns a tuple of 6 integers. The first indicates the value of the hand
+        based on its type, the next 5 indicate the value of each card in the hand.
+        Useful as a sort key
+
+        Higher is better.
+        """
+
         return (self.get_hand_type(jokers).value, *map(card_strengths.index, self.hand))
 
 
@@ -93,11 +107,11 @@ def parse_input(filename: str) -> Input:
         )
 
 def part_1(input: Input):
-    ordered_hands = sorted(input.hands, key=HandBid.get_score, reverse=True)
+    ordered_hands = sorted(input.hands, key=HandBid.get_score)
     return sum((i+1) * h.bid for i,h in enumerate(ordered_hands))
 
 def part_2(input: Input):
-    ordered_hands = sorted(input.hands, key=lambda h: HandBid.get_score(h, True, CARD_VALUES_JOKER), reverse=True)
+    ordered_hands = sorted(input.hands, key=lambda h: HandBid.get_score(h, True, CARD_VALUES_JOKER))
     return sum((i+1) * h.bid for i,h in enumerate(ordered_hands))
 
 if __name__ == '__main__':
