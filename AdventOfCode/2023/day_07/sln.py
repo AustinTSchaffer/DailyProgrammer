@@ -3,8 +3,8 @@ import dataclasses
 import enum
 import collections
 
-CARD_STRENGHTS_P_1 = "AKQJT98765432"
-CARD_STRENGHTS_P_2 = "AKQT98765432J"
+CARD_VALUES = "AKQJT98765432"
+CARD_VALUES_JOKER = "AKQT98765432J"
 
 class HandType(enum.Enum):
     FiveOfAKind = 0
@@ -20,7 +20,7 @@ class HandBid:
     hand: str
     bid: int
 
-    def get_hand_type(self, j_are_jokers=False) -> HandType:
+    def get_hand_type(self, jokers=False) -> HandType:
         counter = collections.Counter(self.hand)
         hand_type: int
         match sorted(counter.values(), reverse=True):
@@ -39,7 +39,7 @@ class HandBid:
             case _:
                 hand_type = HandType.HighCard
 
-        if not j_are_jokers:
+        if not jokers:
             return hand_type
 
         num_jokers = self.hand.count('J')
@@ -74,8 +74,8 @@ class HandBid:
                 return hand_type
 
 
-    def get_score(self, j_are_jokers=False, card_strengths=CARD_STRENGHTS_P_1):
-        return (self.get_hand_type(j_are_jokers).value, *map(card_strengths.index, self.hand))
+    def get_score(self, jokers=False, card_strengths=CARD_VALUES):
+        return (self.get_hand_type(jokers).value, *map(card_strengths.index, self.hand))
 
 
 @dataclasses.dataclass
@@ -97,7 +97,7 @@ def part_1(input: Input):
     return sum((i+1) * h.bid for i,h in enumerate(ordered_hands))
 
 def part_2(input: Input):
-    ordered_hands = sorted(input.hands, key=lambda h: HandBid.get_score(h, True, CARD_STRENGHTS_P_2), reverse=True)
+    ordered_hands = sorted(input.hands, key=lambda h: HandBid.get_score(h, True, CARD_VALUES_JOKER), reverse=True)
     return sum((i+1) * h.bid for i,h in enumerate(ordered_hands))
 
 if __name__ == '__main__':
