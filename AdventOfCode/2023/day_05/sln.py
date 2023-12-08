@@ -111,7 +111,8 @@ def part_2(input: Input) -> int:
     The part described above can probably be slightly optimized if the maximum range
     end of the layer is compared against the current function's lower bounds (and
     vice-versa), as that would definitively mean that the function cannot overlap
-    with anything in the current layer.
+    with anything in the current layer. You might also be able to be more efficient
+    if the functions in each layer are sorted based on their lower bounds.
 
     At the end of this algorithm, the `current_functions` list will contain the full
     function definition, aggregating the ranges and coefficients across all layers
