@@ -68,7 +68,7 @@ def part_2(input: Input):
             # Cycles that don't have the "..Z" node at the end aren't
             # specifically handled, because I wasn't feeling smart enough
             # to actually use the egcd method.
-            if any(eq for eq in cycle_eqs if eq[0] != eq[1]):
+            if any(eq for eq in cycle_eqs if eq[1] not in [0, eq[0]]):
                 raise NotImplementedError()
 
             return math.lcm(*(eq[0] for eq in cycle_eqs))
