@@ -38,8 +38,10 @@ def main():
     prompt_resp = requests.get(f"https://adventofcode.com/{year}/day/{day}", headers={'cookie': f'session={session}'})
     assert prompt_resp.ok
     soup = bs4.BeautifulSoup(prompt_resp.text, features="html.parser")
-    main_article = soup.article
-    prompt_md = markdownify.markdownify(str(main_article))
+    page_contents = soup.main
+    for h2 in page_contents.find_all('h2'):
+        h2.string = h2.string.strip('- ')
+    prompt_md = markdownify.markdownify(str(page_contents))
     with open(output_dir / "prompt.md", "w") as f:
         f.write(prompt_md)
 
