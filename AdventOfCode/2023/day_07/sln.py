@@ -80,7 +80,44 @@ class HandBid:
                 return hand_type
 
 
-    def get_score(self, jokers=False, card_strengths=CARD_VALUES) -> tuple[int, int, int, int, int, int]:
+    def get_hand_type_rachel_edition(self, jokers=False) -> HandType:
+        """
+        Returns the type of the hand based on the 5 cards it contains
+        (see HandType). If `jokers` is set True, this method will attempt
+        to upgrade the hand type based on the number of jokers it contains.
+
+        This is a variant of `get_hand_type` using Rachel's algorithm,
+        which is just better.
+        """
+
+        hand = self.hand if not jokers else self.hand.replace('J', '')
+        counter = collections.Counter(hand)
+        card_counts = sorted(counter.values(), reverse=True)
+        if jokers:
+            if len(card_counts) > 0:
+                card_counts[0] += self.hand.count('J')
+            else:
+                card_counts.append(self.hand.count('J'))
+
+
+        match card_counts:
+            case [5]:
+                return HandType.FiveOfAKind
+            case [4, _]:
+                return HandType.FourOfAKind
+            case [3, 2]:
+                return HandType.FullHouse
+            case [3, *_]:
+                return HandType.ThreeOfAKind
+            case [2, 2, _]:
+                return HandType.TwoPair
+            case [2, *_]:
+                return HandType.OnePair
+            case _:
+                return HandType.HighCard
+
+
+    def get_score(self, jokers=False, card_strengths=CARD_VALUES, alg=get_hand_type) -> tuple[int, int, int, int, int, int]:
         """
         Returns a tuple of 6 integers. The first indicates the value of the hand
         based on its type, the next 5 indicate the value of each card in the hand.
@@ -89,7 +126,7 @@ class HandBid:
         Higher is better.
         """
 
-        return (self.get_hand_type(jokers).value, *map(card_strengths.index, self.hand))
+        return (alg(self, jokers).value, *map(card_strengths.index, self.hand))
 
 
 @dataclasses.dataclass
@@ -106,12 +143,12 @@ def parse_input(filename: str) -> Input:
             ]
         )
 
-def part_1(input: Input):
-    ordered_hands = sorted(input.hands, key=HandBid.get_score)
+def part_1(input: Input, alg=HandBid.get_hand_type):
+    ordered_hands = sorted(input.hands, key=lambda h: HandBid.get_score(h, alg=alg))
     return sum((i+1) * h.bid for i,h in enumerate(ordered_hands))
 
-def part_2(input: Input):
-    ordered_hands = sorted(input.hands, key=lambda h: HandBid.get_score(h, True, CARD_VALUES_JOKER))
+def part_2(input: Input, alg=HandBid.get_hand_type):
+    ordered_hands = sorted(input.hands, key=lambda h: HandBid.get_score(h, True, CARD_VALUES_JOKER, alg))
     return sum((i+1) * h.bid for i,h in enumerate(ordered_hands))
 
 if __name__ == '__main__':
@@ -123,3 +160,6 @@ if __name__ == '__main__':
 
     print('Part 2 (sample):', part_2(sample_input))
     print('Part 2:', part_2(input))
+
+    print('Part 2 (sample, Rachel):', part_2(sample_input, HandBid.get_hand_type_rachel_edition))
+    print('Part 2 (Rachel):', part_2(input, HandBid.get_hand_type_rachel_edition))
