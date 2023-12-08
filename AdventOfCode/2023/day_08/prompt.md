@@ -1,4 +1,3 @@
-
 Day 8: Haunted Wasteland
 ------------------------
 
@@ -50,12 +49,6 @@ ZZZ = (ZZZ, ZZZ)
 Starting at `AAA`, follow the left/right instructions. *How many steps are required to reach `ZZZ`?*
 
 
-
-Your puzzle answer was `13207`.
-
-The first half of this puzzle is complete! It provides one gold star: \*
-
-
 Part Two
 --------
 
@@ -102,17 +95,5 @@ So, in this example, you end up entirely on nodes that end in `Z` after `*6*` st
 
 
 Simultaneously start on every node that ends with `A`. *How many steps does it take before you're only on nodes that end with `Z`?*
-
-
-
-Answer:  
-
-
-Although it hasn't changed, you can still [get your puzzle input](8/input).
-
-
-You can also [Shareon
- [Twitter](https://twitter.com/intent/tweet?text=I%27ve+completed+Part+One+of+%22Haunted+Wasteland%22+%2D+Day+8+%2D+Advent+of+Code+2023&url=https%3A%2F%2Fadventofcode%2Ecom%2F2023%2Fday%2F8&related=ericwastl&hashtags=AdventOfCode)
-[Mastodon](javascript:void(0);)] this puzzle.
 
 

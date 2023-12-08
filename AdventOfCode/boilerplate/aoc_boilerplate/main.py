@@ -39,11 +39,13 @@ def main():
     assert prompt_resp.ok
     soup = bs4.BeautifulSoup(prompt_resp.text, features="html.parser")
     page_contents = soup.main
-    for h2 in page_contents.find_all('h2'):
-        h2.string = h2.string.strip('- ')
-    prompt_md = markdownify.markdownify(str(page_contents))
+
     with open(output_dir / "prompt.md", "w") as f:
-        f.write(prompt_md)
+        for article in page_contents.find_all('article'):
+            for h2 in article.find_all('h2'):
+                h2.string = h2.string.strip('- ')
+            prompt_md = markdownify.markdownify(str(article))
+            f.write(prompt_md)
 
     input_data = aocd.get_data(session=session, day=day, year=year)
     with open(output_dir / "input.txt", "w") as f:
