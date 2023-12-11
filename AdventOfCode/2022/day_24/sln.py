@@ -5,15 +5,28 @@ import collections
 from typing import Literal
 import enum
 import heapq
-import astar
 
-BLIZZARD_GLYPHS = 'v>^<'
+import astar
 
 class BlizzardDir(enum.Enum):
     Down  = 0b0001
     Right = 0b0010
     Up    = 0b0100
     Left  = 0b1000
+
+BLIZZARD_GLYPHS = ''.join(
+    char
+    for _, char in
+    sorted(
+        [
+            (BlizzardDir.Down, 'v'),
+            (BlizzardDir.Up, '^'),
+            (BlizzardDir.Left, '<'),
+            (BlizzardDir.Right, '>'),
+        ],
+        key=lambda d_c: d_c[0].value
+    )
+)
 
 @dataclasses.dataclass(frozen=True)
 class Input:
@@ -145,7 +158,7 @@ def part_1(input: Input):
         for neighbor in possible_moves(input, t, node).values():
             yield (t+1, neighbor)
 
-    def cost_est_func(n1, n2):
+    def manhattan(n1, n2):
         return (
             abs(n1[1][1] - n2[1][1]) +
             abs(n1[1][0] - n2[1][0])
@@ -160,7 +173,7 @@ def part_1(input: Input):
         (0, input.start),
         (-1, input.end),
         neighbors_fnct=neighbors_fnct,
-        heuristic_cost_estimate_fnct=cost_est_func,
+        heuristic_cost_estimate_fnct=manhattan,
         is_goal_reached_fnct=is_goal_reached_fnct,
     )
 

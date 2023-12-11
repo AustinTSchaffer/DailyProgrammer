@@ -112,11 +112,11 @@ def interactive_demo(input_: Input):
     print(f"   Moves made: {moves_made}")
     print("=======================")
 
-def part_2_visually(input: Input):
+def part_2_visually(input_: Input):
     import time
     def neighbors(t_n: tuple[int, tuple[int, int]]):
         t, node = t_n
-        for neighbor in possible_moves(input, t, node).values():
+        for neighbor in possible_moves(input_, t, node).values():
             yield (t+1, neighbor)
 
     def manhattan(n1, n2):
@@ -130,14 +130,20 @@ def part_2_visually(input: Input):
         # if we're at the goal.
         return node_a[1] == node_b[1]
 
+    def distance_function(node_a, node_b):
+        if node_a[1][0] == node_b[1][0] and node_a[1][1] == node_b[1][1]:
+            return 0.75
+        return 1.0
+
     total_t = 0
-    display(simulate(input, total_t), input.start, explorer_glyph='O')
-    for start, end in itertools.cycle(((input.start, input.end), (input.end, input.start))):
+    display(simulate(input_, total_t), input_.start, explorer_glyph='O')
+    for start, end in itertools.cycle(((input_.start, input_.end), (input_.end, input_.start))):
         path = astar.find_path(
             (total_t, start),
             (-1, end),
             neighbors_fnct=neighbors,
             heuristic_cost_estimate_fnct=manhattan,
+            distance_between_fnct=distance_function,
             is_goal_reached_fnct=is_goal_reached,
         )
 
@@ -162,7 +168,7 @@ def part_2_visually(input: Input):
                     move_decision = "?????"
 
             print(f"     Iteration: {total_t:>5}. Last Move: {move_decision:<5} ")
-            display(simulate(input, total_t), node, explorer_glyph='O')
+            display(simulate(input_, total_t), node, explorer_glyph='O')
 
             total_t += 1
             time.sleep(0.1)
@@ -173,4 +179,5 @@ if __name__ == '__main__':
     sample_input_1 = parse_input('sample_input_1.txt')
     sample_input_2 = parse_input('sample_input_2.txt')
 
+    # interactive_demo(sample_input_1)
     part_2_visually(input_)
