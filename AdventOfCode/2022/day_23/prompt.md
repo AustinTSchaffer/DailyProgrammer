@@ -1,5 +1,5 @@
---- Day 23: Unstable Diffusion ---
-----------------------------------
+Day 23: Unstable Diffusion
+--------------------------
 
 You enter a large crater of gray dirt where the grove is supposed to be. All around you, plants you imagine were expected to be full of fruit are instead withered and broken. A large group of Elves has formed in the middle of the grove.
 
@@ -261,5 +261,34 @@ In this region, the number of empty ground tiles is `*110*`.
 
 
 Simulate the Elves' process and find the smallest rectangle that contains the Elves after 10 rounds. *How many empty ground tiles does that rectangle contain?*
+
+
+Part Two
+--------
+
+It seems you're on the right track. Finish simulating the process and figure out where the Elves need to go. How many rounds did you save them?
+
+
+In the example above, the *first round where no Elf moved* was round `*20*`:
+
+
+
+```
+.......#......
+....#......#..
+..#.....#.....
+......#.......
+...#....#.#..#
+#.............
+....#.....#...
+..#.....#.....
+....#.#....#..
+.........#....
+....#......#..
+.......#......
+
+```
+
+Figure out where the Elves need to go. *What is the number of the first round where no Elf moves?*
 
 
