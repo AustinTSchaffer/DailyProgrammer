@@ -30,7 +30,7 @@ def main():
     output_dir = (
         pathlib.Path(args.dir)
         if args.dir else
-        pathlib.Path(this_script_dir / '..' / '..' / str(year) / f'day_{day:02d}')
+        pathlib.Path(f'day_{day:02d}')
     ).resolve()
 
     os.makedirs(output_dir, mode=0o755, exist_ok=True)
