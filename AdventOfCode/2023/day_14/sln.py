@@ -50,6 +50,20 @@ def part_1(input: Input):
     )
 
 def part_2(input: Input):
+    # Roll the boulders North, West, South, East iteratively.
+    # Store data as to check for a cycle.
+    #    - Store post shifting results as a tuple of tuples and hash them?
+    #    - Use a dict for the tup-o-tups, along with instruction index, map to iteration number?
+    # Figure out where in the cycle 1_000_000_000 repetitions will be.
+    # Calculate load.
+    history: dict[tuple[int, tuple[int, int]], int] = {}
+    current_state = tuple(input.spheres)
+    instruction = -1
+
+    for iteration in range(1_000_000_000):
+        instruction = (instruction + 1) % 4
+        history[(instruction, current_state)] = 0
+        ...
     ...
 
 if __name__ == '__main__':
