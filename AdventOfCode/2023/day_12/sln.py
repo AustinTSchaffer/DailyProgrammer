@@ -28,7 +28,7 @@ def parse_input(filename: str) -> list[BrokenSprings]:
 
 def num_valid_arrangements(info: BrokenSprings) -> int:
     known, lens = info.known, info.lens
-    broken_spring_mask = [c=='#' for c in known]
+    broken_spring_mask = [c == '#' for c in known]
 
     def can_start_at(run_idx: int, run_len: int, idx: int):
         """
@@ -111,33 +111,28 @@ def num_valid_arrangements(info: BrokenSprings) -> int:
                 if pos_1_ending_idx < allowed_pos_2 and not any(broken_spring_mask[j] for j in range(pos_1_ending_idx+1, allowed_pos_2)):
                     local_graph.setdefault(allowed_pos_1, []).append(allowed_pos_2)
 
+    #
     # Now we just need to find all of the routes through the network. Ez pz.
-    @functools.cache
-    def num_routes_through(depth=0) -> dict[int, int]:
-        """
-        Determines the number of routes that traverse the network
-        from the current layer. Returns the result as a dict, mapping
-        a valid start position in the current layer to the number
-        of routes that reach the end of the network from that starting
-        position.
-        """
+    #
+                    
+    # Seed the results from the last layer in the network.
+    num_routes_aggregated = {
+        k: len(v)
+        for k,v in
+        network[-1].items()
+    }
 
-        if depth == len(network) - 1:
-            return {
-                k: len(v)
-                for k,v in
-                network[-1].items()
-            }
-
-        output = {}
-        lower_layer = num_routes_through(depth+1)
-        for position, next_positions in network[depth].items():
-            output[position] = 0
+    # For the rest of the layers in reverse...
+    for layer in network[-2::-1]:
+        next_agg = {}
+        for position, next_positions in layer.items():
+            next_agg[position] = 0
             for next_position in next_positions:
-                if next_position in lower_layer:
-                    output[position] += lower_layer[next_position]
-        return output
-    return sum(num_routes_through().values())
+                if next_position in num_routes_aggregated:
+                    next_agg[position] += num_routes_aggregated[next_position]
+        num_routes_aggregated = next_agg
+
+    return sum(num_routes_aggregated.values())
 
 def part_1(input: list[BrokenSprings]):
     return sum(map(num_valid_arrangements, input))
@@ -155,8 +150,8 @@ if __name__ == '__main__':
     input = parse_input('input.txt')
     sample_input = parse_input('sample_input.txt')
 
-    print('Part 1 (sample, x=21):', part_1(sample_input))
-    print('Part 1 (x=7236):', part_1(input))
+    print('Part 1 (sample):', part_1(sample_input))
+    print('Part 1:', part_1(input))
 
     print('Part 2 (sample):', part_2(sample_input))
     print('Part 2:', part_2(input))
