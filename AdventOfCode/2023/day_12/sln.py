@@ -113,8 +113,6 @@ def num_valid_arrangements(info: BrokenSprings) -> int:
         # TODO: This is slow as hell. Caching might help.
         return non_o_combo(0)
 
-    print("Generating non overlapping combinations.")
-
     total = 0
     for non_o_combo in non_overlapping_combinations():
         # make sure that all #'s are accounted for.
