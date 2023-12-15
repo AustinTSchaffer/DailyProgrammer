@@ -2,6 +2,7 @@ import re
 import dataclasses
 import itertools
 from typing import Iterable
+import functools
 
 @dataclasses.dataclass
 class BrokenSprings:
@@ -96,36 +97,39 @@ def num_valid_arrangements(info: BrokenSprings) -> int:
             if can_start_at(i, val, x := minimum_starts[i] + j):
                 allowed_positions[i].append(x)
 
-    # For each allowed position for each continuous run of broken springs, make sure that there are no overlaps.
-    def non_overlapping_combinations() -> Iterable[tuple[int, ...]]:
-        def non_o_combo(depth: int):
-            if depth == len(allowed_positions) - 1:
-                yield from (
-                    (x,) for x in
-                    allowed_positions[depth]
-                )
-            else:
-                for idx, position in enumerate(allowed_positions[depth]):
-                    for combo in non_o_combo(depth+1):
-                        if position + lens[depth] + 1 <= combo[0]:
-                            yield (position, *combo)
+    # Determines the valid positions of pairs of lengths, based on
+    # the allowed starting positions of the 2 lengths, such that there
+    # are no overlaps between them, and that there are no broken springs
+    # ocurring in the range between the 2 lengths.
+    network = []
+    for i, (len_1, len_2) in enumerate(itertools.pairwise(lens)):
+        local_graph = {}
+        network.append(local_graph)
+        for allowed_pos_1 in allowed_positions[i]:
+            for allowed_pos_2 in allowed_positions[i+1]:
+                pos_1_ending_idx = allowed_pos_1 + len_1
+                if pos_1_ending_idx < allowed_pos_2 and not any(broken_spring_mask[j] for j in range(pos_1_ending_idx+1, allowed_pos_2)):
+                    local_graph.setdefault(allowed_pos_1, []).append(allowed_pos_2)
 
-        # TODO: This is slow as hell. Caching might help.
-        return non_o_combo(0)
+    # Now we just need to find all of the routes through the network. Ez pz.
+    @functools.cache
+    def num_routes_through(depth=0) -> dict[int, int]:
+        if depth == len(network) - 1:
+            return {
+                k: len(v)
+                for k,v in
+                network[-1].items()
+            }
 
-    total = 0
-    for non_o_combo in non_overlapping_combinations():
-        # make sure that all #'s are accounted for.
-        is_valid_combination = all(
-            any(c <= idx <= (c + lens[i]) for i, c in enumerate(non_o_combo))
-            for idx, val in enumerate(known)
-            if val == '#'
-        )
-
-        if is_valid_combination:
-            total += 1
-
-    return total
+        output = {}
+        lower_layer = num_routes_through(depth+1)
+        for position, next_positions in network[depth].items():
+            output[position] = 0
+            for next_position in next_positions:
+                if next_position in lower_layer:
+                    output[position] += lower_layer[next_position]
+        return output
+    return sum(num_routes_through().values())
 
 def part_1(input: list[BrokenSprings]):
     return sum(map(num_valid_arrangements, input))
@@ -133,11 +137,11 @@ def part_1(input: list[BrokenSprings]):
 def part_2(input: list[BrokenSprings]):
     total = 0
     for i, entry in enumerate(input):
-        print(f"Working on {i}")
         total += num_valid_arrangements(BrokenSprings(
             '?'.join(entry.known for _ in range(5)),
             entry.lens * 5,
         ))
+    return total
 
 if __name__ == '__main__':
     input = parse_input('input.txt')
