@@ -101,7 +101,7 @@ def num_valid_arrangements(info: BrokenSprings) -> int:
     # the allowed starting positions of the 2 lengths, such that there
     # are no overlaps between them, and that there are no broken springs
     # ocurring in the range between the 2 lengths.
-    network = []
+    network: list[dict[int, list[int]]] = []
     for i, (len_1, len_2) in enumerate(itertools.pairwise(lens)):
         local_graph = {}
         network.append(local_graph)
@@ -114,6 +114,14 @@ def num_valid_arrangements(info: BrokenSprings) -> int:
     # Now we just need to find all of the routes through the network. Ez pz.
     @functools.cache
     def num_routes_through(depth=0) -> dict[int, int]:
+        """
+        Determines the number of routes that traverse the network
+        from the current layer. Returns the result as a dict, mapping
+        a valid start position in the current layer to the number
+        of routes that reach the end of the network from that starting
+        position.
+        """
+
         if depth == len(network) - 1:
             return {
                 k: len(v)
