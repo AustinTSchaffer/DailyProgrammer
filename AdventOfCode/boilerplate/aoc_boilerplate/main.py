@@ -15,7 +15,9 @@ def main():
     argparser = argparse.ArgumentParser()
     argparser.add_argument('--day', '-d', dest='day', required=False)
     argparser.add_argument('--year', '-y', dest='year', required=False)
-    argparser.add_argument('--dir', dest='dir', required=False)
+    meg = argparser.add_mutually_exclusive_group()
+    meg.add_argument('--dir', dest='dir', required=False)
+    meg.add_argument('--here', dest='dir', action='store_const', const='.')
     argparser.add_argument('--session', dest='session', required=False)
 
     args = argparser.parse_args()
