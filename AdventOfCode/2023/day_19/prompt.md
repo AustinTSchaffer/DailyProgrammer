@@ -65,7 +65,6 @@ The workflows are listed first, followed by a blank line, then the ratings of th
 * `{x=2461,m=1339,a=466,s=291}`: `in` -> `px` -> `qkq` -> `crn` -> `*R*`
 * `{x=2127,m=1623,a=2188,s=1013}`: `in` -> `px` -> `rfg` -> `*A*`
 
-
 Ultimately, three parts are *accepted*. Adding up the `x`, `m`, `a`, and `s` rating for each of the accepted parts gives `7540` for the part with `x=787`, `4623` for the part with `x=2036`, and `6951` for the part with `x=2127`. Adding all of the ratings for *all* of the accepted parts gives the sum total of `*19114*`.
 
 
