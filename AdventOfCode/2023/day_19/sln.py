@@ -11,9 +11,13 @@ WORKFLOW_RULE_RE = re.compile(r'(?:(?P<prop>[xmas])(?P<op>[<>])(?P<val>\d+):)?(?
 
 class Part(NamedTuple):
     x: int
+    """Extremely cool looking score."""
     m: int
+    """Musical score."""
     a: int
+    """Aerodynamic score."""
     s: int
+    """Shiny score."""
 
     def __repr__(self):
         return f'{{x={self.x},m={self.m},a={self.a},s={self.s}}}'
@@ -29,9 +33,13 @@ class PartRange(NamedTuple):
     """
 
     x: tuple[int, int]
+    """Extremely cool looking score range."""
     m: tuple[int, int]
+    """Musical score range."""
     a: tuple[int, int]
+    """Aerodynamic score range."""
     s: tuple[int, int]
+    """Shiny score range."""
 
     def __repr__(self):
         return f'{{x={self.x},m={self.m},a={self.a},s={self.s}}}'
@@ -186,10 +194,8 @@ def parse_input(filename: str) -> Input:
     with open(filename, 'r') as f:
         workflows_raw, parts_raw = f.read().split('\n\n')
 
-        workflows = {}
-        for line in workflows_raw.split('\n'):
-            wfm = WORKFLOW_RE.match(line)
-            workflows[wfm['id']] = Workflow(
+        workflows = {
+            wfm['id']: Workflow(
                 wfm['id'],
                 [
                     Workflow.Rule(
@@ -203,6 +209,9 @@ def parse_input(filename: str) -> Input:
                     for wfrm in WORKFLOW_RULE_RE.finditer(wfm['rules'])
                 ]
             )
+            for line in workflows_raw.split('\n')
+            if (wfm := WORKFLOW_RE.match(line))
+        }
 
         parts = [
             Part(*map(int, (pm[1], pm[2], pm[3], pm[4])))
