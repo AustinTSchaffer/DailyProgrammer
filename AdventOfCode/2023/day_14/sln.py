@@ -53,12 +53,16 @@ def part_1(input: Input):
 
 
 def part_2_sets(input: Input, total_iterations=1_000_000_000):
-    # Roll the boulders North, West, South, East iteratively.
-    # Store data as to check for a cycle.
-    #    - Store post shifting results as a tuple of tuples and hash them?
-    #    - Use a dict for the tup-o-tups, along with instruction index, map to iteration number?
-    # Figure out where in the cycle 1_000_000_000 repetitions will be.
-    # Calculate load.
+    """
+    - Uses cached sets of tuples to represent the locations for cube rocks
+      for each of the 4 distinct orientations.
+    - Uses a tuple to represent the current state of the sphere rocks.
+    - Slides each sphere rock individually within its column.
+    - History is implemented as a bi-directional dict:
+      - iteration (int) -> state (tuple)
+      - state (tuple) -> iteration (int)
+    """
+
     history: dict[tuple[tuple[int, int], ...], int] | dict[int, tuple[tuple[int, int], ...]] = {}
     current_state = tuple(sorted(input.spheres))
 
@@ -106,13 +110,17 @@ def part_2_sets(input: Input, total_iterations=1_000_000_000):
             current_state = tuple(sorted(spheres_after_rolling_rotated))
 
 
-def better_tilting(input: Input, total_iterations=1_000_000_000):
-    # Roll the boulders North, West, South, East iteratively.
-    # Store data as to check for a cycle.
-    #    - Store post shifting results as a tuple of tuples and hash them?
-    #    - Use a dict for the tup-o-tups, along with instruction index, map to iteration number?
-    # Figure out where in the cycle 1_000_000_000 repetitions will be.
-    # Calculate load.
+def part_2_sets_better_tilting(input: Input, total_iterations=1_000_000_000):
+    """
+    - Uses cached sets of tupls to represent the locations for cube rocks
+      for each of the 4 distinct orientations.
+    - Uses a tuple/set to represent the current state of the sphere rocks.
+    - Slides each sphere rock individually within its column.
+    - History is implemented with 2 data structures
+      - list of states so far (maps iteration -> state)
+      - dict of state -> iteration
+    """
+
     history_dict: dict[tuple[tuple[int, int], ...], int] = {}
     history_list: list[tuple[tuple[int, int], ...]] = []
     current_state = tuple(sorted(input.spheres))
@@ -172,12 +180,14 @@ def better_tilting(input: Input, total_iterations=1_000_000_000):
 
 
 def part_2_1d_arrays(input: Input, total_iterations=1_000_000_000):
-    # Roll the boulders North, West, South, East iteratively.
-    # Store data as to check for a cycle.
-    #    - Store post shifting results as a tuple of tuples and hash them?
-    #    - Use a dict for the tup-o-tups, along with instruction index, map to iteration number?
-    # Figure out where in the cycle 1_000_000_000 repetitions will be.
-    # Calculate load.
+    """
+    - Uses cached 1D arrays of bools to represent the locations for cube rocks.
+    - Uses a tuple to represent the current state of the sphere rocks.
+    - Slides each sphere rock individually within its column.
+    - History is implemented with 2 data structures
+      - list of states so far (maps iteration -> state)
+      - dict of state -> iteration
+    """
 
     # Immutable, pre-rotated maps of where the cubes are.
     rotated_cubes_maps: list[set] = [[False] * input.width * input.height for _ in range(4)]
@@ -245,10 +255,96 @@ def part_2_1d_arrays(input: Input, total_iterations=1_000_000_000):
         current_state = tuple(current_state)
 
 
+
+def part_2_2D_array_better_tilting(input: Input, total_iterations=1_000_000_000):
+    """
+    - Uses cached 2D arrays of bools to represent the locations for cube rocks,
+      for each unique orientation.
+    - Uses a tuple/set to represent the current state of the sphere rocks.
+    - Performs each tilt by counting the number of spheres in between cubes in a
+      particular column.
+    - History is implemented with 2 data structures
+      - list of states so far (maps iteration -> state)
+      - dict of state -> iteration
+    """
+
+    # Immutable, pre-rotated maps of where the cubes are.
+    rotated_cubes_maps: list[list[list[bool]]] = [
+        [
+            [
+                False for _ in
+                range(input.width if i % 2 == 0 else input.height)
+            ]
+            for _ in range(input.height if i % 2 == 0 else input.width)
+        ] * input.width * input.height
+        for i in range(4)
+    ]
+
+    for i in range(input.height):
+        for j in range(input.width):
+            if (i, j) in input.cubes:
+                rotated_cubes_maps[0][i][j] = True
+                rotated_cubes_maps[1][j][input.height - i - 1] = True
+                rotated_cubes_maps[2][input.height - i - 1][input.width - j - 1] = True
+                rotated_cubes_maps[3][input.width - j - 1][i] = True
+
+    state_to_iteration_map: dict[tuple[tuple[int, int], ...], int] = {}
+    current_state_history: list[tuple[tuple[int, int], ...]] = []
+    current_state = tuple(sorted(input.spheres))
+
+    for current_iteration in range(total_iterations):
+        if (repeated_iteration := state_to_iteration_map.get(current_state)) is not None:
+            cycle_length = current_iteration - repeated_iteration
+
+            # Lookup what the current state will be at iteration (1B-1)
+            ending_iteration = ((total_iterations - current_iteration) % cycle_length) + repeated_iteration
+            final_state = current_state_history[ending_iteration]
+
+            return sum(
+                input.height - s[0]
+                for s in final_state
+            )
+
+        state_to_iteration_map[current_state] = current_iteration
+        current_state_history.append(current_state)
+
+        for instruction in range(4):
+            cube_map = rotated_cubes_maps[instruction]
+            height = input.height if instruction % 2 == 0 else input.width
+            width = input.width if instruction % 2 == 0 else input.height
+
+            current_state = set(current_state)
+            spheres_after_rolling = [None] * len(current_state)
+            sar_idx = 0
+
+            for j in range(width):
+                last_cube_i = -1
+                num_spheres = 0
+                for i in range(height):
+                    if cube_map[i][j]:
+                        for sphere_i in range(1 + last_cube_i, 1 + last_cube_i + num_spheres):
+                            spheres_after_rolling[sar_idx] = (sphere_i, j)
+                            sar_idx += 1
+                        last_cube_i = i
+                        num_spheres = 0
+                    if (i, j) in current_state:
+                        num_spheres += 1
+                for sphere_i in range(1 + last_cube_i, 1 + last_cube_i + num_spheres):
+                    spheres_after_rolling[sar_idx] = (sphere_i, j)
+                    sar_idx += 1
+
+            current_state_rot = [None] * len(current_state)
+            for idx, (i, j) in enumerate(spheres_after_rolling):
+                current_state_rot[idx] = (j, ((height - i) - 1))
+
+            current_state = current_state_rot
+        current_state = tuple(current_state)
+
+
 if __name__ == '__main__':
-    input = parse_input('input.txt')
     sample_input = parse_input('sample_input.txt')
     tiny_input = parse_input('tiny_input.txt')
+    input = parse_input('input.txt')
 
     timeit_globals = {'input': input, 'part_1': part_1, 'part_2': part_2_1d_arrays}
 
@@ -266,10 +362,15 @@ if __name__ == '__main__':
     time = part_1_timer.timeit(1)
     print('Part 1:', timeit_globals['result'], f'({time:.3} seconds)')
 
+    print()
+
     # print('Part 2 (tiny):', part_2(tiny_input))
     print('Part 2 (sample, sets):', part_2_sets(sample_input))
     print('Part 2 (sample, 1D arrays):', part_2_1d_arrays(sample_input))
-    print('Part 2 (sample, sets++):', better_tilting(sample_input))
+    print('Part 2 (sample, sets, better tilting):', part_2_sets_better_tilting(sample_input))
+    print('Part 2 (sample, 2D arrays, better tilting):', part_2_2D_array_better_tilting(sample_input))
+
+    print()
 
     timeit_globals['part_2'] = part_2_sets
     time = part_2_timer.timeit(1)
@@ -279,7 +380,10 @@ if __name__ == '__main__':
     time = part_2_timer.timeit(1)
     print('Part 2 (1D arrays):', timeit_globals['result'], f'({time:.3} seconds)')
 
-    timeit_globals['part_2'] = better_tilting
+    timeit_globals['part_2'] = part_2_sets_better_tilting
     time = part_2_timer.timeit(1)
     print('Part 2 (sets, better tilting):', timeit_globals['result'], f'({time:.3} seconds)')
 
+    timeit_globals['part_2'] = part_2_2D_array_better_tilting
+    time = part_2_timer.timeit(1)
+    print('Part 2 (2D arrays, better tilting):', timeit_globals['result'], f'({time:.3} seconds)')
