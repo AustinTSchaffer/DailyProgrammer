@@ -106,6 +106,71 @@ def part_2_sets(input: Input, total_iterations=1_000_000_000):
             current_state = tuple(sorted(spheres_after_rolling_rotated))
 
 
+def better_tilting(input: Input, total_iterations=1_000_000_000):
+    # Roll the boulders North, West, South, East iteratively.
+    # Store data as to check for a cycle.
+    #    - Store post shifting results as a tuple of tuples and hash them?
+    #    - Use a dict for the tup-o-tups, along with instruction index, map to iteration number?
+    # Figure out where in the cycle 1_000_000_000 repetitions will be.
+    # Calculate load.
+    history_dict: dict[tuple[tuple[int, int], ...], int] = {}
+    history_list: list[tuple[tuple[int, int], ...]] = []
+    current_state = tuple(sorted(input.spheres))
+
+    rotated_cubes_maps: list[set] = [set(sorted(input.cubes)), set(), set(), set()]
+
+    for iter_, (source_cm, dest_cm) in enumerate(itertools.pairwise(rotated_cubes_maps)):
+        for i, j in source_cm:
+            dest_cm.add((j, (input.width if iter_ % 2 == 0 else input.height) - 1 - i))
+
+    for current_iteration in range(total_iterations):
+        if (repeated_iteration := history_dict.get(current_state)) is not None:
+            cycle_length = current_iteration - repeated_iteration
+
+            # Lookup what the current state will be at iteration (1B-1)
+            ending_iteration = ((total_iterations - current_iteration) % cycle_length) + repeated_iteration
+            final_state = history_list[ending_iteration]
+
+            return sum(
+                input.height - s[0]
+                for s in final_state
+            )
+
+        history_dict[current_state] = current_iteration
+        history_list.append(current_state)
+
+        for instruction in range(4):
+            cube_map = rotated_cubes_maps[instruction]
+            width = (input.width if instruction % 2 == 0 else input.height)
+            height = (input.height if instruction % 2 == 0 else input.width)
+
+            current_state = set(current_state)
+            spheres_after_rolling = [None] * len(current_state)
+            sar_idx = 0
+            for j in range(width):
+                num_spheres = 0
+                last_cube_i = -1
+                for i in range(height):
+                    if (i, j) in cube_map:
+                        for sphere_i in range(1 + last_cube_i, 1 + last_cube_i + num_spheres):
+                            spheres_after_rolling[sar_idx] = (sphere_i, j)
+                            sar_idx += 1
+                        last_cube_i = i
+                        num_spheres = 0
+                    if (i, j) in current_state:
+                        num_spheres += 1
+
+                for sphere_i in range(1 + last_cube_i, 1 + last_cube_i + num_spheres):
+                    spheres_after_rolling[sar_idx] = (sphere_i, j)
+                    sar_idx += 1
+
+            spheres_after_rolling_rotated = [None] * len(spheres_after_rolling)
+            for idx, (i, j) in enumerate(spheres_after_rolling):
+                spheres_after_rolling_rotated[idx] = (j, width - 1 - i)
+
+            current_state = tuple(sorted(spheres_after_rolling_rotated))
+
+
 def part_2_1d_arrays(input: Input, total_iterations=1_000_000_000):
     # Roll the boulders North, West, South, East iteratively.
     # Store data as to check for a cycle.
@@ -204,6 +269,7 @@ if __name__ == '__main__':
     # print('Part 2 (tiny):', part_2(tiny_input))
     print('Part 2 (sample, sets):', part_2_sets(sample_input))
     print('Part 2 (sample, 1D arrays):', part_2_1d_arrays(sample_input))
+    print('Part 2 (sample, sets++):', better_tilting(sample_input))
 
     timeit_globals['part_2'] = part_2_sets
     time = part_2_timer.timeit(1)
@@ -212,3 +278,8 @@ if __name__ == '__main__':
     timeit_globals['part_2'] = part_2_1d_arrays
     time = part_2_timer.timeit(1)
     print('Part 2 (1D arrays):', timeit_globals['result'], f'({time:.3} seconds)')
+
+    timeit_globals['part_2'] = better_tilting
+    time = part_2_timer.timeit(1)
+    print('Part 2 (sets, better tilting):', timeit_globals['result'], f'({time:.3} seconds)')
+
