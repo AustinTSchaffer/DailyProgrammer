@@ -20,22 +20,30 @@ if __name__ == '__main__':
     input = parse_input('input.txt')
     sample_input = parse_input('sample_input.txt')
 
-    globals = {'input': input, 'part_1': part_1, 'part_2': part_2}
+    timeit_globals = {'input': input, 'part_1': part_1, 'part_2': part_2}
 
     part_1_timer = timeit.Timer(
         'global result; result = part_1(input)',
-        globals = globals
+        globals=timeit_globals
     )
 
     part_2_timer = timeit.Timer(
         'global result; result = part_2(input)',
-        globals = globals
+        globals=timeit_globals
     )
 
-    print('Part 1 (sample):', part_1(sample_input))
+    timeit_globals['input'] = sample_input
     time = part_1_timer.timeit(1)
-    print('Part 1:', globals['result'], f'({time:.3} seconds)')
+    print('Part 1 (sample):', timeit_globals['result'], f'({time:.3} seconds)')
 
-    print('Part 2 (sample):', part_2(sample_input))
+    timeit_globals['input'] = input
+    time = part_1_timer.timeit(1)
+    print('Part 1:', timeit_globals['result'], f'({time:.3} seconds)')
+
+    timeit_globals['input'] = sample_input
+    time = part_1_timer.timeit(1)
+    print('Part 2 (sample):', timeit_globals['result'], f'({time:.3} seconds)')
+
+    timeit_globals['input'] = input
     time = part_2_timer.timeit(1)
-    print('Part 2:', globals['result'], f'({time:.3} seconds)')
+    print('Part 2:', timeit_globals['result'], f'({time:.3} seconds)')

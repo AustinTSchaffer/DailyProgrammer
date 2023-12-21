@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "aoc-boilerplate"
-version = "0.3.0"
+version = "0.3.1"
 description = ""
 authors = ["Austin Schaffer <schaffer.austin.t@gmail.com>"]
 readme = "README.md"
