@@ -67,13 +67,12 @@ def part_1(input: Input):
     return num_visitable_bfs(input)[0]
 
 def part_2(input: Input, steps: int = None):
-    if steps <= 1000:
+    # This cutoff could probably be a function of the number of steps and the input size.
+    if steps <= 400:
         return num_visitable_bfs(input, steps)[0]
 
-    # Using BFS is obviously not efficient above a certain level.
-    # Also it's crazy to me that the sample input has no value for
-    # 26501365 steps, so there's no way to make sure that the most
-    # efficient methodology works on the actual input search area.
+    """
+    """
 
     raise NotImplementedError()
 
