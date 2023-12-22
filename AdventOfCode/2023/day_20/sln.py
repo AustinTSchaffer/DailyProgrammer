@@ -4,6 +4,7 @@ import timeit
 import copy
 import collections
 from typing import Iterable
+import math
 
 @dataclasses.dataclass
 class Pulse:
@@ -119,29 +120,16 @@ def part_2(input: Input):
     input = copy.deepcopy(input)
     queue: collections.deque[Pulse] = collections.deque([])
 
-    # Find the one modules that outputs to `rx`
-    upstream_of_rx = next(
+    # Find the one ConjMod that outputs to `rx`.
+    rx_upstream = next(
         mod
         for mod in input.modules.values()
-        if 'rx' in mod.out
+        if 'rx' in mod.out and isinstance(mod, ConjMod)
     )
 
-    # The 4 hubs are each 2 nodes upstream of the node that't upstream of `rx`
-    hub_mods: list[ConjMod] = []
-    assert isinstance(upstream_of_rx, ConjMod), upstream_of_rx
-    for mid in upstream_of_rx.inp:
-        mod = input.modules[mid]
-        assert isinstance(mod, ConjMod), mod
-        for _mid in mod.inp:
-            _mod = input.modules[_mid]
-            assert isinstance(_mod, ConjMod), _mod
-            hub_mods.append(_mod)
-    assert len(hub_mods) == 4, hub_mods
-
-    all_ones_histories = {
-        mod.mid: set()
-        for mod in hub_mods
-    }
+    # History of the first time that `rx_upstream` received a
+    # "high" pulse from each of its inputs.
+    rx_upstream_recv_high = {}
 
     button_presses = 0
     while True:
@@ -157,26 +145,16 @@ def part_2(input: Input):
                 return button_presses
             if dst_mod := input.modules.get(pulse.dst):
                 queue.extend(dst_mod.recv(pulse))
-            for mod in hub_mods:
-                if all(mod.inp.values()):
-                    all_ones_histories[mod.mid].add(button_presses)
+            if pulse.val and pulse.dst == rx_upstream.mid:
+                if pulse.src not in rx_upstream_recv_high:
+                    rx_upstream_recv_high[pulse.src] = button_presses
 
-        if all(len(h) >= 1 for h in all_ones_histories.values()):
-            cycles: list[dict] = []
-            for h in all_ones_histories.values():
-                sh = sorted(h)
-                cycles.append(sh[0])
-                # cycles.append({
-                #     'cycle_len': sh[1] - sh[0],
-                #     'cycle_start': sh[0],
-                # })
-
-            import math
-            return math.lcm(*cycles)
-            # Once again, we can throw away "cycle_start".
-            # It seems like we can ignore "cycle_len" too,
-            # the values of both are the same. It feels wrong to
-            # just return without verifying the cycle length.
+        if len(rx_upstream_recv_high) == len(rx_upstream.inp):
+            # It feels wrong to once again ignore the potential
+            # cases where cycles are offset, but I guess that's
+            # part of the magic of AoC. Thanks Eric for all your
+            # hard work. <3
+            return math.lcm(*rx_upstream_recv_high.values())
 
 if __name__ == '__main__':
     input = parse_input('input.txt')
