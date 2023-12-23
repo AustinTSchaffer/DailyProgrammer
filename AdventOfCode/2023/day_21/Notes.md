@@ -40,5 +40,9 @@ Below are links to some files output by [worksheet.py](worksheet.py) for various
   - The number of blocks which have one parity vs another.
   - How many nodes are "reachable" within each parity of an input block.
 - For blocks that fall on the exterior, we can determine:
-  - How many steps it took to reach each node on the edge of the block.
-  - How 
+  - How many steps it took to reach each node on the edge of the block
+  - How many nodes are reachable within the block given the number of steps remaining
+
+## Better ideas for an algorithm
+
+I bet that this problem has 262 separate closed-form solutions.
