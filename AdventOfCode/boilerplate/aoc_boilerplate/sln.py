@@ -41,7 +41,7 @@ if __name__ == '__main__':
     print('Part 1:', timeit_globals['result'], f'({time:.3} seconds)')
 
     timeit_globals['input'] = sample_input
-    time = part_1_timer.timeit(1)
+    time = part_2_timer.timeit(1)
     print('Part 2 (sample):', timeit_globals['result'], f'({time:.3} seconds)')
 
     timeit_globals['input'] = input
