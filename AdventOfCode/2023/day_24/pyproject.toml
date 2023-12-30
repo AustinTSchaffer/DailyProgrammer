@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "day-24"
+version = "0.1.0"
+description = ""
+authors = ["Austin Schaffer <schaffer.austin.t@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+numpy = "^1.26.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
