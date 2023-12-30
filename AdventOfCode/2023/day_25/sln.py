@@ -36,22 +36,15 @@ def part_1(input: Input):
     assert len(subgraphs) == 2
     return len(subgraphs[0]) * len(subgraphs[1])
 
-def part_2(graph: nx.Graph):
-    ...
 
 if __name__ == '__main__':
     input = parse_input('input.txt')
     sample_input = parse_input('sample_input.txt')
 
-    timeit_globals = {'input': input, 'part_1': part_1, 'part_2': part_2}
+    timeit_globals = {'input': input, 'part_1': part_1}
 
     part_1_timer = timeit.Timer(
         'global result; result = part_1(input)',
-        globals=timeit_globals
-    )
-
-    part_2_timer = timeit.Timer(
-        'global result; result = part_2(input)',
         globals=timeit_globals
     )
 
