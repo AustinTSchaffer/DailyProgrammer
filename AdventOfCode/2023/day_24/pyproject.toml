@@ -8,7 +8,16 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.12"
 numpy = "^1.26.2"
+z3-solver = "^4.12.4.0"
 
+
+[tool.poetry.group.dev.dependencies]
+matplotlib = "^3.8.2"
+pandas = "^2.1.4"
+jupyter = "^1.0.0"
+setuptools = "^69.0.3"
+ipympl = "^0.9.3"
+scipy = "^1.11.4"
 
 [build-system]
 requires = ["poetry-core"]

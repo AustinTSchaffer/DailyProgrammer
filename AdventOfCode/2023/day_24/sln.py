@@ -3,6 +3,7 @@ import dataclasses
 import timeit
 import numpy as np
 import itertools
+import z3
 
 @dataclasses.dataclass
 class PV_Vector_3D:
@@ -58,8 +59,20 @@ def part_1(input: Input):
     return p1_ans
 
 def part_2(input: Input):
-    # TODO: 
-    ...
+    s = z3.Solver()
+
+    x, y, z, vx, vy, vz = z3.Ints("x y z vx vy vz")
+
+    for i, pv_vec in enumerate(input.pv_vectors, start=1):
+        t = z3.Int(f't_{i}')
+        s.add(t > 0)
+        s.add(x + (t * vx) - (t * pv_vec.v[0]) == pv_vec.p[0])
+        s.add(y + (t * vy) - (t * pv_vec.v[1]) == pv_vec.p[1])
+        s.add(z + (t * vz) - (t * pv_vec.v[2]) == pv_vec.p[2])
+
+    assert s.check() == z3.sat
+    model = s.model()
+    return model.eval(x + y + z)
 
 if __name__ == '__main__':
     sample_input = parse_input('sample_input.txt', (7, 27))
