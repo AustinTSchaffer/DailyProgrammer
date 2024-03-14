@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "device-firmware-version-api"
+version = "0.1.0"
+description = "API and DB for storing firmware versions of millions of devices."
+authors = ["Austin Schaffer <schaffer.austin.t@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+psycopg2-binary = "^2.9.6"
+django = "^4.2"
+django-cockroachdb = "^4.2"
+djangorestframework = "^3.14.0"
+bcrypt = "^4.0.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

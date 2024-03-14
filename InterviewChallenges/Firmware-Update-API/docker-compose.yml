@@ -1,0 +1,35 @@
+
+services:
+  db:
+    image: cockroachdb/cockroach:latest-v22.2
+    ports:
+      - "26257:26257"
+      - "8080:8080"
+    command: start-single-node --insecure
+    networks:
+      - db_network
+    volumes:
+      - "cockroach_data:/cockroach/cockroach-data"
+
+  app:
+    build:
+      dockerfile: app.Dockerfile
+      context: .
+    command: /bin/sh -c "python /app/src/manage.py migrate && python /app/src/manage.py runserver 0.0.0.0:8000"
+    environment:
+      - DATABASE_HOST=db
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    networks:
+      - db_network
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+volumes:
+  cockroach_data:
+
+networks:
+  db_network:

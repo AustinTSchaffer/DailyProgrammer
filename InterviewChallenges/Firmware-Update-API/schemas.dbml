@@ -1,0 +1,30 @@
+// DBML https://www.dbml.org/home/
+// Visualize with https://dbdiagram.io/d
+
+Table projects {
+  id uuid [pk, increment]
+  name string
+}
+
+Table project_api_keys {
+  id uuid [pk, increment]
+  project_id int [ref: > projects.id]
+  secret_hash bytea
+}
+
+Table devices {
+  id uuid [pk, increment]
+  project_id int [ref: > projects.id]
+}
+
+Table device_api_keys {
+  id uuid [pk, increment]
+  device_id uuid [ref: > devices.id]
+  secret_hash bytea
+}
+
+Table device_firmware_update_events {
+  device_id uuid [pk, ref: > devices.id]
+  timestamp timestamp [pk]
+  version string [pk]
+}

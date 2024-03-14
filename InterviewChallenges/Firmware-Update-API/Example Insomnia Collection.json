@@ -1,0 +1,139 @@
+{
+    "_type": "export",
+    "__export_format": 4,
+    "__export_date": "2023-04-25T23:50:36.925Z",
+    "__export_source": "insomnia.desktop.app:v2023.1.0",
+    "resources": [
+        {
+            "_id": "req_bd8580f55422410a8cd774de9fbc3131",
+            "parentId": "wrk_35c7fcecee2c409c80e40697f07f5417",
+            "modified": 1682464858725,
+            "created": 1682434055907,
+            "url": "http://localhost:8000/v1/seed",
+            "name": "Seed Database",
+            "description": "",
+            "method": "GET",
+            "body": {},
+            "parameters": [],
+            "headers": [],
+            "authentication": {},
+            "metaSortKey": -1682434088647.5,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "wrk_35c7fcecee2c409c80e40697f07f5417",
+            "parentId": null,
+            "modified": 1682434052484,
+            "created": 1682434052484,
+            "name": "Device Firmware Version API",
+            "description": "",
+            "scope": "collection",
+            "_type": "workspace"
+        },
+        {
+            "_id": "req_14e41600d3a5490391c642ce5a3ba551",
+            "parentId": "wrk_35c7fcecee2c409c80e40697f07f5417",
+            "modified": 1682452683931,
+            "created": 1682434121388,
+            "url": "http://localhost:8000/v1/devices/{% response 'body', 'req_bd8580f55422410a8cd774de9fbc3131', 'b64::JC5kZXZpY2UuaWQ=::46b', 'never', 60 %}/firmware_version",
+            "name": "Record Firmware Update Event",
+            "description": "",
+            "method": "POST",
+            "body": {
+                "mimeType": "application/json",
+                "text": "{\n\t\"version\": \"v12.56\"\n}\n"
+            },
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                }
+            ],
+            "authentication": {
+                "type": "basic",
+                "useISO88591": false,
+                "disabled": false,
+                "username": "{% response 'body', 'req_bd8580f55422410a8cd774de9fbc3131', 'b64::JC5kZXZpY2VfYXBpX2tleS5pZA==::46b', 'never', 60 %}",
+                "password": "{% response 'body', 'req_bd8580f55422410a8cd774de9fbc3131', 'b64::JC5kZXZpY2VfYXBpX2tleV9zZWNyZXQ=::46b', 'never', 60 %}"
+            },
+            "metaSortKey": -1682434088597.5,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "req_d8b10618b51747e6a82d298ced138568",
+            "parentId": "wrk_35c7fcecee2c409c80e40697f07f5417",
+            "modified": 1682453150358,
+            "created": 1682434692074,
+            "url": "http://localhost:8000/v1/devices/{% response 'body', 'req_bd8580f55422410a8cd774de9fbc3131', 'b64::JC5kZXZpY2UuaWQ=::46b', 'never', 60 %}/firmware_version",
+            "name": "Retrieve Firmware Update Events",
+            "description": "",
+            "method": "GET",
+            "body": {},
+            "parameters": [],
+            "headers": [],
+            "authentication": {
+                "type": "basic",
+                "useISO88591": false,
+                "disabled": false,
+                "username": "{% response 'body', 'req_bd8580f55422410a8cd774de9fbc3131', 'b64::JC5wcm9qZWN0X2FwaV9rZXkuaWQ=::46b', 'never', 60 %}",
+                "password": "{% response 'body', 'req_bd8580f55422410a8cd774de9fbc3131', 'b64::JC5wcm9qZWN0X2FwaV9rZXlfc2VjcmV0::46b', 'never', 60 %}"
+            },
+            "metaSortKey": -1669301539859.75,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "env_46cfed15b86ebe160a4506bdfe2b5ed3284b20a3",
+            "parentId": "wrk_35c7fcecee2c409c80e40697f07f5417",
+            "modified": 1682434052489,
+            "created": 1682434052489,
+            "name": "Base Environment",
+            "data": {},
+            "dataPropertyOrder": null,
+            "color": null,
+            "isPrivate": false,
+            "metaSortKey": 1682434052489,
+            "_type": "environment"
+        },
+        {
+            "_id": "jar_46cfed15b86ebe160a4506bdfe2b5ed3284b20a3",
+            "parentId": "wrk_35c7fcecee2c409c80e40697f07f5417",
+            "modified": 1682434052491,
+            "created": 1682434052491,
+            "name": "Default Jar",
+            "cookies": [],
+            "_type": "cookie_jar"
+        },
+        {
+            "_id": "spc_9a45603b42254d03976f4d2f8ebc1698",
+            "parentId": "wrk_35c7fcecee2c409c80e40697f07f5417",
+            "modified": 1682434052485,
+            "created": 1682434052485,
+            "fileName": "Device Firmware Version API",
+            "contents": "",
+            "contentType": "yaml",
+            "_type": "api_spec"
+        }
+    ]
+}
