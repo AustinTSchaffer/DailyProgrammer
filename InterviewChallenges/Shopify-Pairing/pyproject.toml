@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "shopify-pairing"
+version = "0.1.0"
+description = ""
+authors = ["Austin Schaffer <schaffer.austin.t@gmail.com>"]
+readme = "Readme.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+uvicorn = {extras = ["standard"], version = "^0.29.0"}
+fastapi = "^0.110.1"
+psycopg = {extras = ["binary", "pool"], version = "^3.1.18"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,37 @@
+services:
+  db:
+    restart: always
+    image: postgres
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app-password
+      POSTGRES_DB: defaultdb
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer
+    depends_on:
+      - db
+    ports:
+      - '8080:8080'
+
+  app:
+    restart: always
+    build:
+      context: .
+      dockerfile: app.Dockerfile
+    ports:
+      - '8081:8081'
+    environment:
+      POSTGRES_HOST: db
+      APP_RELOAD: 'true'
+    volumes:
+      - './src:/home/app_user/app/src'
+    depends_on:
+      - db
+
+volumes:
+  db:
