@@ -14,4 +14,4 @@ COPY . .
 ENV APP_PORT=8081
 ENV APP_RELOAD=false
 
-ENTRYPOINT [ "poetry", "run", "python", "src/main.py" ]
+ENTRYPOINT [ "poetry", "run", "python", "-m", "src.main" ]
