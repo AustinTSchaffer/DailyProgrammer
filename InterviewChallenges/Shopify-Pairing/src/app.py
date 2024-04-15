@@ -3,8 +3,8 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from psycopg_pool import AsyncConnectionPool
 
-import constants
-import routers.health
+from . import constants
+from .routers import health
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -13,4 +13,4 @@ async def lifespan(app: FastAPI):
     await app.state.db_pool.close()
 
 app = FastAPI(lifespan=lifespan)
-app.include_router(routers.health.router)
+app.include_router(health.router)
