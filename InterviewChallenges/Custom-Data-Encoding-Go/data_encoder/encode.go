@@ -25,9 +25,9 @@ func encodeStringField(encodedData *([]byte), data string) error {
 	*encodedData = append(*encodedData, StringField)
 
 	stringLen := len(data)
-	if stringLen > DataInputMaxStringLen {
+	if stringLen > MaxStringLength {
 		// TODO: Error formatting
-		return fmt.Errorf("input string too long. Length %d. Max Length %d", stringLen, DataInputMaxStringLen)
+		return fmt.Errorf("input string too long. Length %d. Max Length %d", stringLen, MaxStringLength)
 	}
 
 	// encode the length of the string as a 3-byte integer (max value: ~16M)
@@ -65,17 +65,17 @@ func encodeDataInputField(encodedData *([]byte), dataInputNumElements *int, data
 	*encodedData = append(*encodedData, DataInputField)
 
 	dataInputLen := len(data)
-	if dataInputLen > DataInputMaxElemments {
-		return fmt.Errorf("too many elements in data input. Data input length: %d. Max length allowed: %d", dataInputLen, DataInputMaxElemments)
+	if dataInputLen > MaxDataInputElements {
+		return fmt.Errorf("too many elements in data input. Data input length: %d. Max length allowed: %d", dataInputLen, MaxDataInputElements)
 	}
 
 	// encode the length of the DataInput slice
-	encodeInteger(encodedData, dataInputLen, DataInputLengthBytes)
+	encodeInteger(encodedData, dataInputLen, DataInputLengthEncBytes)
 
 	for _, element := range data {
 		(*dataInputNumElements) += 1
-		if (*dataInputNumElements) > DataInputMaxElemments {
-			return fmt.Errorf("too many elements in data input. Max length allowed %d", DataInputMaxElemments)
+		if (*dataInputNumElements) > MaxDataInputElements {
+			return fmt.Errorf("too many elements in data input. Max length allowed %d", MaxDataInputElements)
 		}
 
 		switch v := element.(type) {
@@ -100,6 +100,8 @@ func encodeDataInputField(encodedData *([]byte), dataInputNumElements *int, data
 	return nil
 }
 
+// Encode encodes a DataInput instance as a UTF-8 string. Returns an
+// error if the DataInput instance fails validation.
 func Encode(toSend DataInput) (string, error) {
 	encodedData := make([]byte, 1)
 

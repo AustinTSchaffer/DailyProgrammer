@@ -137,7 +137,7 @@ func TestEncodeDataInputErrorHandling(t *testing.T) {
 	}
 
 	di := DataInput{}
-	for i := range DataInputMaxElemments - 1 {
+	for i := range MaxDataInputElements - 1 {
 		di = append(di, int32(i))
 	}
 	_, err = Encode(di)
@@ -146,7 +146,7 @@ func TestEncodeDataInputErrorHandling(t *testing.T) {
 	}
 
 	di = DataInput{}
-	for i := range DataInputMaxElemments {
+	for i := range MaxDataInputElements {
 		di = append(di, int32(i))
 	}
 	_, err = Encode(di)
@@ -160,7 +160,7 @@ func TestEncodeDataInputErrorHandling(t *testing.T) {
 func TestEncode(t *testing.T) {
 	originalData := DataInput{"foo", DataInput{"bar", int32(42)}}
 
-	want := "\x00\x02\x02\x00\x01\x03\x00\x00foo\x02\x02\x00\x01\x03\x00\x00bar\x00*\x00\x00\x00"
+	want := "\x00\x00\x02\x00\x02\x03\x00\x00foo\x00\x02\x00\x02\x03\x00\x00bar\x01*\x00\x00\x00"
 	result, err := Encode(originalData)
 
 	if want != result || err != nil {
