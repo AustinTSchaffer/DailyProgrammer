@@ -22,6 +22,6 @@ func TestEncodeDecodeEmojis(t *testing.T) {
 	}
 
 	if (*decoded)[1] != data[1] {
-		t.Fatalf(`int32 did not survive encoding/decoding. %s != %s`, (*decoded)[1], data[1])
+		t.Fatalf(`int32 did not survive encoding/decoding. %d != %d`, (*decoded)[1], data[1])
 	}
 }
