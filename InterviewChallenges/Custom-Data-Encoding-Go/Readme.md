@@ -12,22 +12,47 @@ There were a few other constraints imposed by the take-home description, includi
 - Strings cannot contain more than 1M bytes.
 
 
+## Usage
+
+To run a quick demo of the encoding and decoding software
+
+```bash
+go run .
+```
+
+Output:
+
+    Original data: []interface {}{"foo", []interface {}{"bar", 42}}
+    Encoded data: "\x00\x02\x02\x00\x01\x03\x00\x00foo\x02\x02\x00\x01\x03\x00\x00bar\x00*\x00\x00\x00"
+    Decoded data: []interface {}{"foo", []interface {}{"bar", 42}}
+
+To run the project's unit tests:
+
+```bash
+go test ./...
+```
+
+
 ## Implementation
 
 My custom message serialization format is defined as follows.
 
-- The first (0th) byte of each message contains the encoding version. For more information about this version number, please refer to the following section.
+- The first (0th) byte of each message contains the encoding version.
 - The next byte should be a `0`, signifying the start of a `DataInput` field. This `DataInput` field follows the rules of all fields.
 
-A **field** is defined as
+### Fields
 
-- A single byte to denote the datatype of the field (int32, vs string, vs `DataInput`, etc). This byte is known as the field's "tag".
+A **field** is defined as follows.
+
+- A single byte is used to denote the datatype of the field (int32, vs string, vs `DataInput`, etc). This byte is known as the field's "tag".
 - An optional "length" section
   - This section exists for fields which have a variable length (e.g. strings and `DataInput` instances).
   - Fields which have a fixed length (e.g. int32) do not have a length section.
   - The existence of and the number of bytes required by each length section is defined independently for each field type.
 - Some number of bytes for the contents of the field.
   - In the case of the `DataInput` field, the contents of the field are either empty, or contain additional fields.
+
+### Supported Field Types
 
 The current list of supported fields are
 
@@ -51,7 +76,7 @@ The current list of supported fields are
 
 ### The Encoding Version
 
-This is used by the decoder as a check to make sure that it can decode a message sent by the encoder. If the encoding format is changed in a non-backwards-compatible way, this constant will be incremented. Backwards incompatible changes include 
+The version number contained within the first byte of every message is used by the decoder as a check to make sure that it can decode the message. If the encoding format is changed in a non-backwards-compatible way, this constant will be incremented. Backwards incompatible changes include 
 
 - Changing the max allowed lengths of either strings or `DataInput` instances, such that it requires more bytes to describe their lengths.
 - Altering the endianness of encoded integers.
@@ -74,30 +99,11 @@ To add a new field:
 
 This implementation has both $O(n)$ time and $O(n)$ space complexity, where $n$ is the number of bytes required to represent the `DataInput` instance in a Go process's memory. Both the encode and decode functions scan the data only once, either to convert the `DataInput` instance directly to a byte array, or to convert a byte array back into a `DataInput` instance.
 
-### Inspiration
 
-I borrowed a lot of knowledge and inspiration from work that I did at Everactive related to parsing byte-array payloads containing [TLV](https://en.wikipedia.org/wiki/Type%E2%80%93length%E2%80%93value) and [TLV-BER](https://en.wikipedia.org/wiki/X.690#BER_encoding) data. Everactive's sensors transmit data encoded in a custom TLV-BER format, which is handled by the cloud. This meant that new sensor capabilities required engineers on the cloud team to process raw byte-arrays.
+## Inspiration
+
+I borrowed a lot of knowledge and inspiration from work that I did at Everactive related to parsing byte-array payloads containing [TLV](https://en.wikipedia.org/wiki/Type%E2%80%93length%E2%80%93value) and [TLV-BER](https://en.wikipedia.org/wiki/X.690#BER_encoding) data. Everactive's sensors transmit data encoded in a custom TLV-BER format, which is processed by their cloud ingest. This meant that new sensor capabilities required engineering time from the cloud team to process raw byte arrays.
 
 The most common issue with this work was with due to the endianness of integers that were packed into sensor data payloads. Field encoding was documented on Confluence, and there were no automated tools for performing serialization/deserialization across our various runtimes.
 
-This serialization format is also similar to how Protobuf serializes data. I believe that a custom byte array serialization format can be more byte-conservative compared to Protobuf. Protobuf is better in every other possible regard (documentation, code generation, type safety, endianness concerns, available tooling, etc).
-
-## Usage
-
-To run a quick demo of the encoding and decoding software
-
-```bash
-go run .
-```
-
-Output:
-
-    Original data: []interface {}{"foo", []interface {}{"bar", 42}}
-    Encoded data: "\x00\x02\x02\x00\x01\x03\x00\x00foo\x02\x02\x00\x01\x03\x00\x00bar\x00*\x00\x00\x00"
-    Decoded data: []interface {}{"foo", []interface {}{"bar", 42}}
-
-To run the project's unit tests:
-
-```bash
-go test ./...
-```
+My custom serialization format is also similar to how Protobuf serializes data. I believe that a custom byte array serialization format can be equivalently, if not more byte-conservative compared to Protobuf. However, in my opinion, Protobuf is better in every other possible regard (documentation, code generation, type safety, endianness concerns, available tooling, etc).
