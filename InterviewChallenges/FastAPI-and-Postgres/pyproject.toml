@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "shopify-pairing"
+name = "fast-api-and-postgres"
 version = "0.1.0"
 description = ""
 authors = ["Austin Schaffer <schaffer.austin.t@gmail.com>"]

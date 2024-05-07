@@ -1,3 +1,0 @@
-# Shopify Peer-Programming Interview
-
-...
