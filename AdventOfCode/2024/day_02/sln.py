@@ -40,9 +40,12 @@ def is_safe_report_2(report: list[int]) -> bool:
     if is_safe_report(report):
         return True
 
-    for idx in range(len(report)):
-        report_cpy = report.copy()
-        del report_cpy[idx]
+    report_cpy = [report[idx] for idx in range(1, len(report))]
+    if is_safe_report(report_cpy):
+        return True
+
+    for skip_idx in range(0, len(report) - 1):
+        report_cpy[skip_idx] = report[skip_idx]
         if is_safe_report(report_cpy):
             return True
 
