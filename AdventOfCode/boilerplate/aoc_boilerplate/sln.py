@@ -27,24 +27,24 @@ if __name__ == '__main__':
 
     before = time.time_ns()
     result = part_1(sample_input)
-    time_ms = (time.time_ns() - before) / 1000
+    _time = (time.time_ns() - before) / 1_000_000
 
-    print('Part 1 (sample):', result, f'({time_ms} ms)')
+    print('Part 1 (sample):', result, f'({_time} ms)')
 
     before = time.time_ns()
     result = part_1(input)
-    time_ms = (time.time_ns() - before) / 1000
+    _time = (time.time_ns() - before) / 1_000_000
 
-    print('Part 1:', result, f'({time_ms} ms)')
+    print('Part 1:', result, f'({_time} ms)')
 
     before = time.time_ns()
     result = part_2(sample_input)
-    time_ms = (time.time_ns() - before) / 1000
+    _time = (time.time_ns() - before) / 1_000_000
 
-    print('Part 2 (sample):', result, f'({time_ms} ms)')
+    print('Part 2 (sample):', result, f'({_time} ms)')
 
     before = time.time_ns()
     result = part_2(input)
-    time_ms = (time.time_ns() - before) / 1000
+    _time = (time.time_ns() - before) / 1_000_000
 
-    print('Part 2:', result, f'({time_ms} ms)')
+    print('Part 2:', result, f'({_time} ms)')
