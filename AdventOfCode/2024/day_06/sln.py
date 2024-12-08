@@ -17,10 +17,7 @@ def parse_input(filename: str) -> Input:
     start = ((0, 0), (0, 0))
 
     with open(filename, "r") as f:
-        the_map = [
-            line.strip() for line in f.read().split('\n')
-            if line.strip()
-        ]
+        the_map = [line.strip() for line in f.read().split("\n") if line.strip()]
 
     for i, row in enumerate(the_map):
         for j, char in enumerate(row):
@@ -43,7 +40,9 @@ def parse_input(filename: str) -> Input:
     )
 
 
-def simulate(input: Input, additional_obstacle: tuple[int, int] = None) -> tuple[bool, set[tuple[int, int]]]:
+def simulate(
+    input: Input, additional_obstacle: tuple[int, int] = None
+) -> tuple[bool, set[tuple[int, int]]]:
     places_visited = set[tuple[int, int]]()
     states_visited = set[tuple[tuple[int, int], tuple[int, int]]]()
 
@@ -64,25 +63,30 @@ def simulate(input: Input, additional_obstacle: tuple[int, int] = None) -> tuple
 
         next_loc = (
             location[0] + direction[0],
-            location[1] + direction[1],            
+            location[1] + direction[1],
         )
 
         if next_loc in input.obstacles or next_loc == additional_obstacle:
             direction = (
-                (0, 1) if direction == (-1, 0) else
-                (1, 0) if direction == (0, 1) else
-                (0, -1) if direction == (1, 0) else
-                (-1, 0) # if direction == (0, -1) else ...
+                (0, 1)
+                if direction == (-1, 0)
+                else (
+                    (1, 0)
+                    if direction == (0, 1)
+                    else (0, -1) if direction == (1, 0) else (-1, 0)
+                )  # if direction == (0, -1) else ...
             )
         else:
             location = next_loc
 
     return True, places_visited
 
+
 def part_1(input: Input):
     _, places_visited = simulate(input)
 
     return len(places_visited)
+
 
 def part_2(input: Input):
     loops_created = 0
