@@ -33,7 +33,6 @@ def parse_input(filename: str) -> Farm:
 class PerimeterSegment:
     node_a: tuple[int, int]
     node_b: tuple[int, int]
-    fence_dir: Literal['H', 'V']
     containment_dir: Literal['U', 'D', 'L', 'R']
 
 @dataclasses.dataclass
@@ -63,28 +62,24 @@ def determine_region(seed: tuple[int, int], farm: Farm) -> Region:
                 return PerimeterSegment(
                     node_a=node,
                     node_b=(node[0], node[1] + 1),
-                    fence_dir='H',
                     containment_dir='D',
                 )
             case 'D':
                 return PerimeterSegment(
                     node_a=(node[0] + 1, node[1]),
                     node_b=(node[0] + 1, node[1] + 1),
-                    fence_dir='H',
                     containment_dir='U',
                 )
             case 'L':
                 return PerimeterSegment(
                     node_a=node,
                     node_b=(node[0] + 1, node[1]),
-                    fence_dir='V',
                     containment_dir='R',
                 )
             case 'R':
                 return PerimeterSegment(
                     node_a=(node[0], node[1] + 1),
                     node_b=(node[0] + 1, node[1] + 1),
-                    fence_dir='V',
                     containment_dir='L',
                 )
             case _:
@@ -119,9 +114,9 @@ def combine_perimeter_segments(region: Region) -> list[tuple[tuple[int, int], tu
     combined_segments: dict[tuple[tuple[int, int], Literal['H', 'V'], Literal['U', 'D', 'L', 'R']], PerimeterSegment] = {}
 
     for segment in region.perimeter_segments:
-        if (existing_combined_segment := combined_segments.get((segment.node_a, segment.fence_dir, segment.containment_dir))):
-            del combined_segments[(existing_combined_segment.node_a, segment.fence_dir, segment.containment_dir)]
-            del combined_segments[(existing_combined_segment.node_b, segment.fence_dir, segment.containment_dir)]
+        if (existing_combined_segment := combined_segments.get((segment.node_a, segment.containment_dir))):
+            del combined_segments[(existing_combined_segment.node_a, segment.containment_dir)]
+            del combined_segments[(existing_combined_segment.node_b, segment.containment_dir)]
 
             nodes = sorted([segment.node_a, segment.node_b, existing_combined_segment.node_a, existing_combined_segment.node_b])
 
@@ -131,13 +126,12 @@ def combine_perimeter_segments(region: Region) -> list[tuple[tuple[int, int], tu
             segment = PerimeterSegment(
                 node_a=node_a,
                 node_b=node_b,
-                fence_dir=segment.fence_dir,
                 containment_dir=segment.containment_dir,
             )
 
-        if (existing_combined_segment := combined_segments.get((segment.node_b, segment.fence_dir, segment.containment_dir))):
-            del combined_segments[(existing_combined_segment.node_a, segment.fence_dir, segment.containment_dir)]
-            del combined_segments[(existing_combined_segment.node_b, segment.fence_dir, segment.containment_dir)]
+        if (existing_combined_segment := combined_segments.get((segment.node_b, segment.containment_dir))):
+            del combined_segments[(existing_combined_segment.node_a, segment.containment_dir)]
+            del combined_segments[(existing_combined_segment.node_b, segment.containment_dir)]
 
             nodes = sorted([segment.node_a, segment.node_b, existing_combined_segment.node_a, existing_combined_segment.node_b])
 
@@ -147,12 +141,11 @@ def combine_perimeter_segments(region: Region) -> list[tuple[tuple[int, int], tu
             segment = PerimeterSegment(
                 node_a=node_a,
                 node_b=node_b,
-                fence_dir=segment.fence_dir,
                 containment_dir=segment.containment_dir,
             )
 
-        combined_segments[(segment.node_a, segment.fence_dir, segment.containment_dir)] = segment
-        combined_segments[(segment.node_b, segment.fence_dir, segment.containment_dir)] = segment
+        combined_segments[(segment.node_a, segment.containment_dir)] = segment
+        combined_segments[(segment.node_b, segment.containment_dir)] = segment
 
     return list(set(combined_segments.values()))
 
