@@ -116,8 +116,8 @@ def part_2(input: Input):
                 cheat_id = (node, adj_node)
                 time_saved = adj_node_time - (node_time + abs(cheat_option[0]) + abs(cheat_option[1]))
 
-                if cheat_id in cheats_and_time_saved:
-                    cheats_and_time_saved[cheat_id] = max(cheats_and_time_saved[cheat_id], time_saved)
+                if (prior_time_saved := cheats_and_time_saved.get(cheat_id)):
+                    cheats_and_time_saved[cheat_id] = max(prior_time_saved, time_saved)
                 else:
                     cheats_and_time_saved[cheat_id] = time_saved
 
