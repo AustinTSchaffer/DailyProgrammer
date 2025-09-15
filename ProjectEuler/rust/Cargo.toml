@@ -1,0 +1,13 @@
+[package]
+name = "euler"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+num-bigint = "0.4.6"
+num-integer = "0.1.46"
+num-traits = "0.2.19"
+
+[[bin]]
+name = "euler"
+path = "src/main.rs"
