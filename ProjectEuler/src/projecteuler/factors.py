@@ -11,7 +11,7 @@ def prime_factors(n):
             factors_.append(prime)
     return factors_
 
-def factors(n):
+def factors(n, proper=False):
     factors_ = [1]
     sqrt_n = math.sqrt(n)
     for i in range(2, n):
@@ -22,14 +22,18 @@ def factors(n):
 
     if factors_[-1] * factors_[-1] == n:
         for f in reversed(factors_[:-1]):
+            if f == 1 and proper:
+                continue
             factors_.append(n // f)
     else:
         for f in reversed(factors_):
+            if f == 1 and proper:
+                continue
             factors_.append(n // f)
 
     return factors_
 
-def num_factors(n):
+def num_factors(n, proper=False):
     if n == 1:
         return 1
 
@@ -47,5 +51,8 @@ def num_factors(n):
         n_factors += (n_factors - 1)
     else:
         n_factors += n_factors
+
+    if proper:
+        n_factors -= 1
 
     return n_factors
