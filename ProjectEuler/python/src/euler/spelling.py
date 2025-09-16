@@ -71,3 +71,9 @@ def spell(n: int) -> list[str]:
         spelling.append(numbers[n])
 
     return spelling
+
+
+def is_pandigital(number: int | str) -> bool:
+    digits = "123456789"
+    number_digits = ''.join(sorted(str(number)))
+    return number_digits == digits[:len(number_digits)]

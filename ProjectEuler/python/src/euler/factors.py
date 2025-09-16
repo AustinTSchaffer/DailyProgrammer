@@ -1,5 +1,6 @@
 import math
-from projecteuler import sequences
+from euler import sequences
+
 
 def prime_factors(n):
     factors_ = []
@@ -10,6 +11,24 @@ def prime_factors(n):
         if n % prime == 0:
             factors_.append(prime)
     return factors_
+
+
+_is_prime_cache = set()
+_is_prime_max_prime: int = 0
+_is_prime_prime_generator = sequences.primes()
+
+
+def is_prime(n: int) -> bool:
+    global _is_prime_max_prime
+
+    n = abs(n)
+
+    while n > _is_prime_max_prime:
+        _is_prime_max_prime = next(_is_prime_prime_generator)
+        _is_prime_cache.add(_is_prime_max_prime)
+
+    return n in _is_prime_cache
+
 
 def factors(n, proper=False):
     factors_ = [1]
@@ -33,6 +52,7 @@ def factors(n, proper=False):
 
     return factors_
 
+
 def num_factors(n, proper=False):
     if n == 1:
         return 1
@@ -46,9 +66,9 @@ def num_factors(n, proper=False):
         if n % i == 0:
             n_factors += 1
             last_factor = i
-    
+
     if last_factor * last_factor == n:
-        n_factors += (n_factors - 1)
+        n_factors += n_factors - 1
     else:
         n_factors += n_factors
 

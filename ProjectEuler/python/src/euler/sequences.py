@@ -58,6 +58,11 @@ def triangle_numbers():
         v += n
 
 
+def is_triange_number(value: int) -> bool:
+    n = 0.5 * (math.sqrt((8*value) + 1) - 1)
+    return int(n) == n
+
+
 def next_collatz(n):
     if n % 2 == 0:
         n = n // 2
