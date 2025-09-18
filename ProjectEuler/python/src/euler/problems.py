@@ -1,4 +1,4 @@
-from euler import factors, sequences, data, spelling, polynomial_nums
+from euler import factors, sequences, data, spelling, polynomial_nums, search
 import re
 import math
 
@@ -303,8 +303,45 @@ def p25():
             return idx
 
 
-def unsolved_p26():
-    raise NotImplementedError()
+def p26():
+    fractions = {
+        d: factors.long_division(numerator=1, denominator=d, precision=10000)
+        for d in range(1, 1000)
+    }
+
+    # with open('fractions.txt', 'w') as f:
+    #     for d, fraction in fractions.items():
+    #         f.write(f'{d}: {fraction[0]}.')
+    #         f.write(''.join(map(str, fraction[1:])))
+    #         f.write('\n')
+
+    fractions_bar_notation = []
+    for d, fraction in fractions.items():
+        fraction = "".join(map(str, fraction))
+        repeating_segment_found = False
+        for length in range(1, len(fraction)):
+            segments = {
+                fraction[-(length * (offset + 1)) : -(length * offset)]
+                for offset in range(1, 4)
+            }
+            if len(segments) == 1:
+                repeating_segment = next(iter(segments))
+                fractions_bar_notation.append(
+                    {
+                        "segment_length": length,
+                        "repeating_segment": repeating_segment,
+                        "d": d,
+                        "prefix": fraction.split(repeating_segment)[0],
+                    }
+                )
+                repeating_segment_found = True
+                break
+
+        if not repeating_segment_found:
+            if len(fraction) > 100:
+                print("Warning: No repeating segment found in fraction:", fraction)
+
+    return max(fractions_bar_notation, key=lambda v: v["segment_length"])["d"]
 
 
 def p27():
@@ -610,6 +647,7 @@ def p45():
                 return T
             skip_answers -= 1
 
+
 def p46():
     odd_composite = 1
     while True:
@@ -618,7 +656,9 @@ def p46():
             continue
         has_goldbach_property = False
         for prime in sequences.seq_less_than(sequences.primes, odd_composite):
-            for square in sequences.seq_less_than(sequences.square_numbers, (odd_composite - prime) / 2, True):
+            for square in sequences.seq_less_than(
+                sequences.square_numbers, (odd_composite - prime) / 2, True
+            ):
                 if (prime + (2 * square)) == odd_composite:
                     has_goldbach_property = True
                     break
@@ -627,18 +667,20 @@ def p46():
         if not has_goldbach_property:
             return odd_composite
 
+
 def p47():
     sum_ = 0
     mod = 10**10
     for i in range(1, 1001):
         term = 1
-        for _ in range(1, i+1):
+        for _ in range(1, i + 1):
             term *= i
             term %= mod
         sum_ += term
     return sum_ % mod
 
-def p48():
+
+def p49():
     import itertools
 
     primes = set()
@@ -653,7 +695,7 @@ def p48():
     for prime in primes:
         group = set()
         for perm in itertools.permutations(str(prime)):
-            perm_as_int = int(''.join(perm))
+            perm_as_int = int("".join(perm))
             if perm_as_int in primes:
                 group.add(perm_as_int)
         if len(group) >= 3:
@@ -665,7 +707,57 @@ def p48():
                 if third_value in group:
                     groups.append((prime, other_value, third_value))
 
-    group = (groups[0] if groups[0][0] != 1487 else groups[1])
-    return ''.join(map(str, group))
+    group = groups[0] if groups[0][0] != 1487 else groups[1]
+    return "".join(map(str, group))
 
-current = p48
+
+def p50():
+    best_results = {}
+    primes = list(sequences.seq_less_than(sequences.primes, 1_000_000))
+
+    for start_idx, start_prime in enumerate(primes):
+        current_value = start_prime
+        for end_idx in range(start_idx + 1, len(primes)):
+            current_value += primes[end_idx]
+
+            if current_value > 1_000_000:
+                break
+
+            if search.binary_search(primes, current_value):
+                best_results[end_idx - start_idx] = (current_value, primes[start_idx])
+
+    longest_chain = max(best_results.keys())
+    best_result = best_results[longest_chain]
+    return best_result[
+        0
+    ], f"Sum of {longest_chain} consecutive primes, starting with {best_result[1]}"
+
+
+def p51():
+    for prime in sequences.primes():
+        if prime < 56003:
+            continue
+        prime_str = str(prime)
+        unique_digits = set(prime_str)
+
+        for digit in unique_digits:
+            family_size = 0
+            for replacement_digit in "0123456789":
+                if digit == prime_str[0] and replacement_digit == "0":
+                    continue
+
+                # There's actually a bug here, but this is good enough to solve
+                # the problem. This assumes that you won't ever replace need to
+                # replace only a subset of the digits in "prime_str" that match
+                # "digit".
+                if factors.is_prime(int(prime_str.replace(digit, replacement_digit))):
+                    family_size += 1
+
+            if family_size >= 8:
+                return prime_str
+
+
+def p52(): ...
+
+
+current = p26

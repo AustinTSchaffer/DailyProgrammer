@@ -76,3 +76,29 @@ def num_factors(n, proper=False):
         n_factors -= 1
 
     return n_factors
+
+
+def long_division(numerator: int, denominator: int, precision: int) -> list[int]:
+    """
+    Performs long division to the specified precision. The first index of
+    the output will be the whole-number part of the result. The remaining
+    indices will be the decimal notation of the fractional component.
+    """
+
+    fraction = []
+    fractional_digits = 0
+
+    while fractional_digits <= precision:
+        if numerator == 0:
+            break
+
+        while numerator < denominator:
+            numerator *= 10
+            fraction.append(0)
+            fractional_digits += 1
+
+        fraction.append(numerator // denominator)
+        fractional_digits += 1
+        numerator = (numerator % denominator) * 10
+
+    return fraction
