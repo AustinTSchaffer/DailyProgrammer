@@ -58,9 +58,25 @@ def triangle_numbers():
         v += n
 
 
-def is_triange_number(value: int) -> bool:
-    n = 0.5 * (math.sqrt((8*value) + 1) - 1)
-    return int(n) == n
+def square_numbers():
+    n = 1
+    while True:
+        yield n**2
+        n += 1
+
+
+def pentagonal_numbers():
+    n = 1
+    while True:
+        yield n * ((3 * n) - 1) // 2
+        n += 1
+
+
+def hexagonal_numbers():
+    n = 1
+    while True:
+        yield n * ((2 * n) - 1)
+        n += 1
 
 
 def next_collatz(n):

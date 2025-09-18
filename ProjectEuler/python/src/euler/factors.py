@@ -2,11 +2,11 @@ import math
 from euler import sequences
 
 
-def prime_factors(n):
+def distinct_prime_factors(n):
     factors_ = []
-    sqrt_n = math.sqrt(n)
+    half_n = n / 2
     for prime in sequences.primes():
-        if prime > sqrt_n:
+        if prime > half_n:
             break
         if n % prime == 0:
             factors_.append(prime)

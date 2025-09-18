@@ -1,4 +1,4 @@
-from euler import factors, sequences, data, spelling
+from euler import factors, sequences, data, spelling, polynomial_nums
 import re
 import math
 
@@ -15,7 +15,7 @@ def p2():
 
 def p3():
     number = 600_851_475_143
-    return max(factors.prime_factors(number))
+    return max(factors.distinct_prime_factors(number))
 
 
 def p4():
@@ -567,9 +567,105 @@ def p42():
     letter_offset = ord("A")
     for word in data.p42:
         word_value = sum(ord(letter) - letter_offset + 1 for letter in word)
-        if sequences.is_triange_number(word_value):
+        if polynomial_nums.is_triange_number(word_value):
             num_triangle_words += 1
     return num_triangle_words
 
 
-current = p42
+def p43():
+    import itertools
+
+    sum_ = 0
+    divisors = [2, 3, 5, 7, 11, 13, 17]
+    digits = "0123456789"
+    for perm in itertools.permutations(digits):
+        has_property = True
+        for idx, divisor in enumerate(divisors):
+            d = int("".join(perm[1 + idx : 1 + idx + 3]).lstrip("0"))
+            if divisor not in factors.distinct_prime_factors(d):
+                has_property = False
+                break
+        if has_property:
+            sum_ += int("".join(perm))
+    return sum_
+
+
+def p44():
+    pn_cache = []
+    for pn_j in sequences.pentagonal_numbers():
+        pn_cache.append(pn_j)
+        for pn_k in pn_cache[-2::-1]:
+            if polynomial_nums.is_pentagonal_number(pn_j + pn_k):
+                if polynomial_nums.is_pentagonal_number(pn_j - pn_k):
+                    return pn_j - pn_k
+
+
+def p45():
+    skip_answers = 2
+    for T in sequences.triangle_numbers():
+        if polynomial_nums.is_pentagonal_number(
+            T
+        ) and polynomial_nums.is_hexagonal_number(T):
+            if skip_answers == 0:
+                return T
+            skip_answers -= 1
+
+def p46():
+    odd_composite = 1
+    while True:
+        odd_composite += 2
+        if factors.is_prime(odd_composite):
+            continue
+        has_goldbach_property = False
+        for prime in sequences.seq_less_than(sequences.primes, odd_composite):
+            for square in sequences.seq_less_than(sequences.square_numbers, (odd_composite - prime) / 2, True):
+                if (prime + (2 * square)) == odd_composite:
+                    has_goldbach_property = True
+                    break
+            if has_goldbach_property:
+                break
+        if not has_goldbach_property:
+            return odd_composite
+
+def p47():
+    sum_ = 0
+    mod = 10**10
+    for i in range(1, 1001):
+        term = 1
+        for _ in range(1, i+1):
+            term *= i
+            term %= mod
+        sum_ += term
+    return sum_ % mod
+
+def p48():
+    import itertools
+
+    primes = set()
+
+    for prime in sequences.primes():
+        if prime >= 1000:
+            if prime > 9999:
+                break
+            primes.add(prime)
+
+    groups = []
+    for prime in primes:
+        group = set()
+        for perm in itertools.permutations(str(prime)):
+            perm_as_int = int(''.join(perm))
+            if perm_as_int in primes:
+                group.add(perm_as_int)
+        if len(group) >= 3:
+            group = list(sorted(group))
+            for other_value in group:
+                if other_value <= prime:
+                    continue
+                third_value = (other_value - prime) + other_value
+                if third_value in group:
+                    groups.append((prime, other_value, third_value))
+
+    group = (groups[0] if groups[0][0] != 1487 else groups[1])
+    return ''.join(map(str, group))
+
+current = p48
