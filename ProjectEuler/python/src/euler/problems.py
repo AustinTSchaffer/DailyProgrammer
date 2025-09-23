@@ -1,6 +1,7 @@
-from euler import factors, sequences, data, spelling, polynomial_nums, search
-import re
 import math
+import re
+
+from euler import data, factors, poker, polynomial_nums, search, sequences, spelling
 
 
 def p2():
@@ -757,7 +758,75 @@ def p51():
                 return prime_str
 
 
-def p52(): ...
+def p52():
+    x = 1
+    while True:
+        if len({"".join(sorted(str(a * x))) for a in range(1, 7)}) == 1:
+            return x
+        x += 1
 
 
-current = p26
+def p53():
+    vals_gt_1m = 0
+    factorials = [math.factorial(i) for i in range(101)]
+
+    for n in range(1, 101):
+        for r in range(1, n + 1):
+            if (factorials[n] / (factorials[r] * factorials[n - r])) > 1_000_000:
+                vals_gt_1m += 1
+    return vals_gt_1m
+
+
+def p54():
+    p1_wins = 0
+
+    _data = data.p54.strip().split("\n")
+    poker_hands = []
+    for line in _data:
+        cards = line.split()
+        assert len(cards) == 10
+        cards = [
+            (
+                10
+                if card[0] == "T"
+                else 11
+                if card[0] == "J"
+                else 12
+                if card[0] == "Q"
+                else 13
+                if card[0] == "K"
+                else 14
+                if card[0] == "A"
+                else int(card[0]),
+                card[1],
+            )
+            for card in line.split()
+        ]
+
+        poker_hands.append((cards[:5], cards[5:]))
+
+    for p1_hand, p2_hand in poker_hands:
+        p1_hand_score = poker.determine_result(p1_hand)
+        p2_hand_score = poker.determine_result(p2_hand)
+        if p1_hand_score > p2_hand_score:
+            p1_wins += 1
+
+    return p1_wins
+
+
+def p55():
+    num_lychrel_nums = 0
+
+    for n in range(10000):
+        n_modified = n
+        is_lychrel = True
+        for i in range(50):
+            n_modified += int("".join(reversed(str(n_modified))))
+            if spelling.is_palindrome(n_modified):
+                is_lychrel = False
+        if is_lychrel:
+            num_lychrel_nums += 1
+    return num_lychrel_nums
+
+
+current = p55

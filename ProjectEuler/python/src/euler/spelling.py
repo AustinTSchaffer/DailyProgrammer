@@ -31,8 +31,9 @@ decade_prefixes = [
     "sixty",
     "seventy",
     "eighty",
-    "ninety"
+    "ninety",
 ]
+
 
 def spell(n: int) -> list[str]:
     if n > 9999:
@@ -43,7 +44,7 @@ def spell(n: int) -> list[str]:
     if n >= 1000:
         left = n // 1000
         spelling.extend([numbers[left], "thousand"])
-        
+
         n = n % 1000
 
     needs_and = False
@@ -58,7 +59,7 @@ def spell(n: int) -> list[str]:
         if needs_and and not has_and:
             spelling.append("and")
             has_and = True
-        
+
         left = n // 10
         spelling.append(decade_prefixes[left])
         n = n % 10
@@ -75,5 +76,9 @@ def spell(n: int) -> list[str]:
 
 def is_pandigital(number: int | str) -> bool:
     digits = "123456789"
-    number_digits = ''.join(sorted(str(number)))
-    return number_digits == digits[:len(number_digits)]
+    number_digits = "".join(sorted(str(number)))
+    return number_digits == digits[: len(number_digits)]
+
+
+def is_palindrome(n):
+    return str(n) == "".join(reversed(str(n)))
