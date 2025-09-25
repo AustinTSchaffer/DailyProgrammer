@@ -1,5 +1,8 @@
 import math
 import re
+import string
+import itertools
+import fractions
 
 from euler import data, factors, poker, polynomial_nums, search, sequences, spelling
 
@@ -289,8 +292,6 @@ def p23():
 
 
 def p24():
-    import itertools
-
     perms = itertools.permutations("0123456789")
     for idx, perm in enumerate(perms, start=1):
         if idx == 1_000_000:
@@ -410,8 +411,6 @@ def p31():
 
 
 def p32():
-    import itertools
-
     digits = [1, 2, 3, 4, 5, 6, 7, 8, 9]
     results = set()
 
@@ -449,8 +448,6 @@ def p32():
 
 
 def p33():
-    import fractions
-
     fracs = []
     for numerator in range(11, 100):
         for denominator in range(numerator + 1, 100):
@@ -611,8 +608,6 @@ def p42():
 
 
 def p43():
-    import itertools
-
     sum_ = 0
     divisors = [2, 3, 5, 7, 11, 13, 17]
     digits = "0123456789"
@@ -682,8 +677,6 @@ def p47():
 
 
 def p49():
-    import itertools
-
     primes = set()
 
     for prime in sequences.primes():
@@ -828,5 +821,55 @@ def p55():
             num_lychrel_nums += 1
     return num_lychrel_nums
 
+def p56():
+    max_digital_sum = 0
+    for a in range(100):
+        for b in range(100):
+            result = a ** b
+            digital_sum = sum(map(int, str(result)))
+            max_digital_sum = max(max_digital_sum, digital_sum)
+    return max_digital_sum
 
-current = p55
+
+def p57():
+    result = 0
+    prior_rhs = 0
+    for iteration in range(1, 1001):
+        rhs = fractions.Fraction(1, 2 + prior_rhs)
+        frac = 1 + rhs
+        if len(str(frac.numerator)) > len(str(frac.denominator)):
+            result += 1
+        prior_rhs = rhs
+
+    return result
+
+def p59():
+    ciphertext = list(map(int, data.p59.split(',')))
+    key_characters = list(map(ord, 'qwertyuiopasdfghjklzxcvbnm'))
+    key_len = 3
+    plaintext: list[str] = [' '] * len(ciphertext)
+    valid_plaintext_chars = string.ascii_letters + string.punctuation + ' ' + string.digits
+
+    possible_plaintexts = []
+    for possible_key in itertools.combinations_with_replacement(key_characters, key_len):
+        for key_perm in itertools.permutations(possible_key):
+            contained_invalid_char = False
+            for i, char_ord in enumerate(ciphertext):
+                plaintext_char = chr(char_ord ^ key_perm[i % key_len])
+                if plaintext_char not in valid_plaintext_chars:
+                    contained_invalid_char = True
+                    break
+                plaintext[i] = chr(char_ord ^ key_perm[i % key_len])
+
+            if not contained_invalid_char:
+                possible_plaintexts.append(''.join(plaintext))
+
+    filtered = [
+        pt for pt in possible_plaintexts
+        if ' the ' in pt
+    ]
+
+    assert len(filtered) == 1
+    return sum(map(ord, filtered[0]))
+
+current = p59
