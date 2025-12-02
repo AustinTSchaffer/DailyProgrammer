@@ -3,10 +3,10 @@ import common
 Input = list[tuple[int, int]]
 
 def transform(input: str) -> Input:
-    return sorted([
+    return [
         tuple(map(int, part.split('-')))
         for part in input.split(',')
-    ])
+    ]
 
 def part_1(input: Input):
     invalid_id_sum = 0
