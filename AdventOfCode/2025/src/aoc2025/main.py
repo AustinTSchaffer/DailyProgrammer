@@ -9,6 +9,7 @@ def main():
                 continue
             raise
 
+        print()
         print('AoC 2025 Day', i)
         actual_input = None
         sample_input = None
@@ -17,7 +18,7 @@ def main():
             actual_input = open(f'data/{module_name}.txt').read()
             sample_input = open(f'data/{module_name}.sample.txt').read()
         except Exception as e:
-            print(e)
+            print('\t'+str(e))
 
         try:
             if actual_input:
