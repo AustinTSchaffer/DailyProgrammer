@@ -1,13 +1,3 @@
-def main():
-    sample_input = open('data/day_01.sample.txt').read()
-    real_input = open('data/day_01.txt').read()
-
-    print("Day 01")
-    print("\tPart 1 (sample):", part_1(sample_input))
-    print("\tPart 1:", part_1(real_input))
-    print("\tPart 2 (sample):", part_2(sample_input))
-    print("\tPart 2:", part_2(real_input))
-
 def part_1(input: str) -> int:
     zeroes = 0
     dial_position = 50
@@ -32,3 +22,4 @@ def part_2(input: str) -> int:
                 if dial_position == 0:
                     zeroes += 1
     return zeroes
+    
