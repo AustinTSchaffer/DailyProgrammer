@@ -2,12 +2,10 @@ def transform(input: str) -> set[tuple[int, int]]:
     output = []
 
     for row in input.split():
-        output.append([
-            char == '@'
-            for char in row.strip()
-        ])
+        output.append([char == "@" for char in row.strip()])
 
     return output
+
 
 offsets = [
     (-1, -1),
@@ -20,22 +18,26 @@ offsets = [
     (+1, +1),
 ]
 
+
 def num_adj_rolls(input: list[list[bool]], row: int, col: int) -> int:
     count = 0
     for row_off, col_off in offsets:
         adj_row = row + row_off
         adj_col = col + col_off
 
-        if adj_row < 0 or adj_row >= len(input):
-            continue
+        cmp = (
+            adj_row >= 0
+            and adj_row < len(input)
+            and adj_col >= 0
+            and adj_col < len(input[adj_row])
+            and input[adj_row][adj_col]
+        )
 
-        if adj_col < 0 or adj_col >= len(input[adj_row]):
-            continue
-
-        if input[adj_row][adj_col]:
+        if cmp:
             count += 1
 
     return count
+
 
 def part_1(input: list[list[bool]]):
     accessible_rolls = 0
@@ -45,6 +47,7 @@ def part_1(input: list[list[bool]]):
                 accessible_rolls += 1
 
     return accessible_rolls
+
 
 def part_2(input: list[list[bool]]):
     total_rolls_removed = 0
