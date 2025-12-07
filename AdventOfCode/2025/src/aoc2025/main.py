@@ -1,5 +1,15 @@
+import os
+
+LATEST_ONLY = os.getenv("LATEST_ONLY", "0").strip() == "1"
+
 def main():
-    for i in range(1, 13):
+    range_ = (
+        range(12, 0, -1)
+        if LATEST_ONLY else
+        range(1, 13)
+    )
+
+    for i in range_:
         module_name = f"day_{i:02d}"
 
         try:
@@ -37,6 +47,9 @@ def main():
             print('\tPart 2 (sample):', module.part_2(sample_input))
         if actual_input:
             print('\tPart 2 (actual):', module.part_2(actual_input))
+
+        if LATEST_ONLY:
+            break
 
 if __name__ == "__main__":
     main()
