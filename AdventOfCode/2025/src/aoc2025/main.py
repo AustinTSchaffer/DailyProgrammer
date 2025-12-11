@@ -23,10 +23,12 @@ def main():
         print('AoC 2025 Day', i)
         actual_input = None
         sample_input = None
+        sample_input_p2 = None
 
         try:
             actual_input = open(f'data/{module_name}.txt').read()
             sample_input = open(f'data/{module_name}.sample.txt').read()
+            sample_input_p2 = open(f'data/{module_name}.sample_p2.txt').read()
         except Exception as e:
             print('\t'+str(e))
 
@@ -35,6 +37,8 @@ def main():
                 actual_input = module.transform(actual_input)
             if sample_input:
                 sample_input = module.transform(sample_input)
+            if sample_input_p2:
+                sample_input_p2 = module.transform(sample_input_p2)
         except Exception as e:
             if "has no attribute 'transform'" not in str(e):
                 raise
@@ -43,8 +47,8 @@ def main():
             print('\tPart 1 (sample):', module.part_1(sample_input))
         if actual_input:
             print('\tPart 1 (actual):', module.part_1(actual_input))
-        if sample_input:
-            print('\tPart 2 (sample):', module.part_2(sample_input))
+        if sample_input_p2 or sample_input:
+            print('\tPart 2 (sample):', module.part_2(sample_input_p2 or sample_input))
         if actual_input:
             print('\tPart 2 (actual):', module.part_2(actual_input))
 
