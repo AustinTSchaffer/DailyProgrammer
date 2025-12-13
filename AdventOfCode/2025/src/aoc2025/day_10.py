@@ -5,6 +5,8 @@ from queue import PriorityQueue
 import random
 import itertools
 
+import z3
+
 @dataclasses.dataclass(frozen=True)
 class Machine:
     original: str
@@ -134,7 +136,33 @@ def presses_req_p2_attempt2(machine: Machine) -> int:
 
     raise ValueError()
 
+def presses_req_p2_z3_solver(machine: Machine) -> int:
+    solver = z3.Solver()
+
+    buttons = []
+    joltage_affectors = [[] for _ in range(len(machine.joltage_requirements))]
+    for idx, button in enumerate(machine.buttons):
+        button_z3 = z3.Int(f'b_{idx}')
+        solver.add(button_z3 >= 0)
+        buttons.append(button_z3)
+        for joltage_idx in button:
+            joltage_affectors[joltage_idx].append(button_z3)
+
+    total_presses = z3.Int('total_presses')
+    solver.add(total_presses == sum(buttons))
+    solver.add(total_presses >= max(machine.joltage_requirements))
+
+    for jr_idx, jr in enumerate(machine.joltage_requirements):
+        solver.add(sum(joltage_affectors[jr_idx]) == jr)
+
+    best_so_far = sum(machine.joltage_requirements)
+    solver.add(total_presses < best_so_far)
+    while solver.check() == z3.sat:
+        model = solver.model()
+        best_so_far = model.eval(total_presses).py_value()
+        solver.add(total_presses < best_so_far)
+
+    return best_so_far
 
 def part_2(input: list[Machine]):
-    return None
-    return sum(map(presses_req_p2_attempt2, input))
+    return sum(map(presses_req_p2_z3_solver, input))

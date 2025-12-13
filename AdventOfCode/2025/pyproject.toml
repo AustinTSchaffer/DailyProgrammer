@@ -7,7 +7,9 @@ authors = [
     { name = "Austin Schaffer", email = "aschaffer@sitetechnologies.io" }
 ]
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "z3-solver>=4.15.4.0",
+]
 
 [project.scripts]
 aoc2025 = "aoc2025:main"

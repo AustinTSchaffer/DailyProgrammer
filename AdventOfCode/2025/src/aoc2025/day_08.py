@@ -3,8 +3,11 @@ def transform(input: str) -> list[tuple[int, int, int]]:
 
 
 def dist(a: tuple[int, int, int], b: tuple[int, int, int]) -> float:
-    return sum((v_b - v_a) ** 2 for v_a, v_b in zip(a, b)) ** 0.5
-
+    return (
+        ((a[0] - b[0])**2) +
+        ((a[1] - b[1])**2) +
+        ((a[2] - b[2])**2)
+    )**0.5
 
 def part_1(input: list[tuple[int, int, int]]):
     n_connections = 10 if len(input) == 20 else 1000
@@ -21,8 +24,10 @@ def part_1(input: list[tuple[int, int, int]]):
     ])
 
     connections = []
+    distances_idx = 0
     while len(connections) < n_connections:
-        distance, jbox1, jbox2 = distances.pop(0)
+        distance, jbox1, jbox2 = distances[distances_idx]
+        distances_idx += 1
         connections.append((jbox1, jbox2))
         if jbox1 not in circuits[jbox2]:
             for jbox1_circuit_jbox in circuits[jbox1]:
@@ -53,8 +58,10 @@ def part_2(input: list[tuple[int, int, int]]):
     ])
 
     connections = []
+    distances_idx = 0
     while True:
-        distance, jbox1, jbox2 = distances.pop(0)
+        distance, jbox1, jbox2 = distances[distances_idx]
+        distances_idx += 1
         connections.append((jbox1, jbox2))
         if jbox1 not in circuits[jbox2]:
             for jbox1_circuit_jbox in circuits[jbox1]:
