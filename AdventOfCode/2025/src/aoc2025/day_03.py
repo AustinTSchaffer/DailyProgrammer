@@ -20,7 +20,11 @@ def find_max_joltage_in_bank_2_batteries(bank: list[int]):
 
 
 def part_1(input: list[list[str]]):
-    return sum(find_max_joltage_in_bank_2_batteries(bank) for bank in input)
+    sum_ = 0
+    for bank in input:
+        joltage = find_max_joltage_in_bank_2_batteries(bank)
+        sum_ += joltage
+    return sum_
 
 
 def find_max_joltage_in_bank_n_batteries(
@@ -29,22 +33,20 @@ def find_max_joltage_in_bank_n_batteries(
     if n_batteries == 0:
         return 0
 
-    for digit in digits:
-        try:
-            digit_idx = (
-                bank.index(digit, start, -(n_batteries-1))
-                if n_batteries > 1 else
-                bank.index(digit, start)
-            )
+    max_joltage = 0
+    max_joltage_idx = -1
 
-            return (digit * (10**(n_batteries-1))) + find_max_joltage_in_bank_n_batteries(
-                bank, n_batteries-1, digit_idx+1
-            )
+    for bank_idx in range(start, len(bank) - (n_batteries-1)):
+        current = bank[bank_idx]
+        if current > max_joltage:
+            max_joltage = current
+            max_joltage_idx = bank_idx
+            if current == 9:
+                break
 
-        except:
-            continue
-
-    raise ValueError()
+    return (max_joltage * (10**(n_batteries-1))) + find_max_joltage_in_bank_n_batteries(
+        bank, n_batteries-1, max_joltage_idx+1
+    )
 
 def part_2(input: list[list[int]]):
     sum_ = 0
