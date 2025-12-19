@@ -19,21 +19,30 @@ offsets = [
 ]
 
 
-def num_adj_rolls(input: list[list[bool]], row: int, col: int) -> int:
-    count = 0
+def adj_locations(input: list[list[bool]], row: int, col: int) -> list[tuple[int, int]]:
+    _adj_locations = []
     for row_off, col_off in offsets:
         adj_row = row + row_off
         adj_col = col + col_off
 
-        cmp = (
+        in_bounds = (
             adj_row >= 0
             and adj_row < len(input)
             and adj_col >= 0
             and adj_col < len(input[adj_row])
-            and input[adj_row][adj_col]
         )
 
-        if cmp:
+        if in_bounds:
+            _adj_locations.append((adj_row, adj_col))
+
+    return _adj_locations
+
+
+def num_adj_rolls(input: list[list[bool]], row: int, col: int) -> int:
+    count = 0
+
+    for adj_row, adj_col in adj_locations(input, row, col):
+        if input[adj_row][adj_col]:
             count += 1
 
     return count
@@ -51,28 +60,40 @@ def part_1(input: list[list[bool]]):
 
 def part_2(input: list[list[bool]]):
     total_rolls_removed = 0
-    rolls_removed_this_round = 1
+
+    # Placeholder value to get the ball rolling.
+    first_time = True
 
     this_round = input
-    while rolls_removed_this_round > 0:
-        rolls_removed_this_round = 0
-        next_round = []
+    rolls_removed_last_round = set()
+    while first_time or rolls_removed_last_round:
+        rolls_removed_this_round = set()
+        next_round = [
+            row.copy()
+            for row in this_round
+        ]
 
-        for row_idx, row in enumerate(this_round):
-            next_round_row = []
-            next_round.append(next_round_row)
-            for col_idx, is_roll in enumerate(row):
-                if not is_roll:
-                    next_round_row.append(False)
-                    continue
-                if num_adj_rolls(this_round, row_idx, col_idx) < 4:
-                    next_round_row.append(False)
-                    rolls_removed_this_round += 1
-                    total_rolls_removed += 1
+        if first_time:
+            for row_idx, row in enumerate(this_round):
+                for col_idx, is_roll in enumerate(row):
+                    if not is_roll:
+                        continue
+                    if num_adj_rolls(this_round, row_idx, col_idx) < 4:
+                        next_round[row_idx][col_idx] = False
+                        rolls_removed_this_round.add((row_idx, col_idx))
 
-                else:
-                    next_round_row.append(True)
+        else:
+            for row_idx, col_idx in rolls_removed_last_round:
+                for adj_loc in adj_locations(this_round, row_idx, col_idx):
+                    adj_row_idx, adj_col_idx = adj_loc
+                    if this_round[adj_row_idx][adj_col_idx] and (num_adj_rolls(this_round, adj_row_idx, adj_col_idx) < 4):
+                        next_round[adj_row_idx][adj_col_idx] = False
+                        rolls_removed_this_round.add(adj_loc)
+
+        total_rolls_removed += len(rolls_removed_this_round)
 
         this_round = next_round
+        rolls_removed_last_round = rolls_removed_this_round
+        first_time = False
 
     return total_rolls_removed
