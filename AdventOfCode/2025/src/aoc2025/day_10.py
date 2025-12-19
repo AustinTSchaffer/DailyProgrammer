@@ -155,14 +155,15 @@ def presses_req_p2_z3_solver(machine: Machine) -> int:
     for jr_idx, jr in enumerate(machine.joltage_requirements):
         solver.add(sum(joltage_affectors[jr_idx]) == jr)
 
-    best_so_far = sum(machine.joltage_requirements)
-    solver.add(total_presses < best_so_far)
+    best_guesses = [sum(machine.joltage_requirements)]
+    solver.add(total_presses < best_guesses[-1])
+
     while solver.check() == z3.sat:
         model = solver.model()
-        best_so_far = model.eval(total_presses).py_value()
-        solver.add(total_presses < best_so_far)
+        best_guesses.append(model.eval(total_presses).py_value())
+        solver.add(total_presses < best_guesses[-1])
 
-    return best_so_far
+    return best_guesses[-1]
 
 def part_2(input: list[Machine]):
     return sum(map(presses_req_p2_z3_solver, input))

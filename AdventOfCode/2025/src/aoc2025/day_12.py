@@ -85,9 +85,12 @@ def fits_part_1(
 
 
 def part_1(input: Input):
-    return sum(map(lambda a: fits_part_1(input.shapes, a), input.arrangements))
+    result = 0
+    for a in input.arrangements:
+        result += fits_part_1(input.shapes, a)
+    return result
 
 
 def part_2(input: Input):
-    # Freebie?
+    # Freebie.
     ...
