@@ -48,9 +48,36 @@ def find_max_joltage_in_bank_n_batteries(
         bank, n_batteries-1, max_joltage_idx+1
     )
 
+
+def find_max_joltage_in_bank_n_batteries_not_rec(
+    bank: list[int], n_batteries: int
+) -> int:
+    joltages = [None for _ in range(n_batteries)]
+
+    start = 0
+    for battery_idx in range(n_batteries):
+        current_max = 0
+        for bank_idx in range(start, len(bank) - (n_batteries-battery_idx) + 1):
+            current = bank[bank_idx]
+            if current > current_max:
+                current_max = current
+                start = bank_idx+1
+                if current == 9:
+                    break
+        joltages[battery_idx] = current_max
+
+    total_joltage = 0
+    factor = 1
+    for joltage_idx in range(n_batteries-1, -1, -1):
+        total_joltage += factor * joltages[joltage_idx]
+        factor *= 10
+
+    return total_joltage
+
+
 def part_2(input: list[list[int]]):
     sum_ = 0
     for bank in input:
-        largest_joltage = find_max_joltage_in_bank_n_batteries(bank, 12, 0)
+        largest_joltage = find_max_joltage_in_bank_n_batteries_not_rec(bank, 12)
         sum_ += largest_joltage
     return sum_
