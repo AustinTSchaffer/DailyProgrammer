@@ -12,23 +12,21 @@ def dist(a: tuple[int, int, int], b: tuple[int, int, int]) -> float:
 def part_1(input: list[tuple[int, int, int]]):
     n_connections = 10 if len(input) == 20 else 1000
 
-    circuits = {
-        jbox: [jbox]
-        for jbox in input
-    }
-
     distances = sorted([
-        (dist(input[jbox1_idx], input[jbox2_idx]), input[jbox1_idx], input[jbox2_idx])
+        (dist(input[jbox1_idx], input[jbox2_idx]), jbox1_idx, jbox2_idx)
         for jbox1_idx in range(len(input) - 1)
         for jbox2_idx in range(jbox1_idx+1, len(input))
     ])
 
-    connections = []
+    circuits = [
+        [jbox_idx]
+        for jbox_idx in range(len(input))
+    ]
+
     distances_idx = 0
-    while len(connections) < n_connections:
-        distance, jbox1, jbox2 = distances[distances_idx]
+    while distances_idx < n_connections:
+        _, jbox1, jbox2 = distances[distances_idx]
         distances_idx += 1
-        connections.append((jbox1, jbox2))
         if jbox1 not in circuits[jbox2]:
             for jbox1_circuit_jbox in circuits[jbox1]:
                 circuits[jbox1_circuit_jbox] = circuits[jbox2]
@@ -36,7 +34,7 @@ def part_1(input: list[tuple[int, int, int]]):
 
     circuit_lens = sorted({
         id(circuit): len(circuit)
-        for circuit in circuits.values()
+        for circuit in circuits
     }.values(), reverse=True)[:3]
 
     prod = 1
@@ -46,23 +44,24 @@ def part_1(input: list[tuple[int, int, int]]):
 
 
 def part_2(input: list[tuple[int, int, int]]):
-    circuits = {
-        jbox: [jbox]
-        for jbox in input
-    }
+    circuits = [
+        [jbox_idx]
+        for jbox_idx in range(len(input))
+    ]
 
     distances = sorted([
-        (dist(input[jbox1_idx], input[jbox2_idx]), input[jbox1_idx], input[jbox2_idx])
+        (dist(input[jbox1_idx], input[jbox2_idx]), jbox1_idx, jbox2_idx)
         for jbox1_idx in range(len(input) - 1)
         for jbox2_idx in range(jbox1_idx+1, len(input))
     ])
 
-    connections = []
+    final_connection = None
+
     distances_idx = 0
     while True:
         distance, jbox1, jbox2 = distances[distances_idx]
         distances_idx += 1
-        connections.append((jbox1, jbox2))
+        final_connection = (jbox1, jbox2)
         if jbox1 not in circuits[jbox2]:
             for jbox1_circuit_jbox in circuits[jbox1]:
                 circuits[jbox1_circuit_jbox] = circuits[jbox2]
@@ -70,4 +69,4 @@ def part_2(input: list[tuple[int, int, int]]):
             if len(circuits[jbox2]) == len(input):
                 break
 
-    return connections[-1][0][0] * connections[-1][1][0]
+    return input[final_connection[0]][0] * input[final_connection[1]][0]
