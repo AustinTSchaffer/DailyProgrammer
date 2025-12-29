@@ -73,11 +73,7 @@ def part_2(input: list[tuple[int, int]]):
                 if compressed_grid[neigh_i][neigh_j] == CG_PLACEHOLDER:
                     coordinate_frontier.add((neigh_i, neigh_j))
 
-    # Set all remaining 2's to 1.
-    for i_idx, row in enumerate(compressed_grid):
-        for j_idx, val in enumerate(row):
-            if val == CG_PLACEHOLDER:
-                compressed_grid[i_idx][j_idx] = CG_INTERIOR
+    ...
 
     rect_sizes_bboxes = sorted(
         [
@@ -95,16 +91,36 @@ def part_2(input: list[tuple[int, int]]):
         reverse=True,
     )
 
+    def _contained_in_interior(min_i: int, max_i: int, min_j: int, max_j: int) -> bool:
+        compressed_min_i = compressed_i[min_i]
+        compressed_max_i = compressed_i[max_i]
+        compressed_min_j = compressed_j[min_j]
+        compressed_max_j = compressed_j[max_j]
+
+        # Left:
+        for i in range(compressed_min_i, compressed_max_i + 1):
+            if compressed_grid[i][compressed_min_j] == CG_EXTERIOR:
+                return False
+
+        # Right:
+        for i in range(compressed_min_i, compressed_max_i + 1):
+            if compressed_grid[i][compressed_max_j] == CG_EXTERIOR:
+                return False
+
+        # Top:
+        for j in range(compressed_min_j, compressed_max_j + 1):
+            if compressed_grid[compressed_min_i][j] == CG_EXTERIOR:
+                return False
+
+        # Bottom:
+        for j in range(compressed_min_j, compressed_max_j + 1):
+            if compressed_grid[compressed_max_i][j] == CG_EXTERIOR:
+                return False
+
+        return True
+
     for size, min_i, max_i, min_j, max_j in rect_sizes_bboxes:
-        contained_in_interior = True
-        for i in range(compressed_i[min_i], compressed_i[max_i] + 1):
-            for j in range(compressed_j[min_j], compressed_j[max_j] + 1):
-                if compressed_grid[i][j] != CG_INTERIOR:
-                    contained_in_interior = False
-                    break
-            if not contained_in_interior:
-                break
-        if contained_in_interior:
+        if _contained_in_interior(min_i, max_i, min_j, max_j):
             return size
 
     raise ValueError()
